@@ -1,0 +1,879 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Scrollback</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700;800&family=Figtree:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: phone-width column, one story card at a time, each card tinted a different pastel */
+:root{
+  --p1:#FFADAD; --p2:#FFD6A5; --p3:#FDFFB6; --p4:#CAFFBF; --p5:#9BF6FF; --p6:#A0C4FF; --p7:#BDB2FF; --p8:#FFC6FF;
+  --onpastel:#231B3C;
+  --paper:#FFFFFC; --surface:#FFFFFF; --ink:#231B3C; --muted:#6C6490;
+  --accent:#6A54D8; --line:#E9E5F7; --shade:#F5F2FF;
+  --font-display:"Gabarito","Trebuchet MS",sans-serif;
+  --font-body:"Figtree","Helvetica Neue",Arial,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#15121E; --surface:#221B31; --ink:#F7F3FF; --muted:#A99DC8;
+  --accent:#C6BBFF; --line:#352C4B; --shade:#2A2239; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --paper:#15121E; --surface:#221B31; --ink:#F7F3FF; --muted:#A99DC8;
+  --accent:#C6BBFF; --line:#352C4B; --shade:#2A2239; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--font-body);line-height:1.55;margin:0}
+.wrap{max-width:440px;margin:0 auto;padding:0 18px;padding-block:22px 48px}
+h1,h2,h3{font-family:var(--font-display);font-weight:700;text-wrap:balance;margin:0}
+h1{font-size:2.1rem;line-height:1.08;letter-spacing:-.02em}
+h2{font-size:1.35rem;line-height:1.15}
+p{margin:0}
+.brand{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-display);font-weight:600;font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--onpastel);background:var(--p8);padding:6px 13px;border-radius:999px}
+.sub{color:var(--muted);font-size:1rem}
+.stack{display:flex;flex-direction:column;gap:18px}
+.drop{border:1.5px dashed var(--p7);border-radius:18px;background:var(--surface);padding:30px 18px;text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center;cursor:pointer;transition:background .15s}
+.drop:hover,.drop.over{background:#F3F0FF;background:color-mix(in srgb,var(--p7) 22%,var(--surface))}
+.drop strong{font-family:var(--font-display);font-size:1.06rem}
+.drop span{color:var(--muted);font-size:.86rem}
+.disc{width:46px;height:46px;border-radius:50%;background:var(--p5);color:var(--onpastel);display:grid;place-items:center;font-size:1.25rem;margin-bottom:4px}
+button{font:inherit;cursor:pointer;border:none}
+.btn{background:var(--p7);color:var(--onpastel);font-family:var(--font-display);font-weight:600;font-size:1.02rem;padding:15px 20px;border-radius:999px;width:100%;transition:filter .15s}
+.btn:hover{filter:brightness(.95)}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.btn.ghost:hover{filter:none;background:var(--shade)}
+.link{background:none;color:var(--accent);font-weight:600;font-size:.92rem;text-decoration:underline;text-underline-offset:3px;padding:0}
+.note{display:flex;gap:7px;align-items:flex-start;color:var(--muted);font-size:.84rem;justify-content:center;text-align:center}
+details.how{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px 15px}
+details.how summary{font-weight:600;color:var(--accent);cursor:pointer;font-size:.92rem;list-style:none}
+details.how summary::-webkit-details-marker{display:none}
+details.how ol{margin:11px 0 0;padding-left:19px;color:var(--muted);font-size:.89rem;display:flex;flex-direction:column;gap:5px}
+.field{display:flex;flex-direction:column;gap:6px}
+.bars{display:flex;gap:3px;margin-bottom:14px}
+.bars i{flex:1;height:4px;border-radius:2px;background:var(--line)}
+.bars i.on{background:var(--p7)}
+.meta{display:flex;justify-content:space-between;align-items:center;font-family:var(--font-display);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.slide{--pc:var(--p7);background:var(--surface);background:color-mix(in srgb,var(--pc) 20%,var(--surface));border:1px solid var(--line);border-color:color-mix(in srgb,var(--pc) 50%,var(--line));border-radius:22px;padding:28px 20px;min-height:400px;display:flex;flex-direction:column;justify-content:center;gap:14px;text-align:center;transition:background .25s,border-color .25s}
+.kicker{font-family:var(--font-display);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+.huge{font-family:var(--font-display);font-size:3.4rem;font-weight:800;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.mid{font-family:var(--font-display);font-size:1.75rem;font-weight:700;line-height:1.18;letter-spacing:-.01em}
+.cap{color:var(--muted);font-size:.95rem}
+.rows{display:flex;flex-direction:column;gap:9px;text-align:left}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 14px;background:var(--surface);border-radius:11px;font-size:.95rem}
+.row b{font-family:var(--font-display);font-variant-numeric:tabular-nums;white-space:nowrap}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chip{background:var(--surface);border-radius:999px;padding:7px 14px;font-size:1.15rem;display:flex;align-items:center;gap:7px}
+.chip small{font-size:.8rem;color:var(--muted);font-family:var(--font-display);font-variant-numeric:tabular-nums}
+.thread{display:flex;flex-direction:column;gap:7px;text-align:left}
+.bub{max-width:84%;padding:9px 13px;border-radius:15px;font-size:.95rem;line-height:1.4;word-wrap:break-word;overflow-wrap:anywhere}
+.bub.them{background:var(--surface);border-bottom-left-radius:5px;align-self:flex-start}
+.bub.me{background:var(--p7);color:var(--onpastel);border-bottom-right-radius:5px;align-self:flex-end}
+.stamp{font-size:.7rem;color:var(--muted);font-family:var(--font-display);letter-spacing:.08em;text-transform:uppercase;align-self:center}
+.awards{display:flex;flex-direction:column;gap:8px;text-align:left}
+.aw{display:flex;align-items:center;gap:11px;padding:10px 13px;background:var(--surface);border-radius:12px}
+.aw div{min-width:0}
+.aw h3{font-size:.95rem;font-family:var(--font-display);line-height:1.2}
+.aw p{font-size:.79rem;color:var(--muted);line-height:1.35}
+.who{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.who .p{background:var(--surface);border-radius:14px;padding:14px;text-align:left;display:flex;flex-direction:column;gap:5px}
+.ini{width:30px;height:30px;border-radius:50%;background:var(--p7);color:var(--onpastel);display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:.85rem;flex:none}
+.who h3{font-size:1rem;font-family:var(--font-display);line-height:1.2}
+.who p{font-size:.82rem;color:var(--muted);line-height:1.4}
+.verdict{background:var(--p8);color:var(--onpastel);border-radius:18px;padding:26px 20px;display:flex;flex-direction:column;gap:10px}
+.verdict .kicker,.verdict h2,.verdict p{color:var(--onpastel)}
+.verdict h2{font-size:1.9rem;line-height:1.1;letter-spacing:-.02em}
+.verdict p{font-size:.95rem;opacity:.82;line-height:1.5}
+.roastlist{display:flex;flex-direction:column;gap:14px;text-align:left}
+.rst{display:flex;flex-direction:column;gap:5px;align-items:flex-start}
+.rst .bub{max-width:94%;font-style:italic}
+.burn{font-size:.9rem;line-height:1.45;color:var(--ink);padding-left:3px}
+.endline{font-family:var(--font-display);font-weight:600;font-size:1.02rem;color:var(--accent);text-align:left;padding-top:4px}
+.langsw{display:flex;gap:7px;justify-content:center;margin-bottom:2px}
+.lg{background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 15px;font-size:.84rem;font-family:var(--font-display);font-weight:600}
+.lg[aria-pressed="true"]{background:var(--p4);color:var(--onpastel);border-color:transparent}
+.nav{display:flex;gap:10px;margin-top:16px}
+.nav button{flex:1}
+.typebar{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.typebar span{font-size:.8rem;color:var(--muted)}
+.typebar select{width:auto;padding:7px 11px;font-size:.84rem}
+.lock{background:var(--surface);background:color-mix(in srgb,var(--p3) 35%,var(--surface));border-radius:16px;padding:22px;text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center}
+.teases{display:flex;flex-direction:column;gap:7px}
+.teases span{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:10px 13px;font-size:.89rem;color:var(--muted);display:flex;gap:9px;align-items:flex-start}
+.teases span b{color:var(--ink);font-family:var(--font-display);font-weight:600}
+.tier{border:1.5px solid var(--line);border-radius:16px;padding:15px;background:var(--surface);color:inherit;font:inherit;width:100%;text-align:left;display:flex;flex-direction:column;gap:4px;cursor:pointer;transition:border-color .15s,background .15s}
+.tier:hover{border-color:var(--p7)}
+.tier[aria-checked="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--p7) 20%,var(--surface))}
+.tier .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.tier .top h3{display:flex;align-items:center;gap:8px}
+.dot{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--line);flex:none;display:grid;place-items:center;font-size:.7rem;color:var(--onpastel)}
+.tier[aria-checked="true"] .dot{border-color:var(--accent);background:var(--p7)}
+.tier h3{font-family:var(--font-display);font-size:1.05rem}
+.tier .price{font-family:var(--font-display);font-weight:700;color:var(--accent);font-size:1.15rem}
+.tier p{font-size:.86rem;color:var(--muted)}
+.badge{align-self:flex-start;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;font-family:var(--font-display);font-weight:600;color:var(--onpastel);background:var(--p2);border-radius:999px;padding:3px 9px}
+.occ{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
+.occ span{background:var(--shade);border-radius:999px;padding:6px 13px;font-size:.82rem;color:var(--muted)}
+.shot{background:var(--p7);color:var(--onpastel);border-radius:20px;padding:26px 20px;display:flex;flex-direction:column;gap:12px;text-align:center}
+.shot .huge,.shot h2,.shot .kicker,.shot .foot,.shot .cap{color:var(--onpastel)}
+.shot .kicker{opacity:.72}
+.shot .line{display:flex;justify-content:space-between;font-size:.9rem;border-top:1px solid rgba(35,27,60,.2);padding-top:9px;text-align:left;gap:10px}
+.shot .line b{font-family:var(--font-display);text-align:right}
+.shot .foot{font-size:.72rem;opacity:.6;letter-spacing:.1em;text-transform:uppercase;font-family:var(--font-display)}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.84rem;background:var(--shade);border-radius:9px;padding:10px 12px;word-break:break-all;color:var(--muted)}
+.err{color:var(--ink);font-size:.88rem;background:#FFE4E4;background:color-mix(in srgb,var(--p1) 40%,var(--surface));border-radius:11px;padding:11px 14px}
+select{font:inherit;width:100%;padding:11px 13px;border-radius:11px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.lbl{font-size:.82rem;color:var(--muted);font-weight:600}
+.foot{text-align:center;color:var(--muted);font-size:.78rem;line-height:1.5}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div class="wrap">
+
+<section id="s-upload" class="stack">
+  <div style="text-align:center"><span class="brand">Scrollback</span></div>
+  <h1 style="text-align:center">Your chat, as a story.</h1>
+  <p class="sub" style="text-align:center">Upload a WhatsApp chat and get a beautiful, funny story of your relationship — ready to share or gift.</p>
+  <div class="drop" id="drop">
+    <div class="disc">&#8593;</div>
+    <strong>Drop your WhatsApp export</strong>
+    <span>.txt or .zip file</span>
+  </div>
+  <input type="file" id="file" accept=".txt,.zip,text/plain,application/zip" hidden>
+  <details class="how" id="how">
+    <summary>How do I export my chat?</summary>
+    <ol>
+      <li>Open the chat in WhatsApp.</li>
+      <li>Tap the contact or group name at the top.</li>
+      <li>Scroll down and tap Export chat.</li>
+      <li>Choose Without media, then save or share the file to this device.</li>
+    </ol>
+  </details>
+  <p class="note"><span>&#128274;</span><span>Your messages never leave your phone. The file is read inside your browser and nothing is uploaded.</span></p>
+  <div id="opts" hidden class="stack">
+    <div class="field" id="modewrap" hidden>
+      <label class="lbl" for="gmode">This is a group. Tell the story about</label>
+      <select id="gmode"><option value="group">The whole group</option><option value="pair">Just two people</option></select>
+    </div>
+    <div class="field" id="pickwrap" hidden>
+      <label class="lbl" for="p1">Which two</label>
+      <select id="p1"></select>
+      <select id="p2"></select>
+    </div>
+  </div>
+  <p id="err" class="err" hidden></p>
+  <button class="btn" id="go">Make my story</button>
+  <button class="link" id="sample">Try it with a sample chat</button>
+</section>
+
+<section id="s-story" hidden>
+  <div class="bars" id="bars"></div>
+  <div class="meta"><span id="pair"></span><span id="count"></span></div>
+  <div class="slide" id="slide"></div>
+  <div class="nav">
+    <button class="btn ghost" id="prev">Back</button>
+    <button class="btn" id="next">Next</button>
+  </div>
+  <div class="typebar">
+    <span>Reading this as</span>
+    <select id="ctype">
+      <option value="love">A love story</option>
+      <option value="friends">Friends</option>
+      <option value="group">A group chat</option>
+      <option value="work">A work chat</option>
+      <option value="new">Just getting started</option>
+    </select>
+  </div>
+  <p class="foot" style="margin-top:10px">Read inside your browser. Nothing was uploaded.</p>
+</section>
+
+<section id="s-pay" hidden class="stack">
+  <div class="lock">
+    <div class="disc">&#128274;</div>
+    <strong style="font-family:var(--font-display);font-size:1.05rem" id="lockn">6 more screens locked</strong>
+    <span class="cap">The ones with the actual memories in them</span>
+  </div>
+  <div class="teases" id="teases"></div>
+  <button class="tier" id="t49" role="radio" aria-checked="false">
+    <div class="top"><h3><span class="dot">&#10003;</span>Full story</h3><span class="price">&#8377;49</span></div>
+    <p>Every screen, your awards, your verdict and the roast jingle.</p>
+  </button>
+  <button class="tier" id="t149" role="radio" aria-checked="true">
+    <span class="badge">Gift ready</span>
+    <div class="top"><h3><span class="dot">&#10003;</span>Gift edition</h3><span class="price">&#8377;149</span></div>
+    <p>Everything above, plus a personal note and a private link to send them.</p>
+  </button>
+  <div class="occ"><span>Anniversary</span><span>Birthday</span><span>Rakhi</span><span>New Year</span></div>
+  <button class="btn" id="unlock">Unlock the rest</button>
+  <p class="foot">Payments go live in the next release. Unlocking is free while Scrollback is in testing.</p>
+</section>
+
+<section id="s-done" hidden class="stack">
+  <h2 style="text-align:center">Your story is ready.</h2>
+  <div class="shot" id="shot"></div>
+  <p class="note">Screenshot the card above to post it. Send anyone the link below and they can make their own.</p>
+  <div class="mono" id="gift"></div>
+  <button class="btn ghost" id="copy">Copy link to Scrollback</button>
+  <button class="btn" id="again">Start another story</button>
+  <p class="foot">The share card shows initials and numbers only. Your messages are never on it.<br>Private gift links you can send to one person arrive with the next release.</p>
+</section>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+(function(){
+"use strict";
+var $=function(id){return document.getElementById(id)};
+var SEC=["s-upload","s-story","s-pay","s-done"];
+function show(id){SEC.forEach(function(s){$(s).hidden=(s!==id)});window.scrollTo(0,0)}
+function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+
+/* ---------- parsing ---------- */
+var IOS=/^\[(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4}),?\s+(\d{1,2}):(\d{2})(?::(\d{2}))?(?:\s*([APap])\.?\s*[Mm]\.?)?\]\s*([^:]{1,70}?):\s*([\s\S]*)$/;
+var AND=/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4}),?\s+(\d{1,2}):(\d{2})(?::(\d{2}))?(?:\s*([APap])\.?\s*[Mm]\.?)?\s*[-–—]\s*([^:]{1,70}?):\s*([\s\S]*)$/;
+var MEDIA=/(<media omitted>|image omitted|video omitted|sticker omitted|audio omitted|document omitted|gif omitted|this message was deleted|you deleted this message|^null$)/i;
+function clean(t){return t.replace(/‎|‏|‪|‬/g,"").replace(/[  ]/g," ")}
+function parse(raw){
+  var lines=clean(raw).split(/\r?\n/),out=[],i,m;
+  for(i=0;i<lines.length;i++){
+    var L=lines[i];if(!L)continue;
+    m=IOS.exec(L);if(!m)m=AND.exec(L);
+    if(m){out.push({a:+m[1],b:+m[2],y:+m[3],h:+m[4],mi:+m[5],ap:m[7]?m[7].toLowerCase():null,who:m[8].trim(),txt:m[9]||""})}
+    else if(out.length){out[out.length-1].txt+="\n"+L}
+  }
+  if(out.length<5)return null;
+  var dayFirst=true,j;
+  for(j=0;j<out.length;j++){if(out[j].a>12){dayFirst=true;break}if(out[j].b>12){dayFirst=false;break}}
+  var msgs=[];
+  for(j=0;j<out.length;j++){
+    var o=out[j],d=dayFirst?o.a:o.b,mo=dayFirst?o.b:o.a,y=o.y;
+    if(y<100)y+=2000;
+    var h=o.h;
+    if(o.ap==="p"&&h<12)h+=12;
+    if(o.ap==="a"&&h===12)h=0;
+    var dt=new Date(y,mo-1,d,h,o.mi,0);
+    if(isNaN(dt.getTime()))continue;
+    msgs.push({t:dt,who:o.who,txt:o.txt.trim()});
+  }
+  return msgs.length>4?msgs:null;
+}
+function people(msgs){
+  var c={},i;
+  for(i=0;i<msgs.length;i++)c[msgs[i].who]=(c[msgs[i].who]||0)+1;
+  return Object.keys(c).sort(function(a,b){return c[b]-c[a]});
+}
+
+/* ---------- helpers ---------- */
+var STOP=("the and you that this for are with have just like not but was its your what when will can get got one out all now how why know think going dont didnt cant wont ive ill yeah yes okay lol haha hey hai han haan nahi nhi nai tha the ko ka ki ke mein kya kar karo bhi toh yeh woh aur par abhi kal aaj acha achha hmm arey bro yaar matlab bas sab kuch kuchh krna kro hoga hun gaya gayi raha rahi kiya kyu kyun mera meri tera teri apna apne koi fir phir thik theek").split(" ");
+var EMO=/\p{Extended_Pictographic}/gu;
+var LOVE=/\b(i love you|love you|love u|luv u|ily|jaan|baby|babe|sweetheart|darling)\b/i;
+var MISS=/\b(miss you|miss u|missing you)\b/i;
+var SORRY=/\b(sorry|sry|maaf|apolog)/i;
+var LAUGH=/\b(?:ha){2,}|\b(?:he){2,}|\bhaa+h|\blol+\b|\blmf?ao+\b|\brofl\b|\bxd\b|\u{1F602}|\u{1F923}|\u{1F605}/iu;
+var WORK=/\b(meeting|deadline|eod|pfa|attached|approval|approve|invoice|client|deliverable|standup|sprint|ticket|escalate|agenda|minutes|revert|regards|kindly|sir|maam|ma'am|hr |payroll|appraisal|onboard|deployment|release|bugfix|jira|asap|eta|fyi|cc |follow up|followup|sop|roster|shift|login|attendance|leave approved|wfh|call at|on call|please share|sharing the|as discussed|noted)\b/i;
+var MON=["January","February","March","April","May","June","July","August","September","October","November","December"];
+function cl(x){return Math.max(0,Math.min(1,x||0))}
+function median(a){if(!a.length)return 0;var s=a.slice().sort(function(x,y){return x-y});var h=Math.floor(s.length/2);return s.length%2?s[h]:(s[h-1]+s[h])/2}
+function dayKey(d){return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()}
+function nice(n){return Math.round(n).toLocaleString("en-IN")}
+function dur(ms){var m=Math.round(ms/60000);if(m<1)return "under a minute";if(m<60)return m+" min";var h=Math.round(m/60);if(h<24)return h+(h===1?" hour":" hours");return Math.round(h/24)+" days"}
+function hourLabel(h){var ap=h<12?"a.m.":"p.m.",hh=h%12;if(hh===0)hh=12;return hh+" "+ap}
+function clock(d){var h=d.getHours(),ap=h<12?"a.m.":"p.m.",hh=h%12;if(hh===0)hh=12;return hh+":"+String(d.getMinutes()).padStart(2,"0")+" "+ap}
+function dstr(d){return d.getDate()+" "+MON[d.getMonth()]+" "+d.getFullYear()}
+function ini(n){return (n.trim()[0]||"?").toUpperCase()}
+function trunc(t,n){t=t.replace(/\s+/g," ").trim();return t.length>n?t.slice(0,n-1)+"…":t}
+
+/* ---------- analysis (works for 2 people or a whole group) ---------- */
+function analyse(msgs,P){
+  var set={};P.forEach(function(p){set[p]=1});
+  var mm=msgs.filter(function(m){return set[m.who]});
+  if(mm.length<5)return null;
+  var s={P:P,pair:P.length===2,total:mm.length,by:{},starts:{},replies:{},hours:new Array(24).fill(0),
+    emoji:{},words:{},late:0,chars:{},msgs:{},sorry:{},q:{},laugh:{},emojiN:{},run:{},lateBy:{},rep:{},repeat:{},
+    streak:0,busiest:{n:0},longest:{n:0},days:{},night:[],silence:{d:0},slow:{ms:0},longMsg:{len:0},
+    loveN:0,laughN:0,qN:0,workN:0,mediaN:0,weekday:0,biz:0,cat:{},quote:{}};
+  P.forEach(function(p){s.by[p]=0;s.starts[p]=0;s.replies[p]=[];s.chars[p]=0;s.msgs[p]=0;s.sorry[p]=0;s.q[p]=0;s.laugh[p]=0;s.emojiN[p]=0;s.run[p]=0;s.lateBy[p]=0;s.rep[p]={}});
+  s.first=mm[0].t;s.last=mm[mm.length-1].t;
+  var sessN=0,sessStart=mm[0].t,curRun=0,curWho=null,i;
+  for(i=0;i<mm.length;i++){
+    var m=mm[i],prev=i?mm[i-1]:null,gap=prev?(m.t-prev.t):Infinity,isMedia=MEDIA.test(m.txt),hr=m.t.getHours(),dw=m.t.getDay();
+    s.by[m.who]++;s.hours[hr]++;
+    if(dw>=1&&dw<=5){s.weekday++;if(hr>=9&&hr<=19)s.biz++}
+    if(hr<5){s.late++;s.lateBy[m.who]++;if(m.txt.length>4&&m.txt.length<90&&!isMedia&&s.night.length<40)s.night.push(m)}
+    var k=dayKey(m.t);s.days[k]=(s.days[k]||0)+1;
+    if(s.days[k]>s.busiest.n)s.busiest={n:s.days[k],d:m.t};
+    if(gap>6*3600000)s.starts[m.who]++;
+    if(prev&&prev.who!==m.who&&gap<12*3600000){s.replies[m.who].push(gap);if(gap>s.slow.ms)s.slow={ms:gap,who:m.who,t:m.t}}
+    if(prev&&gap>s.silence.d&&gap<Infinity)s.silence={d:gap,from:prev.t,to:m.t};
+    if(gap>3600000){if(sessN>s.longest.n)s.longest={n:sessN,d:sessStart};sessN=1;sessStart=m.t}else sessN++;
+    if(m.who===curWho&&gap<=1800000)curRun++;else curRun=1;
+    curWho=m.who;
+    if(curRun>s.run[m.who])s.run[m.who]=curRun;
+    var em=m.txt.match(EMO);
+    if(em){s.emojiN[m.who]+=em.length;for(var e=0;e<em.length;e++)s.emoji[em[e]]=(s.emoji[em[e]]||0)+1}
+    if(isMedia){s.mediaN++;continue}
+    s.msgs[m.who]++;s.chars[m.who]+=m.txt.length;
+    if(SORRY.test(m.txt))s.sorry[m.who]++;
+    if(m.txt.indexOf("?")>=0){s.q[m.who]++;s.qN++}
+    if(LAUGH.test(m.txt)){s.laugh[m.who]++;s.laughN++}
+    if(LOVE.test(m.txt)||MISS.test(m.txt))s.loveN++;
+    if(WORK.test(m.txt))s.workN++;
+    if(m.txt.length>s.longMsg.len&&m.txt.length<4000)s.longMsg={len:m.txt.length,who:m.who,t:m.t,txt:m.txt};
+    if(!s.firstMsg&&m.txt.length>1)s.firstMsg=m;
+    if(!s.mLove&&LOVE.test(m.txt))s.mLove=m;
+    if(!s.mMiss&&MISS.test(m.txt))s.mMiss=m;
+    for(var f=0;f<FUNNY.length;f++){
+      if(FUNNY[f].re.test(m.txt)){
+        var kk=FUNNY[f].k;s.cat[kk]=(s.cat[kk]||0)+1;
+        var qs=qscore(m.txt);
+        if(qs>0&&(!s.quote[kk]||qs>s.quote[kk].sc))s.quote[kk]={m:m,sc:qs};
+        break;
+      }
+    }
+    var norm=m.txt.toLowerCase().replace(/[^\p{L}\s]/gu,"").replace(/\s+/g," ").trim();
+    if(norm.length>1&&norm.length<26)s.rep[m.who][norm]=(s.rep[m.who][norm]||0)+1;
+    var w=m.txt.toLowerCase().replace(/[^a-zऀ-ॿ\s]/g," ").split(/\s+/);
+    for(var q=0;q<w.length;q++){var t=w[q];if(t.length>2&&STOP.indexOf(t)<0)s.words[t]=(s.words[t]||0)+1}
+  }
+  if(sessN>s.longest.n)s.longest={n:sessN,d:sessStart};
+  var keys=Object.keys(s.days).map(function(k){var p=k.split("-");return new Date(+p[0],+p[1]-1,+p[2]).getTime()}).sort(function(a,b){return a-b});
+  var run=1;s.streak=1;
+  for(i=1;i<keys.length;i++){var diff=Math.round((keys[i]-keys[i-1])/86400000);if(diff===1){run++;if(run>s.streak)s.streak=run}else if(diff>1)run=1}
+  s.activeDays=keys.length;
+  var pk=0;for(i=1;i<24;i++)if(s.hours[i]>s.hours[pk])pk=i;
+  s.peak=pk;
+  s.topEmoji=Object.keys(s.emoji).sort(function(x,y){return s.emoji[y]-s.emoji[x]}).slice(0,4);
+  s.topWords=Object.keys(s.words).sort(function(x,y){return s.words[y]-s.words[x]}).slice(0,3);
+  P.forEach(function(p){
+    var r=s.rep[p],best=Object.keys(r).sort(function(x,y){return r[y]-r[x]})[0];
+    s.repeat[p]=best?{txt:best,n:r[best]}:null;
+  });
+  s.board=P.slice().sort(function(x,y){return s.by[y]-s.by[x]});
+  s.spanDays=Math.max(1,s.activeDays,Math.round((s.last-s.first)/86400000));
+  s.perDay=s.total/s.spanDays;
+  s.latePct=Math.round(s.late/s.total*100);
+  s.avgLen=s.chars[s.board[0]]/Math.max(1,s.msgs[s.board[0]]);
+  var top=s.board[0],bot=s.board[s.board.length-1];
+  s.balance=s.by[bot]/Math.max(1,s.by[top]);
+  var meds=P.map(function(p){return median(s.replies[p])||0}).filter(function(x){return x>0});
+  s.medFast=meds.length?Math.min.apply(null,meds):0;
+  s.medSlow=meds.length?Math.max.apply(null,meds):0;
+  s.slowP=P.filter(function(p){return (median(s.replies[p])||0)===s.medSlow})[0]||top;
+  s.fastP=P.filter(function(p){return (median(s.replies[p])||0)===s.medFast})[0]||bot;
+  s.starter=P.slice().sort(function(x,y){return s.starts[y]-s.starts[x]})[0];
+  s.startPct=Math.round(s.starts[s.starter]/Math.max(1,P.reduce(function(a,p){return a+s.starts[p]},0))*100);
+  s.lurkers=P.filter(function(p){return s.by[p]/s.total<0.05}).length;
+  s.silenceDays=Math.round(s.silence.d/86400000)||0;
+  /* normalised 0-1 signals, so verdicts compete on one scale */
+  s.sig={
+    intensity:cl(s.perDay/25), night:cl(s.latePct/22), imbalance:cl((1-s.balance)*1.5),
+    replyGap:cl(Math.log10(Math.max(1,s.medSlow/Math.max(60000,s.medFast)))/1.2),
+    affection:cl(s.loveN/s.total*220), humour:cl(s.laughN/s.total*6),
+    brevity:cl((42-s.avgLen)/34), consistency:cl(s.activeDays/s.spanDays*1.15),
+    volatility:cl(s.silenceDays/21), formal:cl(s.workN/s.total*28),
+    inquiry:cl(s.qN/s.total*4.5), media:cl(s.mediaN/s.total*5),
+    office:cl((s.weekday/s.total-0.68)*5)*cl((s.biz/s.total-0.6)*4), lurk:cl(s.lurkers/Math.max(1,P.length)*2.2),
+    crowd:cl((P.length-2)/8)
+  };
+  s.type=detect(s);
+  return s;
+}
+
+function detect(s){
+  var g=s.sig;
+  if(!s.pair)return (g.formal>0.4&&g.office>0.3)?"work":"group";
+  if(s.total<220||s.spanDays<18)return "new";
+  if(g.affection>0.2)return "love";
+  if(g.formal>0.38)return "work";
+  return "friends";
+}
+
+/* ---------- verdicts, one pool per chat type ---------- */
+var POOLS={
+  love:[
+    {t:"Chronically Online Soulmates",k:["intensity","night"],d:function(s){return nice(s.perDay)+" messages a day, and "+s.latePct+"% of them after midnight. Sleep is clearly optional."}},
+    {t:"The Chaser and The Chased",k:["imbalance","replyGap"],d:function(s){return ini(s.fastP)+" replies in "+dur(s.medFast)+". "+ini(s.slowP)+" takes "+dur(s.medSlow)+". You both know which is which."}},
+    {t:"Steady As They Come",k:["consistency","!night","!volatility"],d:function(s){return "You talked on "+nice(s.activeDays)+" of "+nice(s.spanDays)+" days, with a "+nice(s.streak)+"-day best run. Boring, in the best way."}},
+    {t:"Comes and Goes, Always Returns",k:["volatility","!consistency"],d:function(s){return "You once went "+s.silenceDays+" days without a word, then picked it up like nothing happened."}},
+    {t:"Permanently Unserious",k:["humour","!affection"],d:function(s){return nice(s.laughN)+" messages were just laughing. Not one serious conversation survived this chat."}},
+    {t:"Soft Launch",k:["affection","brevity","!intensity"],d:function(s){return "Short messages, "+nice(s.loveN)+" soft ones, and a lot left unsaid. Everyone can tell, by the way."}}
+  ],
+  friends:[
+    {t:"Two People, One Brain Cell",k:["humour","intensity"],d:function(s){return nice(s.laughN)+" messages were pure laughing. Nothing of value was discussed."}},
+    {t:"Built On Small Talk",k:["brevity","!humour","!intensity"],d:function(s){var a=s.repeat[s.board[0]],b=s.repeat[s.board[1]];return "“"+(a?a.txt:"ok")+"” and “"+(b?b.txt:"hmm")+"” are your most-sent messages. Poetry."}},
+    {t:"Seasonal Friends",k:["volatility","!consistency"],d:function(s){return s.silenceDays+" days of silence at one point, and then straight back in. No explanation offered."}},
+    {t:"One Of You Is The Planner",k:["imbalance","inquiry"],d:function(s){return ini(s.starter)+" starts "+s.startPct+"% of conversations and asked "+nice(s.qN)+" questions. The other one just shows up."}},
+    {t:"The Ones Who Never Logged Off",k:["night","consistency"],d:function(s){return "Active on "+nice(s.activeDays)+" days, "+nice(s.late)+" messages after midnight. This friendship runs on insomnia."}},
+    {t:"Low Effort, High Loyalty",k:["brevity","volatility","!intensity"],d:function(s){return "Short replies, long gaps, "+nice(s.total)+" messages anyway. Somehow it works."}}
+  ],
+  group:[
+    {t:"The Chat That Never Sleeps",k:["intensity","night"],d:function(s){return nice(s.perDay)+" messages a day across "+s.P.length+" people. Someone is always typing."}},
+    {t:"Three People Talking, The Rest Watching",k:["lurk","imbalance"],d:function(s){return ini(s.board[0])+" sent "+Math.round(s.by[s.board[0]]/s.total*100)+"% of everything. "+s.lurkers+" of you have said almost nothing."}},
+    {t:"A Functioning Democracy",k:["consistency","!imbalance","!lurk"],d:function(s){return "Everyone actually talks, on "+nice(s.activeDays)+" separate days. Rare. Treasure it."}},
+    {t:"The Event Planning Committee",k:["inquiry","!media"],d:function(s){return nice(s.qN)+" questions asked. Approximately four plans survived."}},
+    {t:"Mostly Forwards And Silence",k:["media","!intensity"],d:function(s){return nice(s.mediaN)+" of your "+nice(s.total)+" messages were media. The rest was silence."}},
+    {t:"Peak Nonsense",k:["humour","night"],d:function(s){return nice(s.laughN)+" laughing messages and "+nice(s.late)+" sent after midnight. Nobody here is well."}}
+  ],
+  work:[
+    {t:"Strictly Business",k:["formal","!humour","!night"],d:function(s){return nice(s.workN)+" messages mentioned work directly. Warmth was not on the agenda."}},
+    {t:"The 11 p.m. Energy",k:["night","formal"],d:function(s){return nice(s.late)+" messages sent after midnight. Somebody needs to talk to somebody about this."}},
+    {t:"One Person Is Doing All Of This",k:["imbalance","formal"],d:function(s){return ini(s.board[0])+" sent "+Math.round(s.by[s.board[0]]/s.total*100)+"% of the messages. The rest of you replied “noted”."}},
+    {t:"A Meeting That Could Have Been A Message",k:["inquiry","intensity"],d:function(s){return nice(s.qN)+" questions across "+nice(s.total)+" messages. Alignment remains elusive."}},
+    {t:"Professionally Cordial",k:["brevity","!night","!humour"],d:function(s){return "Average message: "+Math.round(s.avgLen)+" characters. Nobody has overstepped once."}},
+    {t:"Deadline Driven",k:["volatility","formal"],d:function(s){return s.silenceDays+" quiet days, then everything at once. You know exactly which week that was."}}
+  ],
+  "new":[
+    {t:"Early Days",k:["consistency","!imbalance","!intensity"],d:function(s){return nice(s.total)+" messages in "+s.spanDays+" days. Too soon to tell, but the signs are there."}},
+    {t:"Fast Burn",k:["intensity","night"],d:function(s){return nice(s.perDay)+" messages a day already. Pace yourselves."}},
+    {t:"Someone Is Keen",k:["imbalance","replyGap"],d:function(s){return ini(s.board[0])+" has sent "+Math.round(s.by[s.board[0]]/s.total*100)+"% of the messages so far. No further comment."}},
+    {t:"Polite Strangers",k:["brevity","!humour","!night"],d:function(s){return "Average message: "+Math.round(s.avgLen)+" characters. Nobody has risked anything yet."}}
+  ]
+};
+function verdict(s,type){
+  var pool=POOLS[type]||POOLS.friends,best=null,bv=-1;
+  pool.forEach(function(v){
+    var sum=0;v.k.forEach(function(k){sum+=k.charAt(0)==="!"?1-(s.sig[k.slice(1)]||0):(s.sig[k]||0)});
+    var score=sum/v.k.length;
+    if(score>bv){bv=score;best=v}
+  });
+  return {t:best.t,d:best.d(s),fit:bv};
+}
+
+/* ---------- personas and awards ---------- */
+var PERSONAS={
+  love:[["The double-texter","Once sent {run} messages in a row without a single reply."],["The blue-tick villain","Seen. Thinking. Replies tomorrow."],["The opener","Starts the conversation more often than not."],["The novelist","Averages {avg} characters a message. Brevity is for other people."],["The quick draw","Replies before the message is fully delivered."],["The night shift","Does the best talking after midnight."],["The chief apologist","Has said sorry {sorry} times. Possibly too many."]],
+  friends:[["The group project","Sent {run} messages in a row while the other one lived their life."],["The ghost","Replies eventually. Define eventually."],["The planner","Starts the conversation, makes the plan, books the table."],["The paragrapher","Averages {avg} characters a message. It is a lot."],["The instant responder","Online. Always. Concerningly."],["The night owl","Peaks after midnight, like a raccoon."],["The apologiser","Has said sorry {sorry} times, mostly for nothing."]],
+  group:[["The main character","{run} messages in a row. The group has learned to scroll."],["The lurker","Reads everything. Says nothing. Knows everything."],["The announcer","Starts most conversations in here."],["The essayist","Averages {avg} characters per message in a group chat."],["The first responder","Always replies first, every time."],["The night shift","Still typing when everyone else is asleep."],["The apologiser","Said sorry {sorry} times. In a group chat."]],
+  work:[["The follow-upper","Sent {run} messages in a row chasing one answer."],["The slow revert","Will get back to you. Has said this before."],["The one who starts the thread","Opens most conversations here."],["The long-form emailer","Averages {avg} characters a message. In a chat app."],["The instant acknowledger","Replies “noted” faster than anyone."],["The after-hours worker","Still online well past midnight."],["The over-apologiser","Said sorry {sorry} times for things that were fine."]],
+  "new":[["The keen one","Sent {run} messages in a row this early. Bold."],["The slow player","Takes their time. Possibly strategy."],["The opener","Starts almost every conversation so far."],["The over-explainer","Averages {avg} characters a message already."],["The quick replier","Answers in minutes, every time."],["The night texter","Already texting after midnight."],["The apologiser","Has said sorry {sorry} times in a brand new chat."]]
+};
+function persona(s,me,you,type,avoid){
+  var L=PERSONAS[type]||PERSONAS.friends;
+  var mine=median(s.replies[me])||0,theirs=median(s.replies[you])||0;
+  var avg=Math.round(s.chars[me]/Math.max(1,s.msgs[me])),avgY=Math.round(s.chars[you]/Math.max(1,s.msgs[you]));
+  var v=[s.run[me]/Math.max(1,s.run[you]),mine/Math.max(60000,theirs),s.starts[me]/Math.max(1,s.starts[you]),
+         avg/Math.max(1,avgY),theirs/Math.max(60000,mine),s.lateBy[me]/Math.max(1,s.lateBy[you]),s.sorry[me]/Math.max(1,s.sorry[you])];
+  var o=L.map(function(x,i){return {t:x[0],d:x[1].replace("{run}",s.run[me]).replace("{avg}",avg).replace("{sorry}",s.sorry[me]),v:v[i]}});
+  o.sort(function(x,y){return y.v-x.v});
+  for(var i=0;i<o.length;i++)if(o[i].t!==avoid)return o[i];
+  return o[0];
+}
+function awards(s,type){
+  var P=s.board,out=[],top=function(key){return P.slice().sort(function(x,y){return s[key][y]-s[key][x]})[0]};
+  var yap=P[0];
+  out.push({t:type==="work"?"Highest message volume":"The yapper",who:yap,d:nice(s.by[yap])+" messages, "+Math.round(s.by[yap]/s.total*100)+"% of everything said here."});
+  if(s.medSlow>0)out.push({t:type==="work"?"Slowest revert":"Ghoster of the year",who:s.slowP,d:"Takes "+dur(s.medSlow)+" to reply, on average."});
+  var dbl=top("run");
+  out.push({t:type==="work"?"Most persistent follow-up":"Most likely to double-text",who:dbl,d:s.run[dbl]+" messages back to back within half an hour, no reply in between."});
+  if(s.sorry[P[0]]+s.sorry[P[1]||P[0]]>3)out.push({t:"Chief apologist",who:top("sorry"),d:"Said sorry "+nice(s.sorry[top("sorry")])+" times."});
+  if(s.late>10)out.push({t:type==="work"?"After-hours award":"Night shift",who:top("lateBy"),d:nice(s.lateBy[top("lateBy")])+" messages sent after midnight."});
+  if(s.qN>10)out.push({t:type==="work"?"Most questions asked":"The interrogator",who:top("q"),d:"Asked "+nice(s.q[top("q")])+" questions."});
+  if(!s.pair&&s.lurkers>0)out.push({t:"The lurker",who:P[P.length-1],d:"Sent "+nice(s.by[P[P.length-1]])+" messages in total. Reads everything though."});
+  var emTot=P.reduce(function(a,p){return a+s.emojiN[p]},0);
+  if(emTot>10)out.push({t:"Emoji mayor",who:top("emojiN"),d:nice(s.emojiN[top("emojiN")])+" emoji deployed."});
+  if(s.laughN>5)out.push({t:"Easiest to amuse",who:top("laugh"),d:"Laughed "+nice(s.laugh[top("laugh")])+" times."});
+  return out.slice(0,6);
+}
+
+/* ---------- the roast: built from lines they actually wrote ---------- */
+var FUNNY=[
+ {k:"bore",re:/\b(bore|bored|boring|mann (nahi|nhi|ni)|man nhi|bekaar|bekar|kuch nahi|kuch nhi|time ?pass|khali|fursat)\b/i},
+ {k:"sleep",re:/\b(neend|so ?ja|sona|so ?gaya|so ?gayi|sleepy|good ?night|uth|jaag|raat bhar|soya|soyi)\b/i},
+ {k:"food",re:/\b(khana|khaya|bhook|bhukh|kha ?lo|kha ?liya|dinner|lunch|chai|breakfast|khane|order kar)\b/i},
+ {k:"study",re:/\b(padhai|padh lo|exam|assignment|submission|lecture|viva|semester|marks|result|class mein|college)\b/i},
+ {k:"work",re:/\b(kaam|office|meeting|deadline|boss|duty|shift|project|client|kaam hai)\b/i},
+ {k:"plan",re:/\b(plan|chalte|chalein|kab mil|milte|scene|aa ?ja|nikal|ghoom|baahar|bahar)\b/i},
+ {k:"sorry",re:/\b(sorry|sry|maaf|galti|mera fault|meri galti)\b/i},
+ {k:"love",re:/\b(miss|love|jaan|baby|babu|yaad aa)\b/i},
+ {k:"drama",re:/\b(pata nahi|pata nhi|matlab|kyu|kyun|seriously|bas kar|chup|whatever|chhodo|chodo|rehne de)\b/i},
+ {k:"tired",re:/\b(thak|thaka|tired|exhausted|energy nahi|dead|mar gaya|mar gayi|hogaya bas)\b/i}
+];
+function qscore(t){
+  var L=t.replace(/\s+/g," ").trim().length;
+  if(L<12||L>95)return 0;
+  if(/https?:|www\./i.test(t))return 0;
+  var v=1;
+  if(L>=18&&L<=65)v+=1.3;
+  if(/\b(yaar|yr|bhai|arey|arre|abe|bro|na|naa|matlab)\b/i.test(t))v+=1.2;
+  if(/[?!]/.test(t))v+=0.4;
+  if(/\p{Extended_Pictographic}/u.test(t))v+=0.2;
+  return v;
+}
+function seed(s,k){
+  var h=(s.total*7919+s.spanDays*104729+Math.floor(s.first.getTime()/86400000)*31)|0,i;
+  for(i=0;i<k.length;i++)h=(h*33+k.charCodeAt(i))|0;
+  return Math.abs(h);
+}
+var BURN={
+  bore:[
+    function(s,n){return "Yeh baat "+nice(n)+" baar boli gayi hai. Mann kabhi laga hi nahi, bas chat chalti rahi."},
+    function(s,n){return nice(n)+" messages mein bore hone ka zikr hai. Bore hone ka time tha, kaam ka nahi."},
+    function(s,n){return "Boredom ka record "+nice(n)+" ka hai. Phir bhi "+nice(s.total)+" messages type kar liye."}
+  ],
+  sleep:[
+    function(s,n){return s.late>5?"Phir bhi raat ke baad "+nice(s.late)+" messages bheje. Neend se dushmani personal lagti hai.":"Sone ka zikr "+nice(n)+" baar hua. Sona kabhi nahi hua."},
+    function(s,n){return nice(n)+" baar neend ka naam liya gaya. Peak hour "+hourLabel(s.peak)+" hai, toh samajh aa raha hai."},
+    function(s,n){return "Good night "+nice(n)+" baar bola. Uske baad bhi chat chalti rahi."}
+  ],
+  food:[
+    function(s,n){return "Khane ki baat "+nice(n)+" baar hui. Ek baar kha bhi lo."},
+    function(s,n){return nice(n)+" messages khane pe gaye. Kitchen se zyada khana chat mein bana."},
+    function(s,n){return "Bhook ka zikr "+nice(n)+" baar. Yeh data Zomato ko bech sakte ho."}
+  ],
+  study:[
+    function(s,n){return "Padhai ka zikr "+nice(n)+" baar hua. Marks ka zikr kitni baar hua, woh alag kahani hai."},
+    function(s,n){return nice(n)+" baar padhai boli gayi. Padhi kitni gayi, uska record nahi hai."},
+    function(s,n){return "Exam ka naam "+nice(n)+" baar aaya. Tension lene mein consistency hai."}
+  ],
+  work:[
+    function(s,n){return "Kaam ka rona "+nice(n)+" messages mein hai. Resignation letter kab likh rahe ho?"},
+    function(s,n){return "Office ka zikr "+nice(n)+" baar. Salary shayad isi liye milti hai."},
+    function(s,n){return nice(n)+" messages kaam ke baare mein, aur woh bhi chat pe. Kaam kab hua phir?"}
+  ],
+  plan:[
+    function(s,n){return "Plan "+nice(n)+" baar bana. Ghar se kitni baar nikle, woh data available nahi hai."},
+    function(s,n){return nice(n)+" plans banaye gaye. Confirm hone ka record missing hai."},
+    function(s,n){return "Planning "+nice(n)+" baar hui. Execution ek baar bhi nahi dikha."}
+  ],
+  sorry:[
+    function(s,n){return "Sorry "+nice(n)+" baar bola gaya hai. Ab yeh greeting ban chuka hai."},
+    function(s,n){return nice(n)+" sorry. Galti itni baar hui ya habit ban gayi, confirm nahi ho pa raha."},
+    function(s,n){return "Maafi "+nice(n)+" baar maangi gayi. Accept hone ka koi proof nahi mila."}
+  ],
+  love:[
+    function(s,n){return "Yeh wali line "+nice(n)+" baar aa chuki hai. Thoda naya likhne ka try karo."},
+    function(s,n){return nice(n)+" baar yahi bola gaya. Copy paste ka shak ho raha hai."},
+    function(s,n){return nice(n)+" messages mein yahi ek emotion. Consistency hai, variety nahi."}
+  ],
+  drama:[
+    function(s,n){return "Drama "+nice(n)+" messages mein hai. Netflix ko seedha competition hai."},
+    function(s,n){return nice(n)+" baar yeh wali energy aayi. Isme poora serial ban sakta hai."},
+    function(s,n){return "Confusion "+nice(n)+" messages mein. Resolve ek baar bhi nahi hua."}
+  ],
+  tired:[
+    function(s,n){return "Thakne ki baat "+nice(n)+" baar hui. Aaram utni baar kiya hoga, umeed hai."},
+    function(s,n){return nice(n)+" baar thakne ka zikr. Phir bhi "+nice(s.total)+" messages type karne ki energy thi."},
+    function(s,n){return "Energy khatam hone ka zikr "+nice(n)+" baar. Charging kab hoti hai?"}
+  ]
+};
+var BURN_EN={
+  bore:[
+    function(s,n){return "This has been said "+nice(n)+" times. The interest never arrived, but the chat kept going."},
+    function(s,n){return "Boredom came up in "+nice(n)+" messages. There was time to be bored, just not to work."},
+    function(s,n){return "Bored "+nice(n)+" times, and still found the energy for "+nice(s.total)+" messages."}
+  ],
+  sleep:[
+    function(s,n){return s.late>5?"And then sent "+nice(s.late)+" messages after midnight. The feud with sleep is personal.":"Sleep came up "+nice(n)+" times. You never actually went."},
+    function(s,n){return "Sleep mentioned "+nice(n)+" times. Your peak hour is "+hourLabel(s.peak)+", which explains a lot."},
+    function(s,n){return "Said good night "+nice(n)+" times. The chat continued every single time."}
+  ],
+  food:[
+    function(s,n){return "Food came up "+nice(n)+" times. Consider eating one of them."},
+    function(s,n){return nice(n)+" messages about food. More cooking happened here than in a kitchen."},
+    function(s,n){return "Hunger mentioned "+nice(n)+" times. This data belongs to a delivery app."}
+  ],
+  study:[
+    function(s,n){return "Studying came up "+nice(n)+" times. How often marks came up is a separate story."},
+    function(s,n){return "Mentioned studying "+nice(n)+" times. Whether it happened is undocumented."},
+    function(s,n){return "Exams came up "+nice(n)+" times. The panic, at least, is consistent."}
+  ],
+  work:[
+    function(s,n){return "Work was complained about in "+nice(n)+" messages. When is the resignation letter coming?"},
+    function(s,n){return "The office came up "+nice(n)+" times. Presumably that is what the salary is for."},
+    function(s,n){return nice(n)+" messages about work, sent during work. The work remains unaccounted for."}
+  ],
+  plan:[
+    function(s,n){return "Plans were made "+nice(n)+" times. How many happened is not in this dataset."},
+    function(s,n){return nice(n)+" plans proposed. Confirmations: no record found."},
+    function(s,n){return "Planned "+nice(n)+" times. Executed: not once, as far as this chat shows."}
+  ],
+  sorry:[
+    function(s,n){return "Sorry has been said "+nice(n)+" times. At this point it is a greeting."},
+    function(s,n){return nice(n)+" apologies. Either that many mistakes, or it became a verbal tic."},
+    function(s,n){return "Apologised "+nice(n)+" times. No evidence any were accepted."}
+  ],
+  love:[
+    function(s,n){return "This line has appeared "+nice(n)+" times. Try writing a new one."},
+    function(s,n){return "Said "+nice(n)+" times, word for word. Copy and paste is suspected."},
+    function(s,n){return "One emotion across "+nice(n)+" messages. Consistent, not varied."}
+  ],
+  drama:[
+    function(s,n){return "Drama across "+nice(n)+" messages. Netflix has competition."},
+    function(s,n){return "This energy appeared "+nice(n)+" times. There is a whole series in here."},
+    function(s,n){return "Confusion in "+nice(n)+" messages. Resolved on zero occasions."}
+  ],
+  tired:[
+    function(s,n){return "Exhaustion mentioned "+nice(n)+" times. Rest taken: unclear."},
+    function(s,n){return "Too tired "+nice(n)+" times, yet somehow typed "+nice(s.total)+" messages."},
+    function(s,n){return "Ran out of energy "+nice(n)+" times. Recharging has not been observed."}
+  ]
+};
+var INTRO={
+  love:"Dono ne milke jo likha hai, uska hisaab:",
+  friends:"Dosti ka poora record, aapke hi shabdon mein:",
+  group:"Is group ne jo likha hai, uska hisaab:",
+  work:"Professional chat ka asli chehra, aapke hi messages se:",
+  "new":"Abhi shuruaat hai, lekin record toh ban hi chuka hai:"
+};
+var INTRO_EN={
+  love:"Everything you two wrote, accounted for:",
+  friends:"The friendship, in your own words:",
+  group:"What this group has actually been saying:",
+  work:"The real face of this professional chat:",
+  "new":"Early days, but the record already exists:"
+};
+function roast(s,type,lang){
+  var en=lang==="en",B=en?BURN_EN:BURN;
+  var ks=Object.keys(s.cat||{}).filter(function(k){return s.quote[k]&&s.quote[k].sc>0});
+  ks.sort(function(a,b){return (s.quote[b].sc*1.5+Math.log(1+s.cat[b]))-(s.quote[a].sc*1.5+Math.log(1+s.cat[a]))});
+  var out=[],i;
+  for(i=0;i<ks.length&&out.length<4;i++){
+    var k=ks[i];
+    var vr=B[k];
+    out.push({q:s.quote[k].m,burn:vr[seed(s,k)%vr.length](s,s.cat[k])});
+  }
+  var top=s.board[0],rp=s.repeat[top],used=out.map(function(b){return b.q.txt.toLowerCase().replace(/[^\p{L}\s]/gu,"").replace(/\s+/g," ").trim()});
+  if(rp&&rp.n>3&&out.length<5&&used.indexOf(rp.txt)<0)
+    out.push({dry:rp.txt,who:top,burn:en?"“"+rp.txt+"”, "+nice(rp.n)+" times. That is the entire vocabulary.":"“"+rp.txt+"” "+nice(rp.n)+" baar. Poora vocabulary isi mein aa gaya."});
+  return {
+    intro:(en?INTRO_EN:INTRO)[type]||(en?INTRO_EN:INTRO).friends,
+    beats:out,
+    end:en?"Final verdict: "+s.vd.t+". No further questions.":"Final verdict: "+s.vd.t+". Isme koi doubt nahi."
+  };
+}
+
+/* ---------- story ---------- */
+var NIGHTK={love:"The 3 a.m. file",friends:"The 3 a.m. file",group:"The 3 a.m. file",work:"The after-hours file","new":"The late ones"};
+var FIRSTK={love:"Where it started",friends:"Where it started",group:"Day one",work:"The first thread","new":"Where it started"};
+function build(s,type){
+  var P=s.board,c=[];
+  c.push({k:"Chapter one",big:nice(s.total),cap:"messages sent",
+    sub:(s.pair?"Since ":s.P.length+" people, since ")+MON[s.first.getMonth()]+" "+s.first.getFullYear()+" · about "+nice(s.perDay)+" a day."});
+  if(s.pair){
+    c.push({k:"Who starts it",mid:ini(s.starter)+" texts first "+s.startPct+"% of the time",
+      cap:"Across "+nice(P.reduce(function(a,p){return a+s.starts[p]},0))+" separate conversations, someone always had to go first."});
+    c.push({k:"Reply speed",rows:P.map(function(p){return [ini(p)+" replies in",dur(median(s.replies[p])||0)]}),
+      cap:s.slow.ms?ini(s.slow.who)+" once took "+dur(s.slow.ms)+" to answer. That was "+dstr(s.slow.t)+".":"Measured across every exchange."});
+  }else{
+    c.push({k:"The leaderboard",rows:P.slice(0,5).map(function(p){return [trunc(p,16),nice(s.by[p])]}),
+      cap:ini(P[0])+" alone sent "+Math.round(s.by[P[0]]/s.total*100)+"% of everything in here."});
+    c.push({k:"Who starts it",mid:trunc(s.starter,18)+" starts "+s.startPct+"% of conversations",
+      cap:"Someone has to break the silence, and it is usually the same person."});
+  }
+  if(s.firstMsg)c.push({k:FIRSTK[type]||"Where it started",thread:[[s.firstMsg,"them"]],stamp:dstr(s.firstMsg.t)+" · "+clock(s.firstMsg.t),
+    cap:"The first thing anyone said here. Everything after it is "+nice(s.total-1)+" more messages."});
+  var ms=s.mLove?{k:"The day it changed",lab:"said it first",m:s.mLove}:
+         s.mMiss?{k:"The day it changed",lab:"missed them first",m:s.mMiss}:
+         (s.longMsg.len>220?{k:"The longest thing anyone typed",lab:"wrote "+nice(s.longMsg.len)+" characters in one go",m:s.longMsg}:null);
+  if(ms&&type!=="work")c.push({k:ms.k,thread:[[ms.m,"me"]],stamp:dstr(ms.m.t)+" · "+clock(ms.m.t),
+    cap:ini(ms.m.who)+" "+ms.lab+", "+Math.max(1,Math.round((ms.m.t-s.first)/86400000))+" days in."});
+  else if(ms&&type==="work")c.push({k:"The longest message in here",thread:[[s.longMsg,"me"]],stamp:dstr(s.longMsg.t),
+    cap:ini(s.longMsg.who)+" wrote "+nice(s.longMsg.len)+" characters. In a chat app."});
+  var reps=P.filter(function(p){return s.repeat[p]}).slice(0,3);
+  if(reps.length)c.push({k:"Receipts",rows:reps.map(function(p){return ["“"+trunc(s.repeat[p].txt,20)+"” — "+ini(p),nice(s.repeat[p].n)+"×"]}),
+    cap:"The most-sent message from each of you, word for word. No notes."});
+  if(s.night.length>=2)c.push({k:NIGHTK[type]||"The 3 a.m. file",thread:pick3(s.night).map(function(m,i){return [m,i%2?"me":"them"]}),
+    stamp:nice(s.late)+" messages after midnight",cap:"Nothing good is ever said at this hour. You said "+nice(s.late)+" things."});
+  c.push({k:"The awards",awards:awards(s,type),cap:"Decided entirely by the numbers. Take it up with the data."});
+  var vd=verdict(s,type);
+  var w=s.pair?[[ini(P[0]),persona(s,P[0],P[1],type)],[ini(P[1]),persona(s,P[1],P[0],type,persona(s,P[0],P[1],type).t)]]
+              :[[ini(P[0]),persona(s,P[0],P[1],type)],[ini(P[1]),persona(s,P[1],P[0],type,persona(s,P[0],P[1],type).t)]];
+  c.push({k:"The verdict",verdict:vd,who:w});
+  s.vd=vd;
+  if(roast(s,type,"hi").beats.length)c.push({k:"The roast",roast:true});
+  return c;
+}
+function pick3(a){return a.length<=3?a:[a[0],a[Math.floor(a.length/2)],a[a.length-1]]}
+
+/* ---------- render ---------- */
+var S=null,CARDS=[],idx=0,unlocked=false,FREE=3,TYPE="friends",LANG="hi";
+var PAL=["--p7","--p5","--p2","--p4","--p6","--p8","--p1","--p3"];
+function render(){
+  var c=CARDS[idx],h="";
+  $("bars").innerHTML=CARDS.map(function(_,i){return '<i class="'+(i<=idx?"on":"")+'"></i>'}).join("");
+  $("pair").textContent=S.pair?ini(S.board[0])+" + "+ini(S.board[1]):S.P.length+" people";
+  $("count").textContent=(idx+1)+" / "+CARDS.length;
+  if(c.k)h+='<p class="kicker">'+esc(c.k)+'</p>';
+  if(c.big)h+='<p class="huge">'+c.big+'</p><p class="cap">'+esc(c.cap)+'</p>';
+  if(c.mid)h+='<p class="mid">'+esc(c.mid)+'</p>';
+  if(c.thread)h+='<div class="thread">'+c.thread.map(function(p){return '<div class="bub '+p[1]+'">'+esc(trunc(p[0].txt,180))+'</div>'}).join("")+(c.stamp?'<span class="stamp">'+esc(c.stamp)+'</span>':'')+'</div>';
+  if(c.rows)h+='<div class="rows">'+c.rows.map(function(r){return '<div class="row"><span>'+esc(r[0])+'</span><b>'+esc(r[1])+'</b></div>'}).join("")+'</div>';
+  if(c.awards)h+='<div class="awards">'+c.awards.map(function(a){return '<div class="aw"><span class="ini">'+esc(ini(a.who))+'</span><div><h3>'+esc(a.t)+'</h3><p>'+esc(a.d)+'</p></div></div>'}).join("")+'</div>';
+  if(c.verdict)h+='<div class="verdict"><p class="kicker">'+(S.pair?"You two are":"This group is")+'</p><h2>'+esc(c.verdict.t)+'</h2><p>'+esc(c.verdict.d)+'</p></div>';
+  if(c.who)h+='<div class="who">'+c.who.map(function(w){return '<div class="p"><span class="ini">'+esc(w[0])+'</span><h3>'+esc(w[1].t)+'</h3><p>'+esc(w[1].d)+'</p></div>'}).join("")+'</div>';
+  if(c.roast){
+    var R=roast(S,TYPE,LANG);
+    h+='<div class="langsw"><button class="lg" data-l="hi" aria-pressed="'+(LANG==="hi")+'">Hinglish</button>'+
+       '<button class="lg" data-l="en" aria-pressed="'+(LANG==="en")+'">English</button></div>'+
+       '<p class="cap" style="margin-bottom:2px">'+esc(R.intro)+'</p><div class="roastlist">'+
+       R.beats.map(function(b){
+         return '<div class="rst"><div class="bub them">'+esc(b.dry?b.dry:trunc(b.q.txt,120))+'</div><p class="burn">'+esc(b.burn)+'</p></div>';
+       }).join("")+'</div><p class="endline">'+esc(R.end)+'</p>';
+  }
+  if(c.sub)h+='<p class="cap">'+esc(c.sub)+'</p>';
+  if(c.cap&&!c.big)h+='<p class="cap">'+esc(c.cap)+'</p>';
+  $("slide").style.setProperty("--pc","var("+PAL[idx%PAL.length]+")");
+  $("slide").innerHTML=h;
+  if(c.roast){
+    var lgs=$("slide").querySelectorAll(".lg");
+    for(var z=0;z<lgs.length;z++)lgs[z].addEventListener("click",function(){
+      LANG=this.getAttribute("data-l");render();
+    });
+  }
+  $("prev").disabled=idx===0;
+  $("prev").style.opacity=idx===0?".4":"1";
+  $("next").textContent=(idx===CARDS.length-1)?"Finish":"Next";
+}
+function step(d){
+  var n=idx+d;
+  if(n<0)return;
+  if(n>=CARDS.length){doneScreen();return}
+  if(!unlocked&&n>=FREE){gate();return}
+  idx=n;render();
+}
+function gate(){
+  var s=S,t=[];
+  $("lockn").textContent=(CARDS.length-FREE)+" more screens locked";
+  if(s.firstMsg)t.push(["\u{1F4C5}","The first thing anyone said here, from "+dstr(s.firstMsg.t)]);
+  if(s.mLove)t.push(["❤️","The exact day someone said it first"]);
+  if(s.repeat[s.board[0]])t.push(["\u{1F9FE}","The message one of you has sent "+nice(s.repeat[s.board[0]].n)+" times"]);
+  if(s.late>10)t.push(["\u{1F319}","Your "+nice(s.late)+" messages sent after midnight"]);
+  t.push(["\u{1F3C6}","Six awards, decided entirely by your own data"]);
+  t.push(["⚖️","Your verdict — and what each of you is in this chat"]);
+  t.push(["\u{1F525}","A roast, built from the lines you actually sent"]);
+  $("teases").innerHTML=t.slice(0,6).map(function(x){return '<span>'+x[0]+'<b>'+esc(x[1])+'</b></span>'}).join("");
+  show("s-pay");
+}
+function doneScreen(){
+  var s=S;
+  $("shot").innerHTML='<p class="kicker">Scrollback</p><h2>'+esc(s.vd.t)+'</h2>'+
+    '<p class="cap" style="opacity:.75">'+(s.pair?ini(s.board[0])+" + "+ini(s.board[1]):s.P.length+" people")+' · since '+MON[s.first.getMonth()]+' '+s.first.getFullYear()+'</p>'+
+    '<div class="line"><span>Messages</span><b>'+nice(s.total)+'</b></div>'+
+    '<div class="line"><span>Starts it most</span><b>'+ini(s.starter)+'</b></div>'+
+    '<div class="line"><span>Peak hour</span><b>'+hourLabel(s.peak)+'</b></div>'+
+    '<div class="line"><span>Longest streak</span><b>'+nice(s.streak)+' days</b></div>'+
+    '<p class="foot">scrollback</p>';
+  var here="";
+  try{here=String(location.href).split("#")[0].split("?")[0]}catch(e){}
+  $("gift").textContent=here||"scrollback.in";
+  show("s-done");
+}
+
+/* ---------- input ---------- */
+function fail(msg){$("err").textContent=msg;$("err").hidden=false}
+var RAW=null,PEOPLE=[];
+function load(text){
+  var msgs=parse(text);
+  if(!msgs){fail("That file does not look like a WhatsApp export. Export the chat again and choose Without media.");return}
+  RAW=msgs;PEOPLE=people(msgs);$("err").hidden=true;
+  if(PEOPLE.length<2){fail("This export only has one person in it. Try a chat with at least two people.");return}
+  $("drop").querySelector("strong").textContent="Chat loaded";
+  $("drop").querySelector("span").textContent=nice(msgs.length)+" messages · "+PEOPLE.length+" people";
+  if(PEOPLE.length>2){
+    $("opts").hidden=false;$("modewrap").hidden=false;
+    var opts=PEOPLE.map(function(p){return '<option value="'+esc(p)+'">'+esc(p)+'</option>'}).join("");
+    $("p1").innerHTML=opts;$("p2").innerHTML=opts;
+    $("p1").selectedIndex=0;$("p2").selectedIndex=1;
+    $("pickwrap").hidden=$("gmode").value!=="pair";
+    return;
+  }
+  start(PEOPLE.slice(0,2));
+}
+function start(P){
+  var s=analyse(RAW,P);
+  if(!s){fail("Not enough messages between those people to build a story.");return}
+  S=s;TYPE=s.type;$("ctype").value=TYPE;
+  CARDS=build(s,TYPE);idx=0;unlocked=false;render();show("s-story");
+}
+var PRICE=149;
+function pickTier(p){
+  PRICE=p;
+  $("t49").setAttribute("aria-checked",p===49?"true":"false");
+  $("t149").setAttribute("aria-checked",p===149?"true":"false");
+  $("unlock").textContent="Unlock "+(p===49?"the full story":"the gift edition")+" — ₹"+p;
+}
+$("t49").addEventListener("click",function(){pickTier(49)});
+$("t149").addEventListener("click",function(){pickTier(149)});
+pickTier(149);
+$("gmode").addEventListener("change",function(){$("pickwrap").hidden=$("gmode").value!=="pair"});
+$("ctype").addEventListener("change",function(){
+  if(!S)return;
+  TYPE=$("ctype").value;CARDS=build(S,TYPE);
+  if(idx>=CARDS.length)idx=CARDS.length-1;
+  render();
+});
+$("drop").addEventListener("click",function(){$("file").click()});
+$("drop").addEventListener("dragover",function(e){e.preventDefault();$("drop").classList.add("over")});
+$("drop").addEventListener("dragleave",function(){$("drop").classList.remove("over")});
+$("drop").addEventListener("drop",function(e){e.preventDefault();$("drop").classList.remove("over");if(e.dataTransfer.files[0])take(e.dataTransfer.files[0])});
+$("file").addEventListener("change",function(e){if(e.target.files[0])take(e.target.files[0])});
+function take(f){
+  $("err").hidden=true;
+  if(/\.zip$/i.test(f.name)){
+    if(typeof JSZip==="undefined"){fail("Zip files cannot be opened right now. Export the chat as a .txt file instead.");return}
+    JSZip.loadAsync(f).then(function(z){
+      var name=Object.keys(z.files).filter(function(n){return /\.txt$/i.test(n)&&!/^__/.test(n)})[0];
+      if(!name)throw 0;
+      return z.files[name].async("string");
+    }).then(load).catch(function(){fail("That zip did not contain a chat file. Try exporting again.")});
+    return;
+  }
+  var r=new FileReader();
+  r.onload=function(){load(String(r.result))};
+  r.onerror=function(){fail("That file could not be read. Try exporting the chat again.")};
+  r.readAsText(f);
+}
+$("go").addEventListener("click",function(){
+  if(!RAW){fail("Add your chat file first, or try the sample chat below.");return}
+  if(PEOPLE.length>2&&$("gmode").value==="pair"){
+    var A=$("p1").value,B=$("p2").value;
+    if(A===B){fail("Pick two different people.");return}
+    start([A,B]);return;
+  }
+  start(PEOPLE.length>2?PEOPLE:PEOPLE.slice(0,2));
+});
+$("prev").addEventListener("click",function(){step(-1)});
+$("next").addEventListener("click",function(){step(1)});
+$("unlock").addEventListener("click",function(){unlocked=true;idx=FREE;render();show("s-story")});
+$("again").addEventListener("click",function(){
+  RAW=null;PEOPLE=[];S=null;$("opts").hidden=true;$("modewrap").hidden=true;$("pickwrap").hidden=true;
+  $("drop").querySelector("strong").textContent="Drop your WhatsApp export";
+  $("drop").querySelector("span").textContent=".txt or .zip file";show("s-upload");
+});
+$("copy").addEventListener("click",function(){
+  var t=$("gift").textContent,b=$("copy");
+  function sel(){var r=document.createRange();r.selectNodeContents($("gift"));var g=getSelection();g.removeAllRanges();g.addRange(r);b.textContent="Selected — copy it";setTimeout(function(){b.textContent="Copy link to Scrollback"},2400)}
+  try{navigator.clipboard.writeText(t).then(function(){b.textContent="Copied";setTimeout(function(){b.textContent="Copy link to Scrollback"},1600)},sel)}catch(e){sel()}
+});
+
+/* ---------- sample ---------- */
+$("sample").addEventListener("click",function(){
+  var names=["Riya","Arjun"],out=[],n=0;
+  var early=["hey","hi","who is this","arjun from sunday","ohh hey","how are you","good, you?","same","what are you doing","nothing much"];
+  var mid=["kya kar rahe ho","bored yaar","should we watch something","that movie you mentioned","haan that one","you fell asleep last time","that was once","sure sure","ok good night","wait one more thing","did you eat","not yet","ok ok eating","call me","in 5","reached home","finally","ok"];
+  var late=["i love you","love you too","miss you","i miss you more","cant sleep","same","you up?","always","sorry about today","its ok","no its not, sorry","stop apologising","ok"];
+  var emo=["\u{1F602}","❤️","\u{1F605}","\u{1F97A}"];
+  function add(t,who,txt){var hh=t.getHours()%12||12,ap=t.getHours()<12?"am":"pm";
+    out.push(t.getDate()+"/"+(t.getMonth()+1)+"/"+String(t.getFullYear()).slice(2)+", "+hh+":"+String(t.getMinutes()).padStart(2,"0")+" "+ap+" - "+who+": "+txt);n++}
+  add(new Date(2022,2,14,21,12),"Riya","hey");
+  for(var k=1;k<early.length;k++)add(new Date(2022,2,14,21,12+k*3),names[k%2],early[k]);
+  for(var day=1;day<430;day++){
+    if(day>60&&day<71)continue;
+    var per=3+Math.floor(Math.random()*13);
+    var base=new Date(2022,2,14+day,19+Math.floor(Math.random()*5),Math.floor(Math.random()*58));
+    for(var j=0;j<per;j++){
+      var who=Math.random()<0.6?names[0]:names[1];
+      var pool=day>45&&Math.random()<0.4?late:mid;
+      var txt=pool[Math.floor(Math.random()*pool.length)];
+      if(day===46&&j===0){who=names[1];txt="i love you"}
+      if(Math.random()<0.28)txt+=" "+emo[Math.floor(Math.random()*emo.length)];
+      add(new Date(base.getTime()+j*(1+Math.floor(Math.random()*24))*60000),who,txt);
+    }
+    if(Math.random()<0.35){
+      var nb=new Date(2022,2,14+day+1,0,10+Math.floor(Math.random()*170));
+      for(var q=0;q<2+Math.floor(Math.random()*3);q++)add(new Date(nb.getTime()+q*7*60000),Math.random()<0.5?names[0]:names[1],late[Math.floor(Math.random()*late.length)]);
+    }
+  }
+  load(out.join("\n"));
+});
+})();
+</script>
+
+</body></html>
