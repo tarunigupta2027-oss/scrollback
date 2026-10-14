@@ -1,219 +1,484 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Scrollback</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gabarito:wght@400;500;600;700;800&family=Figtree:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Figtree:wght@400;500;600&display=swap">
 <style>
-/* Layout: phone-width column, one story card at a time, each card tinted a different pastel */
+/* Layout: full-width marketing site on a warm greige ground; the story itself plays in a centred card */
 :root{
-  --p1:#FFADAD; --p2:#FFD6A5; --p3:#FDFFB6; --p4:#CAFFBF; --p5:#9BF6FF; --p6:#A0C4FF; --p7:#BDB2FF; --p8:#FFC6FF;
-  --onpastel:#231B3C;
-  --paper:#FFFFFC; --surface:#FFFFFF; --ink:#231B3C; --muted:#6C6490;
-  --accent:#6A54D8; --line:#E9E5F7; --shade:#F5F2FF;
-  --font-display:"Gabarito","Trebuchet MS",sans-serif;
+  --coral:#FF5A36; --orange:#FF9B42; --yellow:#F7D14A; --mint:#35BF9E;
+  --cyan:#2BC4D4; --sky:#8FD3F4; --pink:#F58FC2; --peach:#F0D9C4;
+  --p1:#FF5A36; --p2:#FF9B42; --p3:#F7D14A; --p4:#35BF9E;
+  --p5:#2BC4D4; --p6:#8FD3F4; --p7:#F58FC2; --p8:#F0D9C4;
+  --cream:#EDEAE4; --paper:#F7F5F1; --card:#FFFFFF;
+  --ink:#141414; --muted:#5E5A54; --line:#141414; --onpastel:#141414;
+  --accent:#D63A17; --shade:#F7F5F1; --surface:#FFFFFF;
+  --font-display:"Fredoka","Trebuchet MS",sans-serif;
   --font-body:"Figtree","Helvetica Neue",Arial,sans-serif;
-}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --paper:#15121E; --surface:#221B31; --ink:#F7F3FF; --muted:#A99DC8;
-  --accent:#C6BBFF; --line:#352C4B; --shade:#2A2239; color-scheme:dark;
-}}
-:root[data-theme="dark"]{
-  --paper:#15121E; --surface:#221B31; --ink:#F7F3FF; --muted:#A99DC8;
-  --accent:#C6BBFF; --line:#352C4B; --shade:#2A2239; color-scheme:dark;
+  color-scheme:light;
 }
 *{box-sizing:border-box}
-body{background:var(--paper);color:var(--ink);font-family:var(--font-body);line-height:1.55;margin:0}
-.wrap{max-width:440px;margin:0 auto;padding:0 18px;padding-block:22px 48px}
-h1,h2,h3{font-family:var(--font-display);font-weight:700;text-wrap:balance;margin:0}
-h1{font-size:2.1rem;line-height:1.08;letter-spacing:-.02em}
-h2{font-size:1.35rem;line-height:1.15}
+body{background:var(--cream);color:var(--ink);font-family:var(--font-body);line-height:1.6;margin:0;overflow-x:hidden}
+h1,h2,h3{font-family:var(--font-display);font-weight:600;text-wrap:balance;margin:0;line-height:1.05}
 p{margin:0}
-.brand{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-display);font-weight:600;font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;color:var(--onpastel);background:var(--p8);padding:6px 13px;border-radius:999px}
-.sub{color:var(--muted);font-size:1rem}
-.stack{display:flex;flex-direction:column;gap:18px}
-.drop{border:1.5px dashed var(--p7);border-radius:18px;background:var(--surface);padding:30px 18px;text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center;cursor:pointer;transition:background .15s}
-.drop:hover,.drop.over{background:#F3F0FF;background:color-mix(in srgb,var(--p7) 22%,var(--surface))}
-.drop strong{font-family:var(--font-display);font-size:1.06rem}
-.drop span{color:var(--muted);font-size:.86rem}
-.disc{width:46px;height:46px;border-radius:50%;background:var(--p5);color:var(--onpastel);display:grid;place-items:center;font-size:1.25rem;margin-bottom:4px}
+a{color:inherit}
 button{font:inherit;cursor:pointer;border:none}
-.btn{background:var(--p7);color:var(--onpastel);font-family:var(--font-display);font-weight:600;font-size:1.02rem;padding:15px 20px;border-radius:999px;width:100%;transition:filter .15s}
-.btn:hover{filter:brightness(.95)}
-.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
-.btn.ghost:hover{filter:none;background:var(--shade)}
-.link{background:none;color:var(--accent);font-weight:600;font-size:.92rem;text-decoration:underline;text-underline-offset:3px;padding:0}
-.note{display:flex;gap:7px;align-items:flex-start;color:var(--muted);font-size:.84rem;justify-content:center;text-align:center}
-details.how{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:13px 15px}
-details.how summary{font-weight:600;color:var(--accent);cursor:pointer;font-size:.92rem;list-style:none}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* nav */
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 0;flex-wrap:wrap}
+.mark{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:1.3rem;letter-spacing:-.01em}
+.navlinks{display:flex;gap:22px;font-size:.95rem;font-weight:500}
+.navlinks a{text-decoration:none;padding:4px 0;border-bottom:2px solid transparent}
+.navlinks a:hover{border-bottom-color:var(--coral)}
+
+/* buttons */
+.btn{background:var(--coral);color:#fff;font-family:var(--font-display);font-weight:600;font-size:1.05rem;
+  padding:14px 28px;border-radius:999px;border:2.5px solid var(--ink);box-shadow:4px 4px 0 var(--ink);
+  transition:transform .12s,box-shadow .12s;display:inline-block;text-decoration:none;text-align:center}
+.btn:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--ink)}
+.btn:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
+.btn.wide{width:100%}
+.btn.ghost{background:var(--card);color:var(--ink)}
+.btn.cyan{background:var(--cyan)}
+.link{background:none;color:var(--accent);font-weight:600;font-size:.95rem;text-decoration:underline;text-underline-offset:4px;padding:0}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center;padding:28px 0 56px}
+.hero h1{font-size:clamp(2.6rem,6vw,4.4rem);font-weight:700}
+.hl{display:inline-block;padding:2px 16px 8px;margin:4px 0}
+.hl-peach{background:var(--peach)}
+.hl-coral{background:var(--coral);color:var(--yellow);transform:rotate(-1.5deg)}
+.hl-cyan{color:var(--cyan)}
+.lede{font-size:1.15rem;color:var(--muted);max-width:30ch;margin:22px 0 26px}
+.cta-row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.micro{display:flex;gap:8px;align-items:center;font-size:.88rem;color:var(--muted);margin-top:18px}
+.hero-art{position:relative}
+.hero-art svg{width:100%;height:auto;display:block}
+
+/* bands */
+.band{background:var(--paper);border-top:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);padding:56px 0}
+.band.cream{background:var(--cream);border:none;padding:56px 0}
+.eyebrow{font-family:var(--font-display);font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.h2{font-size:clamp(1.8rem,3.4vw,2.6rem);font-weight:700;margin-bottom:10px}
+.sub{color:var(--muted);font-size:1.05rem;max-width:56ch}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:34px}
+.step{background:var(--card);border:2.5px solid var(--ink);border-radius:20px;padding:24px;box-shadow:5px 5px 0 var(--ink);
+  display:flex;flex-direction:column;gap:10px}
+.step svg{width:84px;height:84px}
+.stepn{font-family:var(--font-display);font-weight:700;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.step h3{font-size:1.25rem}
+.step p{font-size:.95rem;color:var(--muted)}
+
+/* upload card */
+.start{background:var(--card);border:2.5px solid var(--ink);border-radius:26px;box-shadow:7px 7px 0 var(--ink);
+  padding:34px;max-width:620px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+.drop{border:2.5px dashed var(--ink);border-radius:18px;background:var(--paper);padding:34px 20px;text-align:center;
+  display:flex;flex-direction:column;gap:6px;align-items:center;cursor:pointer;transition:background .15s}
+.drop:hover,.drop.over{background:var(--peach)}
+.drop strong{font-family:var(--font-display);font-size:1.15rem;font-weight:600}
+.drop span{color:var(--muted);font-size:.9rem}
+.disc{width:58px;height:58px;border-radius:50%;background:var(--yellow);border:2.5px solid var(--ink);
+  display:grid;place-items:center;font-size:1.5rem;margin-bottom:6px}
+details.how{background:var(--paper);border:2px solid var(--ink);border-radius:14px;padding:14px 16px}
+details.how summary{font-family:var(--font-display);font-weight:600;color:var(--accent);cursor:pointer;font-size:.98rem;list-style:none}
 details.how summary::-webkit-details-marker{display:none}
-details.how ol{margin:11px 0 0;padding-left:19px;color:var(--muted);font-size:.89rem;display:flex;flex-direction:column;gap:5px}
-.field{display:flex;flex-direction:column;gap:6px}
-.bars{display:flex;gap:3px;margin-bottom:14px}
-.bars i{flex:1;height:4px;border-radius:2px;background:var(--line)}
-.bars i.on{background:var(--p7)}
-.meta{display:flex;justify-content:space-between;align-items:center;font-family:var(--font-display);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
-.slide{--pc:var(--p7);background:var(--surface);background:color-mix(in srgb,var(--pc) 20%,var(--surface));border:1px solid var(--line);border-color:color-mix(in srgb,var(--pc) 50%,var(--line));border-radius:22px;padding:28px 20px;min-height:400px;display:flex;flex-direction:column;justify-content:center;gap:14px;text-align:center;transition:background .25s,border-color .25s}
-.kicker{font-family:var(--font-display);font-size:.74rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
-.huge{font-family:var(--font-display);font-size:3.4rem;font-weight:800;line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
-.mid{font-family:var(--font-display);font-size:1.75rem;font-weight:700;line-height:1.18;letter-spacing:-.01em}
-.cap{color:var(--muted);font-size:.95rem}
+details.how ol{margin:12px 0 0;padding-left:20px;color:var(--muted);font-size:.93rem;display:flex;flex-direction:column;gap:6px}
+.field{display:flex;flex-direction:column;gap:7px}
+.lbl{font-size:.88rem;color:var(--muted);font-weight:600}
+select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px solid var(--ink);background:var(--card);color:var(--ink)}
+.err{color:#8A1B06;font-size:.92rem;background:#FFE2DA;border:2px solid #8A1B06;border-radius:12px;padding:12px 14px}
+.note{display:flex;gap:9px;align-items:flex-start;color:var(--muted);font-size:.88rem;justify-content:center;text-align:center}
+
+/* privacy band */
+.privacy{display:grid;grid-template-columns:1.15fr .85fr;gap:36px;align-items:center}
+.privacy svg{width:100%;height:auto;max-width:320px;margin:0 auto;display:block}
+.plist{display:flex;flex-direction:column;gap:12px;margin-top:20px}
+.plist li{list-style:none;display:flex;gap:12px;align-items:flex-start;font-size:1rem}
+.tick{flex:none;width:26px;height:26px;border-radius:50%;background:var(--mint);border:2.5px solid var(--ink);
+  display:grid;place-items:center;font-size:.8rem;font-weight:700}
+
+/* pricing preview */
+.prices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;margin-top:30px;max-width:720px}
+.pcard{background:var(--card);border:2.5px solid var(--ink);border-radius:20px;padding:24px;box-shadow:5px 5px 0 var(--ink);
+  display:flex;flex-direction:column;gap:8px}
+.pcard.feat{background:var(--peach)}
+.ptag{align-self:flex-start;font-family:var(--font-display);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;
+  background:var(--yellow);border:2px solid var(--ink);border-radius:999px;padding:3px 10px;font-weight:600}
+.pamt{font-family:var(--font-display);font-size:2.4rem;font-weight:700;line-height:1}
+.pcard p{font-size:.95rem;color:var(--muted)}
+
+/* footer */
+.foot{border-top:2.5px solid var(--ink);padding:34px 0;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+  font-size:.9rem;color:var(--muted)}
+
+/* ---- story view ---- */
+.stage{padding:30px 0 60px;position:relative}
+.stagewrap{max-width:470px;margin:0 auto;position:relative;z-index:2}
+.doodle{position:absolute;z-index:1;pointer-events:none;opacity:.9}
+.doodle.l{left:4%;top:120px;width:104px;opacity:.75}
+.doodle.r{right:5%;top:210px;width:76px;opacity:.85}
+.bars{display:flex;gap:4px;margin-bottom:14px}
+.bars i{flex:1;height:6px;border-radius:3px;background:var(--card);border:2px solid var(--ink)}
+.bars i.on{background:var(--coral)}
+.meta{display:flex;justify-content:space-between;align-items:center;font-family:var(--font-display);font-size:.76rem;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.slide{--pc:var(--p7);background:var(--card);background:color-mix(in srgb,var(--pc) 22%,var(--card));
+  border:2.5px solid var(--ink);box-shadow:7px 7px 0 var(--ink);border-radius:26px;padding:30px 22px;min-height:420px;
+  display:flex;flex-direction:column;justify-content:center;gap:15px;text-align:center;transition:background .25s}
+.kicker{font-family:var(--font-display);font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+.huge{font-family:var(--font-display);font-size:3.6rem;font-weight:700;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.mid{font-family:var(--font-display);font-size:1.8rem;font-weight:600;line-height:1.15}
+.cap{color:var(--muted);font-size:.97rem}
 .rows{display:flex;flex-direction:column;gap:9px;text-align:left}
-.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:11px 14px;background:var(--surface);border-radius:11px;font-size:.95rem}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 15px;background:var(--card);
+  border:2px solid var(--ink);border-radius:12px;font-size:.96rem}
 .row b{font-family:var(--font-display);font-variant-numeric:tabular-nums;white-space:nowrap}
 .chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
-.chip{background:var(--surface);border-radius:999px;padding:7px 14px;font-size:1.15rem;display:flex;align-items:center;gap:7px}
+.chip{background:var(--card);border:2px solid var(--ink);border-radius:999px;padding:7px 15px;font-size:1.15rem;display:flex;align-items:center;gap:8px}
 .chip small{font-size:.8rem;color:var(--muted);font-family:var(--font-display);font-variant-numeric:tabular-nums}
-.thread{display:flex;flex-direction:column;gap:7px;text-align:left}
-.bub{max-width:84%;padding:9px 13px;border-radius:15px;font-size:.95rem;line-height:1.4;word-wrap:break-word;overflow-wrap:anywhere}
-.bub.them{background:var(--surface);border-bottom-left-radius:5px;align-self:flex-start}
-.bub.me{background:var(--p7);color:var(--onpastel);border-bottom-right-radius:5px;align-self:flex-end}
-.stamp{font-size:.7rem;color:var(--muted);font-family:var(--font-display);letter-spacing:.08em;text-transform:uppercase;align-self:center}
-.awards{display:flex;flex-direction:column;gap:8px;text-align:left}
-.aw{display:flex;align-items:center;gap:11px;padding:10px 13px;background:var(--surface);border-radius:12px}
+.thread{display:flex;flex-direction:column;gap:8px;text-align:left}
+.bub{max-width:85%;padding:10px 14px;border-radius:16px;font-size:.96rem;line-height:1.4;border:2px solid var(--ink);
+  word-wrap:break-word;overflow-wrap:anywhere}
+.bub.them{background:var(--card);border-bottom-left-radius:5px;align-self:flex-start}
+.bub.me{background:var(--cyan);border-bottom-right-radius:5px;align-self:flex-end}
+.stamp{font-size:.72rem;color:var(--muted);font-family:var(--font-display);letter-spacing:.08em;text-transform:uppercase;align-self:center}
+.awards{display:flex;flex-direction:column;gap:9px;text-align:left}
+.aw{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--card);border:2px solid var(--ink);border-radius:14px}
 .aw div{min-width:0}
-.aw h3{font-size:.95rem;font-family:var(--font-display);line-height:1.2}
-.aw p{font-size:.79rem;color:var(--muted);line-height:1.35}
-.who{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.who .p{background:var(--surface);border-radius:14px;padding:14px;text-align:left;display:flex;flex-direction:column;gap:5px}
-.ini{width:30px;height:30px;border-radius:50%;background:var(--p7);color:var(--onpastel);display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:.85rem;flex:none}
-.who h3{font-size:1rem;font-family:var(--font-display);line-height:1.2}
-.who p{font-size:.82rem;color:var(--muted);line-height:1.4}
-.verdict{background:var(--p8);color:var(--onpastel);border-radius:18px;padding:26px 20px;display:flex;flex-direction:column;gap:10px}
-.verdict .kicker,.verdict h2,.verdict p{color:var(--onpastel)}
-.verdict h2{font-size:1.9rem;line-height:1.1;letter-spacing:-.02em}
-.verdict p{font-size:.95rem;opacity:.82;line-height:1.5}
-.roastlist{display:flex;flex-direction:column;gap:14px;text-align:left}
-.rst{display:flex;flex-direction:column;gap:5px;align-items:flex-start}
-.rst .bub{max-width:94%;font-style:italic}
-.burn{font-size:.9rem;line-height:1.45;color:var(--ink);padding-left:3px}
-.endline{font-family:var(--font-display);font-weight:600;font-size:1.02rem;color:var(--accent);text-align:left;padding-top:4px}
-.langsw{display:flex;gap:7px;justify-content:center;margin-bottom:2px}
-.lg{background:var(--surface);color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 15px;font-size:.84rem;font-family:var(--font-display);font-weight:600}
-.lg[aria-pressed="true"]{background:var(--p4);color:var(--onpastel);border-color:transparent}
-.nav{display:flex;gap:10px;margin-top:16px}
-.nav button{flex:1}
-.typebar{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:12px;flex-wrap:wrap}
-.typebar span{font-size:.8rem;color:var(--muted)}
-.typebar select{width:auto;padding:7px 11px;font-size:.84rem}
-.lock{background:var(--surface);background:color-mix(in srgb,var(--p3) 35%,var(--surface));border-radius:16px;padding:22px;text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center}
-.teases{display:flex;flex-direction:column;gap:7px}
-.teases span{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:10px 13px;font-size:.89rem;color:var(--muted);display:flex;gap:9px;align-items:flex-start}
+.aw h3{font-size:1rem;font-family:var(--font-display);line-height:1.2}
+.aw p{font-size:.82rem;color:var(--muted);line-height:1.35}
+.who{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.who .p{background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:15px;text-align:left;display:flex;flex-direction:column;gap:6px}
+.ini{width:34px;height:34px;border-radius:50%;background:var(--yellow);border:2px solid var(--ink);color:var(--ink);
+  display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:.9rem;flex:none}
+.who h3{font-size:1.05rem;font-family:var(--font-display);line-height:1.2}
+.who p{font-size:.84rem;color:var(--muted);line-height:1.4}
+.verdict{background:var(--coral);color:#fff;border:2.5px solid var(--ink);border-radius:20px;padding:28px 22px;display:flex;flex-direction:column;gap:11px}
+.verdict .kicker{color:var(--yellow)}
+.verdict h2{font-size:2rem;line-height:1.08;color:#fff;font-weight:700}
+.verdict p{font-size:.97rem;color:#fff;opacity:.92;line-height:1.5}
+.roastlist{display:flex;flex-direction:column;gap:15px;text-align:left}
+.rst{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.rst .bub{max-width:95%;font-style:italic}
+.burn{font-size:.93rem;line-height:1.45;color:var(--ink);padding-left:3px}
+.endline{font-family:var(--font-display);font-weight:600;font-size:1.05rem;color:var(--accent);text-align:left;padding-top:4px}
+.langsw{display:flex;gap:8px;justify-content:center}
+.lg{background:var(--card);color:var(--muted);border:2px solid var(--ink);border-radius:999px;padding:7px 16px;font-size:.86rem;
+  font-family:var(--font-display);font-weight:600}
+.lg[aria-pressed="true"]{background:var(--mint);color:var(--ink)}
+.nav2{display:flex;gap:12px;margin-top:18px}
+.nav2 button{flex:1}
+.typebar{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:16px;flex-wrap:wrap}
+.typebar span{font-size:.86rem;color:var(--muted)}
+.typebar select{width:auto;padding:8px 12px;font-size:.88rem}
+.footnote{text-align:center;color:var(--muted);font-size:.84rem;line-height:1.5;margin-top:12px}
+
+/* paywall + done */
+.panel{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.lock{background:var(--yellow);border:2.5px solid var(--ink);border-radius:22px;box-shadow:6px 6px 0 var(--ink);
+  padding:26px;text-align:center;display:flex;flex-direction:column;gap:7px;align-items:center}
+.teases{display:flex;flex-direction:column;gap:9px}
+.teases span{background:var(--card);border:2px solid var(--ink);border-radius:13px;padding:12px 15px;font-size:.93rem;
+  color:var(--muted);display:flex;gap:10px;align-items:flex-start}
 .teases span b{color:var(--ink);font-family:var(--font-display);font-weight:600}
-.tier{border:1.5px solid var(--line);border-radius:16px;padding:15px;background:var(--surface);color:inherit;font:inherit;width:100%;text-align:left;display:flex;flex-direction:column;gap:4px;cursor:pointer;transition:border-color .15s,background .15s}
-.tier:hover{border-color:var(--p7)}
-.tier[aria-checked="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--p7) 20%,var(--surface))}
+.tier{border:2.5px solid var(--ink);border-radius:18px;padding:18px;background:var(--card);color:inherit;font:inherit;width:100%;
+  text-align:left;display:flex;flex-direction:column;gap:5px;cursor:pointer;transition:box-shadow .12s,background .15s}
+.tier[aria-checked="true"]{background:var(--peach);box-shadow:5px 5px 0 var(--ink)}
 .tier .top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
-.tier .top h3{display:flex;align-items:center;gap:8px}
-.dot{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--line);flex:none;display:grid;place-items:center;font-size:.7rem;color:var(--onpastel)}
-.tier[aria-checked="true"] .dot{border-color:var(--accent);background:var(--p7)}
-.tier h3{font-family:var(--font-display);font-size:1.05rem}
-.tier .price{font-family:var(--font-display);font-weight:700;color:var(--accent);font-size:1.15rem}
-.tier p{font-size:.86rem;color:var(--muted)}
-.badge{align-self:flex-start;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;font-family:var(--font-display);font-weight:600;color:var(--onpastel);background:var(--p2);border-radius:999px;padding:3px 9px}
-.occ{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}
-.occ span{background:var(--shade);border-radius:999px;padding:6px 13px;font-size:.82rem;color:var(--muted)}
-.shot{background:var(--p7);color:var(--onpastel);border-radius:20px;padding:26px 20px;display:flex;flex-direction:column;gap:12px;text-align:center}
-.shot .huge,.shot h2,.shot .kicker,.shot .foot,.shot .cap{color:var(--onpastel)}
-.shot .kicker{opacity:.72}
-.shot .line{display:flex;justify-content:space-between;font-size:.9rem;border-top:1px solid rgba(35,27,60,.2);padding-top:9px;text-align:left;gap:10px}
+.tier .top h3{display:flex;align-items:center;gap:9px;font-family:var(--font-display);font-size:1.12rem}
+.dot{width:19px;height:19px;border-radius:50%;border:2px solid var(--ink);flex:none;display:grid;place-items:center;font-size:.7rem;color:var(--ink);background:var(--card)}
+.tier[aria-checked="true"] .dot{background:var(--mint)}
+.tier .price{font-family:var(--font-display);font-weight:700;color:var(--accent);font-size:1.3rem}
+.tier p{font-size:.9rem;color:var(--muted)}
+.badge{align-self:flex-start;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;font-family:var(--font-display);
+  font-weight:600;color:var(--ink);background:var(--yellow);border:2px solid var(--ink);border-radius:999px;padding:3px 10px}
+.occ{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.occ span{background:var(--card);border:2px solid var(--ink);border-radius:999px;padding:7px 14px;font-size:.85rem}
+.shot{background:var(--pink);color:var(--ink);border:2.5px solid var(--ink);box-shadow:7px 7px 0 var(--ink);border-radius:22px;
+  padding:28px 22px;display:flex;flex-direction:column;gap:13px;text-align:center}
+.shot .huge,.shot h2,.shot .kicker,.shot .cap,.shot .foottxt{color:var(--ink)}
+.shot .line{display:flex;justify-content:space-between;font-size:.93rem;border-top:2px solid var(--ink);padding-top:10px;text-align:left;gap:10px}
 .shot .line b{font-family:var(--font-display);text-align:right}
-.shot .foot{font-size:.72rem;opacity:.6;letter-spacing:.1em;text-transform:uppercase;font-family:var(--font-display)}
-.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.84rem;background:var(--shade);border-radius:9px;padding:10px 12px;word-break:break-all;color:var(--muted)}
-.err{color:var(--ink);font-size:.88rem;background:#FFE4E4;background:color-mix(in srgb,var(--p1) 40%,var(--surface));border-radius:11px;padding:11px 14px}
-select{font:inherit;width:100%;padding:11px 13px;border-radius:11px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
-.lbl{font-size:.82rem;color:var(--muted);font-weight:600}
-.foot{text-align:center;color:var(--muted);font-size:.78rem;line-height:1.5}
+.shot .foottxt{font-size:.74rem;opacity:.65;letter-spacing:.1em;text-transform:uppercase;font-family:var(--font-display)}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86rem;background:var(--card);border:2px solid var(--ink);
+  border-radius:12px;padding:12px 14px;word-break:break-all;color:var(--muted)}
+
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr;gap:12px;padding:16px 0 40px}
+  .hero-art{order:-1;max-width:420px;margin:0 auto}
+  .steps{grid-template-columns:1fr}
+  .privacy{grid-template-columns:1fr}
+  .prices{grid-template-columns:1fr}
+  .navlinks{display:none}
+  .doodle{display:none}
+  .start{padding:22px}
+}
+[hidden]{display:none!important}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
+<svg class="sr" aria-hidden="true"><defs>
+<g id="squiggle"><path d="M2 14C10 2 18 26 26 14s16-12 24 0 16 12 24 0" fill="none" stroke="#141414" stroke-width="3" stroke-linecap="round"/></g>
+<g id="burst"><path d="M30 2l6 14 15-7-7 15 14 6-14 6 7 15-15-7-6 14-6-14-15 7 7-15-14-6 14-6-7-15 15 7z" fill="none" stroke="#141414" stroke-width="3" stroke-linejoin="round"/></g>
+</defs></svg>
+
+<div id="s-upload">
 <div class="wrap">
-
-<section id="s-upload" class="stack">
-  <div style="text-align:center"><span class="brand">Scrollback</span></div>
-  <h1 style="text-align:center">Your chat, as a story.</h1>
-  <p class="sub" style="text-align:center">Upload a WhatsApp chat and get a beautiful, funny story of your relationship — ready to share or gift.</p>
-  <div class="drop" id="drop">
-    <div class="disc">&#8593;</div>
-    <strong>Drop your WhatsApp export</strong>
-    <span>.txt or .zip file</span>
-  </div>
-  <input type="file" id="file" accept=".txt,.zip,text/plain,application/zip" hidden>
-  <details class="how" id="how">
-    <summary>How do I export my chat?</summary>
-    <ol>
-      <li>Open the chat in WhatsApp.</li>
-      <li>Tap the contact or group name at the top.</li>
-      <li>Scroll down and tap Export chat.</li>
-      <li>Choose Without media, then save or share the file to this device.</li>
-    </ol>
-  </details>
-  <p class="note"><span>&#128274;</span><span>Your messages never leave your phone. The file is read inside your browser and nothing is uploaded.</span></p>
-  <div id="opts" hidden class="stack">
-    <div class="field" id="modewrap" hidden>
-      <label class="lbl" for="gmode">This is a group. Tell the story about</label>
-      <select id="gmode"><option value="group">The whole group</option><option value="pair">Just two people</option></select>
+  <nav class="nav">
+    <div class="mark">
+      <svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true">
+        <circle cx="20" cy="20" r="17" fill="#F7D14A" stroke="#141414" stroke-width="2.5"/>
+        <path d="M11 17h18M11 22h12" stroke="#141414" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      Scrollback
     </div>
-    <div class="field" id="pickwrap" hidden>
-      <label class="lbl" for="p1">Which two</label>
-      <select id="p1"></select>
-      <select id="p2"></select>
+    <div class="navlinks">
+      <a href="#how">How it works</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#pricing">Pricing</a>
+    </div>
+    <a class="btn" href="#start" style="padding:10px 22px;font-size:.95rem">Make my story</a>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-copy">
+      <h1><span class="hl hl-peach">Your chat,</span><br><span class="hl hl-coral">as a story.</span></h1>
+      <p class="lede">Drop in a WhatsApp chat and get a funny, slightly too honest story of your relationship. Ready to share or gift.</p>
+      <div class="cta-row">
+        <a class="btn" href="#start">Make my story</a>
+        <button class="link" id="sample">Try a sample chat</button>
+      </div>
+      <p class="micro"><span>&#128274;</span><span>Your chat is read on your device and never sent to a server.</span></p>
+    </div>
+    <div class="hero-art">
+      <svg viewBox="0 0 440 400" role="img" aria-label="A phone with chat bubbles spilling out of it">
+        <g transform="rotate(-8 220 240)">
+          <rect x="150" y="120" width="150" height="250" rx="24" fill="#fff" stroke="#141414" stroke-width="4"/>
+          <rect x="162" y="140" width="126" height="208" rx="14" fill="#EDEAE4" stroke="#141414" stroke-width="3"/>
+          <rect x="200" y="128" width="50" height="7" rx="3.5" fill="#141414"/>
+          <rect x="174" y="158" width="62" height="24" rx="10" fill="#F58FC2" stroke="#141414" stroke-width="3"/>
+          <rect x="212" y="192" width="64" height="24" rx="10" fill="#2BC4D4" stroke="#141414" stroke-width="3"/>
+          <rect x="174" y="226" width="78" height="24" rx="10" fill="#F7D14A" stroke="#141414" stroke-width="3"/>
+          <rect x="196" y="260" width="80" height="24" rx="10" fill="#35BF9E" stroke="#141414" stroke-width="3"/>
+          <rect x="174" y="294" width="56" height="24" rx="10" fill="#fff" stroke="#141414" stroke-width="3"/>
+        </g>
+        <g>
+          <path d="M44 86h92a14 14 0 0 1 14 14v40a14 14 0 0 1-14 14H74l-22 22v-22h-8a14 14 0 0 1-14-14v-40a14 14 0 0 1 14-14z" fill="#FF5A36" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+          <path d="M60 110h60M60 128h38" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+        </g>
+        <g>
+          <path d="M300 30h86a13 13 0 0 1 13 13v34a13 13 0 0 1-13 13h-42l-20 19v-19h-24a13 13 0 0 1-13-13V43a13 13 0 0 1 13-13z" fill="#2BC4D4" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+          <path d="M314 50h54M314 66h32" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+        </g>
+        <g>
+          <path d="M318 196h74a12 12 0 0 1 12 12v30a12 12 0 0 1-12 12h-32l-18 17v-17h-24a12 12 0 0 1-12-12v-30a12 12 0 0 1 12-12z" fill="#F7D14A" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+          <path d="M332 214h46M332 229h26" stroke="#141414" stroke-width="4" stroke-linecap="round"/>
+        </g>
+        <path d="M66 210c14-18 26 10 40-6s24 8 36-6" fill="none" stroke="#141414" stroke-width="4" stroke-linecap="round"/>
+        <path d="M402 128l6 14 15-6-7 15 14 6" fill="none" stroke="#141414" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="96" cy="286" r="15" fill="#FF9B42" stroke="#141414" stroke-width="4"/>
+        <path d="M250 70c0-9 7-16 16-16s16 7 16 16c0 12-16 22-16 22s-16-10-16-22z" fill="#F58FC2" stroke="#141414" stroke-width="4" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </section>
+</div>
+
+<div class="band" id="how">
+  <div class="wrap">
+    <p class="eyebrow">Three steps</p>
+    <h2 class="h2">It takes about a minute.</h2>
+    <p class="sub">No account, no install, no waiting. Export the chat, drop it in, read your story.</p>
+    <div class="steps">
+      <div class="step">
+        <svg viewBox="0 0 90 90" aria-hidden="true">
+          <rect x="22" y="10" width="46" height="70" rx="10" fill="#fff" stroke="#141414" stroke-width="4"/>
+          <rect x="30" y="22" width="30" height="40" rx="5" fill="#EDEAE4" stroke="#141414" stroke-width="3"/>
+          <path d="M45 56V30m0 0l-9 9m9-9l9 9" stroke="#FF5A36" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="45" cy="71" r="4" fill="#141414"/>
+        </svg>
+        <span class="stepn">Step one</span>
+        <h3>Export the chat</h3>
+        <p>In WhatsApp, tap the chat name, then Export chat, then Without media.</p>
+      </div>
+      <div class="step">
+        <svg viewBox="0 0 90 90" aria-hidden="true">
+          <rect x="12" y="34" width="66" height="44" rx="10" fill="#2BC4D4" stroke="#141414" stroke-width="4"/>
+          <path d="M45 58V12m0 0L32 25m13-13l13 13" stroke="#141414" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M66 18l4 9 9-4-4 9 9 4" fill="none" stroke="#141414" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="stepn">Step two</span>
+        <h3>Drop the file here</h3>
+        <p>It's read on your device, by the page itself. No server ever sees it, so this works offline.</p>
+      </div>
+      <div class="step">
+        <svg viewBox="0 0 90 90" aria-hidden="true">
+          <rect x="14" y="24" width="48" height="58" rx="9" fill="#F7D14A" stroke="#141414" stroke-width="4"/>
+          <rect x="26" y="14" width="48" height="58" rx="9" fill="#F58FC2" stroke="#141414" stroke-width="4"/>
+          <path d="M38 34h24M38 46h16" stroke="#141414" stroke-width="4" stroke-linecap="round"/>
+          <path d="M70 62l4 8 8-4-4 8 8 4" fill="none" stroke="#141414" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span class="stepn">Step three</span>
+        <h3>Read, laugh, share</h3>
+        <p>Ten screens, six awards, a verdict and a roast built from your own lines.</p>
+      </div>
     </div>
   </div>
-  <p id="err" class="err" hidden></p>
-  <button class="btn" id="go">Make my story</button>
-  <button class="link" id="sample">Try it with a sample chat</button>
-</section>
+</div>
 
-<section id="s-story" hidden>
-  <div class="bars" id="bars"></div>
-  <div class="meta"><span id="pair"></span><span id="count"></span></div>
-  <div class="slide" id="slide"></div>
-  <div class="nav">
-    <button class="btn ghost" id="prev">Back</button>
-    <button class="btn" id="next">Next</button>
+<div class="band cream" id="start">
+  <div class="wrap">
+    <div class="start">
+      <div style="text-align:center">
+        <p class="eyebrow">Start here</p>
+        <h2 class="h2" style="font-size:1.8rem">Drop your chat in</h2>
+      </div>
+      <div class="drop" id="drop">
+        <div class="disc">&#8593;</div>
+        <strong>Drop your WhatsApp export here</strong>
+        <span>.txt or .zip · stays on this device</span>
+      </div>
+      <input type="file" id="file" accept=".txt,.zip,text/plain,application/zip" hidden>
+      <details class="how" id="how2">
+        <summary>How do I export my chat?</summary>
+        <ol>
+          <li>Open the chat in WhatsApp.</li>
+          <li>Tap the contact or group name at the top.</li>
+          <li>Scroll down and tap Export chat.</li>
+          <li>Choose Without media, then save the file to this device.</li>
+        </ol>
+      </details>
+      <div id="opts" hidden style="display:flex;flex-direction:column;gap:16px">
+        <div class="field" id="modewrap" hidden>
+          <label class="lbl" for="gmode">This is a group. Tell the story about</label>
+          <select id="gmode"><option value="group">The whole group</option><option value="pair">Just two people</option></select>
+        </div>
+        <div class="field" id="pickwrap" hidden>
+          <label class="lbl" for="p1">Which two</label>
+          <select id="p1"></select>
+          <select id="p2"></select>
+        </div>
+      </div>
+      <p id="err" class="err" hidden></p>
+      <button class="btn wide" id="go">Make my story</button>
+      <p class="note"><span>&#128274;</span><span>Read on your device. Your chat is never sent to a server.</span></p>
+    </div>
   </div>
-  <div class="typebar">
-    <span>Reading this as</span>
-    <select id="ctype">
-      <option value="love">A love story</option>
-      <option value="friends">Friends</option>
-      <option value="group">A group chat</option>
-      <option value="work">A work chat</option>
-      <option value="new">Just getting started</option>
-    </select>
+</div>
+
+<div class="band" id="privacy">
+  <div class="wrap">
+    <div class="privacy">
+      <div>
+        <p class="eyebrow">The important bit</p>
+        <h2 class="h2">Your chat never leaves your phone.</h2>
+        <p class="sub">Most tools like this send your file to a server. Scrollback doesn't have one — the whole thing runs on your device.</p>
+        <ul class="plist">
+          <li><span class="tick">&#10003;</span><span>The file is read on your device, never transmitted.</span></li>
+          <li><span class="tick">&#10003;</span><span>No account, no email, no login.</span></li>
+          <li><span class="tick">&#10003;</span><span>Share cards show initials and numbers only, never your messages.</span></li>
+          <li><span class="tick">&#10003;</span><span>Close the tab and it's gone.</span></li>
+        </ul>
+      </div>
+      <svg viewBox="0 0 260 260" role="img" aria-label="A padlock with a phone inside it">
+        <rect x="56" y="110" width="148" height="124" rx="20" fill="#35BF9E" stroke="#141414" stroke-width="5"/>
+        <path d="M92 110V82a38 38 0 0 1 76 0v28" fill="none" stroke="#141414" stroke-width="5" stroke-linecap="round"/>
+        <rect x="108" y="140" width="44" height="66" rx="8" fill="#fff" stroke="#141414" stroke-width="4"/>
+        <path d="M118 158h24M118 172h14" stroke="#141414" stroke-width="4" stroke-linecap="round"/>
+        <path d="M24 62c12-14 22 8 34-4" fill="none" stroke="#141414" stroke-width="4" stroke-linecap="round"/>
+        <path d="M212 44l4 10 11-5-5 11 10 4" fill="none" stroke="#141414" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
   </div>
-  <p class="foot" style="margin-top:10px">Read inside your browser. Nothing was uploaded.</p>
-</section>
+</div>
 
-<section id="s-pay" hidden class="stack">
-  <div class="lock">
-    <div class="disc">&#128274;</div>
-    <strong style="font-family:var(--font-display);font-size:1.05rem" id="lockn">6 more screens locked</strong>
-    <span class="cap">The ones with the actual memories in them</span>
+<div class="band cream" id="pricing">
+  <div class="wrap">
+    <p class="eyebrow">Pricing</p>
+    <h2 class="h2">Free to try. Pay if you like it.</h2>
+    <p class="sub">The first three screens are free, every time. No trial, no card, no countdown.</p>
+    <div class="prices">
+      <div class="pcard">
+        <h3 style="font-size:1.2rem">Full story</h3>
+        <p class="pamt">&#8377;49</p>
+        <p>All ten screens, your six awards, the verdict and a card to share.</p>
+      </div>
+      <div class="pcard feat">
+        <span class="ptag">Gift ready</span>
+        <h3 style="font-size:1.2rem">Gift edition</h3>
+        <p class="pamt">&#8377;149</p>
+        <p>Everything above, plus a personal note and a private link to send them.</p>
+      </div>
+    </div>
   </div>
-  <div class="teases" id="teases"></div>
-  <button class="tier" id="t49" role="radio" aria-checked="false">
-    <div class="top"><h3><span class="dot">&#10003;</span>Full story</h3><span class="price">&#8377;49</span></div>
-    <p>Every screen, your awards, your verdict and the roast jingle.</p>
-  </button>
-  <button class="tier" id="t149" role="radio" aria-checked="true">
-    <span class="badge">Gift ready</span>
-    <div class="top"><h3><span class="dot">&#10003;</span>Gift edition</h3><span class="price">&#8377;149</span></div>
-    <p>Everything above, plus a personal note and a private link to send them.</p>
-  </button>
-  <div class="occ"><span>Anniversary</span><span>Birthday</span><span>Rakhi</span><span>New Year</span></div>
-  <button class="btn" id="unlock">Unlock the rest</button>
-  <p class="foot">Payments go live in the next release. Unlocking is free while Scrollback is in testing.</p>
-</section>
+</div>
 
-<section id="s-done" hidden class="stack">
-  <h2 style="text-align:center">Your story is ready.</h2>
-  <div class="shot" id="shot"></div>
-  <p class="note">Screenshot the card above to post it. Send anyone the link below and they can make their own.</p>
-  <div class="mono" id="gift"></div>
-  <button class="btn ghost" id="copy">Copy link to Scrollback</button>
-  <button class="btn" id="again">Start another story</button>
-  <p class="foot">The share card shows initials and numbers only. Your messages are never on it.<br>Private gift links you can send to one person arrive with the next release.</p>
-</section>
+<div class="wrap">
+  <div class="foot">
+    <span>Scrollback &middot; made in Gurgaon</span>
+    <span>Your messages never leave your phone.</span>
+  </div>
+</div>
+</div>
 
+<div id="s-story" hidden class="stage">
+  <svg class="doodle l" viewBox="0 0 100 60" aria-hidden="true"><path d="M4 30C16 6 28 54 40 30s24-24 36 0 20 24 20 0" fill="none" stroke="#141414" stroke-width="4" stroke-linecap="round"/></svg>
+  <svg class="doodle r" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 6l9 24 24 9-24 9-9 24-9-24-24-9 24-9z" fill="#F7D14A" stroke="#141414" stroke-width="4" stroke-linejoin="round"/></svg>
+  <div class="stagewrap">
+    <div class="bars" id="bars"></div>
+    <div class="meta"><span id="pair"></span><span id="count"></span></div>
+    <div class="slide" id="slide"></div>
+    <div class="nav2">
+      <button class="btn ghost" id="prev">Back</button>
+      <button class="btn" id="next">Next</button>
+    </div>
+    <div class="typebar">
+      <span>Reading this as</span>
+      <select id="ctype">
+        <option value="love">A love story</option>
+        <option value="friends">Friends</option>
+        <option value="group">A group chat</option>
+        <option value="work">A work chat</option>
+        <option value="new">Just getting started</option>
+      </select>
+    </div>
+    <p class="footnote">Read on your device. Nothing was sent anywhere.</p>
+  </div>
+</div>
+
+<div id="s-pay" hidden class="stage">
+  <div class="panel">
+    <div class="lock">
+      <div class="disc" style="background:#fff">&#128274;</div>
+      <strong style="font-family:var(--font-display);font-size:1.2rem" id="lockn">6 more screens locked</strong>
+      <span class="cap">The ones with the actual memories in them</span>
+    </div>
+    <div class="teases" id="teases"></div>
+    <button class="tier" id="t49" role="radio" aria-checked="false">
+      <div class="top"><h3><span class="dot">&#10003;</span>Full story</h3><span class="price">&#8377;49</span></div>
+      <p>Every screen, your awards, your verdict and the roast.</p>
+    </button>
+    <button class="tier" id="t149" role="radio" aria-checked="true">
+      <span class="badge">Gift ready</span>
+      <div class="top"><h3><span class="dot">&#10003;</span>Gift edition</h3><span class="price">&#8377;149</span></div>
+      <p>Everything above, plus a personal note and a private link to send them.</p>
+    </button>
+    <div class="occ"><span>Anniversary</span><span>Birthday</span><span>Rakhi</span><span>New Year</span></div>
+    <button class="btn wide" id="unlock">Unlock the rest</button>
+    <p class="footnote">Payments go live in the next release. Unlocking is free while Scrollback is in testing.</p>
+  </div>
+</div>
+
+<div id="s-done" hidden class="stage">
+  <div class="panel">
+    <h2 class="h2" style="text-align:center">Your story is ready.</h2>
+    <div class="shot" id="shot"></div>
+    <p class="note">Screenshot the card above to post it. Send anyone the link below and they can make their own.</p>
+    <div class="mono" id="gift"></div>
+    <button class="btn ghost wide" id="copy">Copy link to Scrollback</button>
+    <button class="btn wide" id="again">Start another story</button>
+    <p class="footnote">The share card shows initials and numbers only. Your messages are never on it.<br>Private gift links you can send to one person arrive with the next release.</p>
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -288,14 +553,15 @@ function analyse(msgs,P){
   var s={P:P,pair:P.length===2,total:mm.length,by:{},starts:{},replies:{},hours:new Array(24).fill(0),
     emoji:{},words:{},late:0,chars:{},msgs:{},sorry:{},q:{},laugh:{},emojiN:{},run:{},lateBy:{},rep:{},repeat:{},
     streak:0,busiest:{n:0},longest:{n:0},days:{},night:[],silence:{d:0},slow:{ms:0},longMsg:{len:0},
-    loveN:0,laughN:0,qN:0,workN:0,mediaN:0,weekday:0,biz:0,cat:{},quote:{}};
+    loveN:0,laughN:0,qN:0,workN:0,mediaN:0,weekday:0,biz:0,weekend:0,cat:{},quote:{},catFirst:{},catBy:{},ender:{}};
   P.forEach(function(p){s.by[p]=0;s.starts[p]=0;s.replies[p]=[];s.chars[p]=0;s.msgs[p]=0;s.sorry[p]=0;s.q[p]=0;s.laugh[p]=0;s.emojiN[p]=0;s.run[p]=0;s.lateBy[p]=0;s.rep[p]={}});
   s.first=mm[0].t;s.last=mm[mm.length-1].t;
   var sessN=0,sessStart=mm[0].t,curRun=0,curWho=null,i;
   for(i=0;i<mm.length;i++){
     var m=mm[i],prev=i?mm[i-1]:null,gap=prev?(m.t-prev.t):Infinity,isMedia=MEDIA.test(m.txt),hr=m.t.getHours(),dw=m.t.getDay();
     s.by[m.who]++;s.hours[hr]++;
-    if(dw>=1&&dw<=5){s.weekday++;if(hr>=9&&hr<=19)s.biz++}
+    if(dw>=1&&dw<=5){s.weekday++;if(hr>=9&&hr<=19)s.biz++}else s.weekend++;
+    if(prev&&gap>6*3600000)s.ender[prev.who]=(s.ender[prev.who]||0)+1;
     if(hr<5){s.late++;s.lateBy[m.who]++;if(m.txt.length>4&&m.txt.length<90&&!isMedia&&s.night.length<40)s.night.push(m)}
     var k=dayKey(m.t);s.days[k]=(s.days[k]||0)+1;
     if(s.days[k]>s.busiest.n)s.busiest={n:s.days[k],d:m.t};
@@ -322,6 +588,9 @@ function analyse(msgs,P){
     for(var f=0;f<FUNNY.length;f++){
       if(FUNNY[f].re.test(m.txt)){
         var kk=FUNNY[f].k;s.cat[kk]=(s.cat[kk]||0)+1;
+        if(!s.catFirst[kk])s.catFirst[kk]=m.t;
+        if(!s.catBy[kk])s.catBy[kk]={};
+        s.catBy[kk][m.who]=(s.catBy[kk][m.who]||0)+1;
         var qs=qscore(m.txt);
         if(qs>0&&(!s.quote[kk]||qs>s.quote[kk].sc))s.quote[kk]={m:m,sc:qs};
         break;
@@ -347,6 +616,13 @@ function analyse(msgs,P){
   });
   s.board=P.slice().sort(function(x,y){return s.by[y]-s.by[x]});
   s.spanDays=Math.max(1,s.activeDays,Math.round((s.last-s.first)/86400000));
+  var th=Math.max(1,Math.floor(mm.length/3));
+  var d1=Math.max(1,(mm[th].t-mm[0].t)/86400000), d3=Math.max(1,(mm[mm.length-1].t-mm[mm.length-1-th].t)/86400000);
+  s.rateEarly=th/d1; s.rateLate=th/d3;
+  s.drift=Math.round((s.rateLate/Math.max(0.001,s.rateEarly)-1)*100);
+  s.enderP=P.slice().sort(function(x,y){return (s.ender[y]||0)-(s.ender[x]||0)})[0];
+  s.enderPct=Math.round((s.ender[s.enderP]||0)/Math.max(1,P.reduce(function(a,q){return a+(s.ender[q]||0)},0))*100);
+  s.wkndPct=Math.round(s.weekend/s.total*100);
   s.perDay=s.total/s.spanDays;
   s.latePct=Math.round(s.late/s.total*100);
   s.avgLen=s.chars[s.board[0]]/Math.max(1,s.msgs[s.board[0]]);
@@ -366,10 +642,11 @@ function analyse(msgs,P){
     intensity:cl(s.perDay/25), night:cl(s.latePct/22), imbalance:cl((1-s.balance)*1.5),
     replyGap:cl(Math.log10(Math.max(1,s.medSlow/Math.max(60000,s.medFast)))/1.2),
     affection:cl(s.loveN/s.total*220), humour:cl(s.laughN/s.total*6),
-    brevity:cl((42-s.avgLen)/34), consistency:cl(s.activeDays/s.spanDays*1.15),
-    volatility:cl(s.silenceDays/21), formal:cl(s.workN/s.total*28),
+    brevity:cl((40-s.avgLen)/30), consistency:cl((s.activeDays/s.spanDays-0.5)/0.48),
+    volatility:cl(s.silenceDays/45), formal:cl(s.workN/s.total*28),
     inquiry:cl(s.qN/s.total*4.5), media:cl(s.mediaN/s.total*5),
     office:cl((s.weekday/s.total-0.68)*5)*cl((s.biz/s.total-0.6)*4), lurk:cl(s.lurkers/Math.max(1,P.length)*2.2),
+    fading:cl(-s.drift/70), growing:cl(s.drift/90), weekendy:cl((s.wkndPct-29)/26), ending:cl((s.enderPct-55)/35),
     crowd:cl((P.length-2)/8)
   };
   s.type=detect(s);
@@ -386,56 +663,51 @@ function detect(s){
 }
 
 /* ---------- verdicts, one pool per chat type ---------- */
-var POOLS={
-  love:[
-    {t:"Chronically Online Soulmates",k:["intensity","night"],d:function(s){return nice(s.perDay)+" messages a day, and "+s.latePct+"% of them after midnight. Sleep is clearly optional."}},
-    {t:"The Chaser and The Chased",k:["imbalance","replyGap"],d:function(s){return ini(s.fastP)+" replies in "+dur(s.medFast)+". "+ini(s.slowP)+" takes "+dur(s.medSlow)+". You both know which is which."}},
-    {t:"Steady As They Come",k:["consistency","!night","!volatility"],d:function(s){return "You talked on "+nice(s.activeDays)+" of "+nice(s.spanDays)+" days, with a "+nice(s.streak)+"-day best run. Boring, in the best way."}},
-    {t:"Comes and Goes, Always Returns",k:["volatility","!consistency"],d:function(s){return "You once went "+s.silenceDays+" days without a word, then picked it up like nothing happened."}},
-    {t:"Permanently Unserious",k:["humour","!affection"],d:function(s){return nice(s.laughN)+" messages were just laughing. Not one serious conversation survived this chat."}},
-    {t:"Soft Launch",k:["affection","brevity","!intensity"],d:function(s){return "Short messages, "+nice(s.loveN)+" soft ones, and a lot left unsaid. Everyone can tell, by the way."}}
-  ],
-  friends:[
-    {t:"Two People, One Brain Cell",k:["humour","intensity"],d:function(s){return nice(s.laughN)+" messages were pure laughing. Nothing of value was discussed."}},
-    {t:"Built On Small Talk",k:["brevity","!humour","!intensity"],d:function(s){var a=s.repeat[s.board[0]],b=s.repeat[s.board[1]];return "“"+(a?a.txt:"ok")+"” and “"+(b?b.txt:"hmm")+"” are your most-sent messages. Poetry."}},
-    {t:"Seasonal Friends",k:["volatility","!consistency"],d:function(s){return s.silenceDays+" days of silence at one point, and then straight back in. No explanation offered."}},
-    {t:"One Of You Is The Planner",k:["imbalance","inquiry"],d:function(s){return ini(s.starter)+" starts "+s.startPct+"% of conversations and asked "+nice(s.qN)+" questions. The other one just shows up."}},
-    {t:"The Ones Who Never Logged Off",k:["night","consistency"],d:function(s){return "Active on "+nice(s.activeDays)+" days, "+nice(s.late)+" messages after midnight. This friendship runs on insomnia."}},
-    {t:"Low Effort, High Loyalty",k:["brevity","volatility","!intensity"],d:function(s){return "Short replies, long gaps, "+nice(s.total)+" messages anyway. Somehow it works."}}
-  ],
-  group:[
-    {t:"The Chat That Never Sleeps",k:["intensity","night"],d:function(s){return nice(s.perDay)+" messages a day across "+s.P.length+" people. Someone is always typing."}},
-    {t:"Three People Talking, The Rest Watching",k:["lurk","imbalance"],d:function(s){return ini(s.board[0])+" sent "+Math.round(s.by[s.board[0]]/s.total*100)+"% of everything. "+s.lurkers+" of you have said almost nothing."}},
-    {t:"A Functioning Democracy",k:["consistency","!imbalance","!lurk"],d:function(s){return "Everyone actually talks, on "+nice(s.activeDays)+" separate days. Rare. Treasure it."}},
-    {t:"The Event Planning Committee",k:["inquiry","!media"],d:function(s){return nice(s.qN)+" questions asked. Approximately four plans survived."}},
-    {t:"Mostly Forwards And Silence",k:["media","!intensity"],d:function(s){return nice(s.mediaN)+" of your "+nice(s.total)+" messages were media. The rest was silence."}},
-    {t:"Peak Nonsense",k:["humour","night"],d:function(s){return nice(s.laughN)+" laughing messages and "+nice(s.late)+" sent after midnight. Nobody here is well."}}
-  ],
-  work:[
-    {t:"Strictly Business",k:["formal","!humour","!night"],d:function(s){return nice(s.workN)+" messages mentioned work directly. Warmth was not on the agenda."}},
-    {t:"The 11 p.m. Energy",k:["night","formal"],d:function(s){return nice(s.late)+" messages sent after midnight. Somebody needs to talk to somebody about this."}},
-    {t:"One Person Is Doing All Of This",k:["imbalance","formal"],d:function(s){return ini(s.board[0])+" sent "+Math.round(s.by[s.board[0]]/s.total*100)+"% of the messages. The rest of you replied “noted”."}},
-    {t:"A Meeting That Could Have Been A Message",k:["inquiry","intensity"],d:function(s){return nice(s.qN)+" questions across "+nice(s.total)+" messages. Alignment remains elusive."}},
-    {t:"Professionally Cordial",k:["brevity","!night","!humour"],d:function(s){return "Average message: "+Math.round(s.avgLen)+" characters. Nobody has overstepped once."}},
-    {t:"Deadline Driven",k:["volatility","formal"],d:function(s){return s.silenceDays+" quiet days, then everything at once. You know exactly which week that was."}}
-  ],
-  "new":[
-    {t:"Early Days",k:["consistency","!imbalance","!intensity"],d:function(s){return nice(s.total)+" messages in "+s.spanDays+" days. Too soon to tell, but the signs are there."}},
-    {t:"Fast Burn",k:["intensity","night"],d:function(s){return nice(s.perDay)+" messages a day already. Pace yourselves."}},
-    {t:"Someone Is Keen",k:["imbalance","replyGap"],d:function(s){return ini(s.board[0])+" has sent "+Math.round(s.by[s.board[0]]/s.total*100)+"% of the messages so far. No further comment."}},
-    {t:"Polite Strangers",k:["brevity","!humour","!night"],d:function(s){return "Average message: "+Math.round(s.avgLen)+" characters. Nobody has risked anything yet."}}
-  ]
+/* Verdict is composed from the two signals that are most unusual for THIS chat:
+   adjective from the first, noun from the second. 19 signals -> ~340 possible titles. */
+var ADJ={intensity:"Relentless",night:"Nocturnal",imbalance:"One-Sided",replyGap:"Patient",affection:"Hopeless",
+  humour:"Unserious",brevity:"Economical",consistency:"Devoted",volatility:"Seasonal",formal:"Strictly Professional",
+  inquiry:"Curious",media:"Forwarding",lurk:"Silent",crowd:"Overcrowded",office:"Nine-to-Five",
+  fading:"Fading",growing:"Accelerating",weekendy:"Weekends-Only",ending:"Last-Word"};
+var NOUN={intensity:"Marathon",night:"Night Shift",imbalance:"Chase",replyGap:"Waiting Game",affection:"Romantics",
+  humour:"Comedians",brevity:"Minimalists",consistency:"Ritual",volatility:"Reunion",formal:"Working Relationship",
+  inquiry:"Interrogation",media:"Forward Chain",lurk:"Audience",crowd:"Committee",office:"Colleagues",
+  fading:"Slow Fade",growing:"Upswing",weekendy:"Weekenders",ending:"Sign-Off"};
+var FACT={
+  intensity:function(s){return nice(s.perDay)+" messages a day, every day."},
+  night:function(s){return s.latePct+"% of everything here lands after midnight."},
+  imbalance:function(s){return ini(s.board[0])+" sent "+Math.round(s.by[s.board[0]]/s.total*100)+"% of it."},
+  replyGap:function(s){return ini(s.fastP)+" replies in "+dur(s.medFast)+"; "+ini(s.slowP)+" takes "+dur(s.medSlow)+"."},
+  affection:function(s){return nice(s.loveN)+" messages were some version of I miss you."},
+  humour:function(s){return nice(s.laughN)+" messages were purely laughing."},
+  brevity:function(s){return "The average message is "+Math.round(s.avgLen)+" characters."},
+  consistency:function(s){return "You talked on "+nice(s.activeDays)+" of "+nice(s.spanDays)+" days."},
+  volatility:function(s){return "You once went "+s.silenceDays+" days without a word."},
+  formal:function(s){return nice(s.workN)+" messages mentioned work outright."},
+  inquiry:function(s){return nice(s.qN)+" questions asked here."},
+  media:function(s){return nice(s.mediaN)+" of the messages were photos and forwards."},
+  lurk:function(s){return s.lurkers+" people here have barely said a thing."},
+  crowd:function(s){return s.P.length+" people, one chat, no structure."},
+  office:function(s){return Math.round(s.weekday/s.total*100)+"% of it happens on a weekday."},
+  fading:function(s){return "You text "+Math.abs(s.drift)+"% less now than when this started."},
+  growing:function(s){return "You text "+s.drift+"% more now than when this started."},
+  weekendy:function(s){return s.wkndPct+"% of this lands on a Saturday or Sunday."},
+  ending:function(s){return ini(s.enderP)+" gets the last word "+s.enderPct+"% of the time."}
 };
-function verdict(s,type){
-  var pool=POOLS[type]||POOLS.friends,best=null,bv=-1;
-  pool.forEach(function(v){
-    var sum=0;v.k.forEach(function(k){sum+=k.charAt(0)==="!"?1-(s.sig[k.slice(1)]||0):(s.sig[k]||0)});
-    var score=sum/v.k.length;
-    if(score>bv){bv=score;best=v}
-  });
-  return {t:best.t,d:best.d(s),fit:bv};
+function rank(s){
+  var keys=Object.keys(s.sig).filter(function(k){return ADJ[k]}),mu=0;
+  keys.forEach(function(k){mu+=s.sig[k]});
+  mu=mu/Math.max(1,keys.length);
+  return keys.map(function(k){return {k:k,v:(s.sig[k]||0)-mu}}).sort(function(x,y){return y.v-x.v});
 }
-
+function verdict(s,type){
+  var r=rank(s),a=r[0],b=r[1];
+  if(!a)return {t:"Hard To Read",d:"Not enough here to call it.",fit:0};
+  if(!b)b=r[0];
+  var t=ADJ[a.k]+" "+NOUN[b.k];
+  var d=FACT[a.k](s)+" "+FACT[b.k](s);
+  return {t:t,d:d,fit:a.v,top:[a.k,b.k]};
+}
 /* ---------- personas and awards ---------- */
 var PERSONAS={
   love:[["The double-texter","Once sent {run} messages in a row without a single reply."],["The blue-tick villain","Seen. Thinking. Replies tomorrow."],["The opener","Starts the conversation more often than not."],["The novelist","Averages {avg} characters a message. Brevity is for other people."],["The quick draw","Replies before the message is fully delivered."],["The night shift","Does the best talking after midnight."],["The chief apologist","Has said sorry {sorry} times. Possibly too many."]],
@@ -497,114 +769,109 @@ function qscore(t){
   return v;
 }
 function seed(s,k){
-  var h=(s.total*7919+s.spanDays*104729+Math.floor(s.first.getTime()/86400000)*31)|0,i;
-  for(i=0;i<k.length;i++)h=(h*33+k.charCodeAt(i))|0;
-  return Math.abs(h);
+  var str=k+"|"+s.total+"|"+s.spanDays+"|"+s.activeDays+"|"+Math.floor(s.first.getTime()/3600000)+"|"+s.board.join(","),
+      h=2166136261>>>0,i;
+  for(i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)>>>0}
+  return h>>>0;
 }
-var BURN={
-  bore:[
-    function(s,n){return "Yeh baat "+nice(n)+" baar boli gayi hai. Mann kabhi laga hi nahi, bas chat chalti rahi."},
-    function(s,n){return nice(n)+" messages mein bore hone ka zikr hai. Bore hone ka time tha, kaam ka nahi."},
-    function(s,n){return "Boredom ka record "+nice(n)+" ka hai. Phir bhi "+nice(s.total)+" messages type kar liye."}
-  ],
-  sleep:[
-    function(s,n){return s.late>5?"Phir bhi raat ke baad "+nice(s.late)+" messages bheje. Neend se dushmani personal lagti hai.":"Sone ka zikr "+nice(n)+" baar hua. Sona kabhi nahi hua."},
-    function(s,n){return nice(n)+" baar neend ka naam liya gaya. Peak hour "+hourLabel(s.peak)+" hai, toh samajh aa raha hai."},
-    function(s,n){return "Good night "+nice(n)+" baar bola. Uske baad bhi chat chalti rahi."}
-  ],
-  food:[
-    function(s,n){return "Khane ki baat "+nice(n)+" baar hui. Ek baar kha bhi lo."},
-    function(s,n){return nice(n)+" messages khane pe gaye. Kitchen se zyada khana chat mein bana."},
-    function(s,n){return "Bhook ka zikr "+nice(n)+" baar. Yeh data Zomato ko bech sakte ho."}
-  ],
-  study:[
-    function(s,n){return "Padhai ka zikr "+nice(n)+" baar hua. Marks ka zikr kitni baar hua, woh alag kahani hai."},
-    function(s,n){return nice(n)+" baar padhai boli gayi. Padhi kitni gayi, uska record nahi hai."},
-    function(s,n){return "Exam ka naam "+nice(n)+" baar aaya. Tension lene mein consistency hai."}
-  ],
-  work:[
-    function(s,n){return "Kaam ka rona "+nice(n)+" messages mein hai. Resignation letter kab likh rahe ho?"},
-    function(s,n){return "Office ka zikr "+nice(n)+" baar. Salary shayad isi liye milti hai."},
-    function(s,n){return nice(n)+" messages kaam ke baare mein, aur woh bhi chat pe. Kaam kab hua phir?"}
-  ],
-  plan:[
-    function(s,n){return "Plan "+nice(n)+" baar bana. Ghar se kitni baar nikle, woh data available nahi hai."},
-    function(s,n){return nice(n)+" plans banaye gaye. Confirm hone ka record missing hai."},
-    function(s,n){return "Planning "+nice(n)+" baar hui. Execution ek baar bhi nahi dikha."}
-  ],
-  sorry:[
-    function(s,n){return "Sorry "+nice(n)+" baar bola gaya hai. Ab yeh greeting ban chuka hai."},
-    function(s,n){return nice(n)+" sorry. Galti itni baar hui ya habit ban gayi, confirm nahi ho pa raha."},
-    function(s,n){return "Maafi "+nice(n)+" baar maangi gayi. Accept hone ka koi proof nahi mila."}
-  ],
-  love:[
-    function(s,n){return "Yeh wali line "+nice(n)+" baar aa chuki hai. Thoda naya likhne ka try karo."},
-    function(s,n){return nice(n)+" baar yahi bola gaya. Copy paste ka shak ho raha hai."},
-    function(s,n){return nice(n)+" messages mein yahi ek emotion. Consistency hai, variety nahi."}
-  ],
-  drama:[
-    function(s,n){return "Drama "+nice(n)+" messages mein hai. Netflix ko seedha competition hai."},
-    function(s,n){return nice(n)+" baar yeh wali energy aayi. Isme poora serial ban sakta hai."},
-    function(s,n){return "Confusion "+nice(n)+" messages mein. Resolve ek baar bhi nahi hua."}
-  ],
-  tired:[
-    function(s,n){return "Thakne ki baat "+nice(n)+" baar hui. Aaram utni baar kiya hoga, umeed hai."},
-    function(s,n){return nice(n)+" baar thakne ka zikr. Phir bhi "+nice(s.total)+" messages type karne ki energy thi."},
-    function(s,n){return "Energy khatam hone ka zikr "+nice(n)+" baar. Charging kab hoti hai?"}
-  ]
+function topOf(o){var k=Object.keys(o||{});if(!k.length)return null;return k.sort(function(x,y){return o[y]-o[x]})[0]}
+var OPEN={
+  bore:[function(s,o){return "Pehli baar "+dstr(o.first)+" ko, aur uske baad "+nice(o.n)+" baar."},
+        function(s,o){return ini(o.who)+" ne akele "+o.pct+"% baar yeh rona roya hai."},
+        function(s,o){return nice(o.n)+" baar bore hone ka zikr, phir bhi chat kabhi band nahi hui."}],
+  sleep:[function(s,o){return "Neend ka zikr "+nice(o.n)+" baar, aur "+nice(s.late)+" messages aadhi raat ke baad."},
+        function(s,o){return "Pehli baar "+dstr(o.first)+" ko, aur aadat aaj tak nahi gayi."},
+        function(s,o){return ini(o.who)+" is chat ka official night shift hai, "+o.pct+"% baar."}],
+  food:[function(s,o){return "Khane ka zikr "+nice(o.n)+" baar, zyada tar "+hourLabel(s.peak)+" ke aas paas."},
+        function(s,o){return ini(o.who)+" ne "+o.pct+"% baar khane ki baat chhedi hai."},
+        function(s,o){return "Pehli baar "+dstr(o.first)+" ko bhookh lagi thi, uske baad "+nice(o.n)+" baar."}],
+  study:[function(s,o){return "Padhai ka zikr "+nice(o.n)+" baar, pehli baar "+dstr(o.first)+" ko."},
+        function(s,o){return ini(o.who)+" ne "+o.pct+"% baar padhai ka naam liya hai."},
+        function(s,o){return nice(o.n)+" baar exam ka rona, result ka zikr kaafi kam."}],
+  work:[function(s,o){return "Kaam ka rona "+nice(o.n)+" messages mein, pehli baar "+dstr(o.first)+" ko."},
+        function(s,o){return ini(o.who)+" akela "+o.pct+"% complaints kar raha hai."},
+        function(s,o){return nice(o.n)+" baar office ka naam, aur chat sabse busy "+hourLabel(s.peak)+" pe."}],
+  plan:[function(s,o){return nice(o.n)+" plans bane, pehla "+dstr(o.first)+" ko."},
+        function(s,o){return ini(o.who)+" hi "+o.pct+"% plans propose karta hai."},
+        function(s,o){return nice(o.n)+" baar planning, aur beech mein "+nice(s.silenceDays)+" din ki chuppi bhi."}],
+  sorry:[function(s,o){return "Sorry "+nice(o.n)+" baar, pehli baar "+dstr(o.first)+" ko."},
+        function(s,o){return ini(o.who)+" ne akele "+o.pct+"% maafi maangi hai."},
+        function(s,o){return nice(o.n)+" sorry, aur behaviour mein koi badlaav nahi."}],
+  love:[function(s,o){return "Yeh "+nice(o.n)+" baar bola gaya, pehli baar "+dstr(o.first)+" ko."},
+        function(s,o){return ini(o.who)+" "+o.pct+"% baar pehle bolta hai."},
+        function(s,o){return nice(o.n)+" baar yahi emotion, "+nice(s.spanDays)+" din mein."}],
+  drama:[function(s,o){return "Drama "+nice(o.n)+" messages mein, shuruaat "+dstr(o.first)+" se."},
+        function(s,o){return ini(o.who)+" "+o.pct+"% drama ka zimmedaar hai."},
+        function(s,o){return nice(o.n)+" baar confusion, resolve kitni baar hua woh record mein nahi."}],
+  tired:[function(s,o){return "Thakne ka zikr "+nice(o.n)+" baar, pehli baar "+dstr(o.first)+" ko."},
+        function(s,o){return ini(o.who)+" "+o.pct+"% baar thaka hua hai."},
+        function(s,o){return nice(o.n)+" baar energy khatam, phir bhi "+nice(s.total)+" messages type hue."}]
 };
-var BURN_EN={
-  bore:[
-    function(s,n){return "This has been said "+nice(n)+" times. The interest never arrived, but the chat kept going."},
-    function(s,n){return "Boredom came up in "+nice(n)+" messages. There was time to be bored, just not to work."},
-    function(s,n){return "Bored "+nice(n)+" times, and still found the energy for "+nice(s.total)+" messages."}
-  ],
-  sleep:[
-    function(s,n){return s.late>5?"And then sent "+nice(s.late)+" messages after midnight. The feud with sleep is personal.":"Sleep came up "+nice(n)+" times. You never actually went."},
-    function(s,n){return "Sleep mentioned "+nice(n)+" times. Your peak hour is "+hourLabel(s.peak)+", which explains a lot."},
-    function(s,n){return "Said good night "+nice(n)+" times. The chat continued every single time."}
-  ],
-  food:[
-    function(s,n){return "Food came up "+nice(n)+" times. Consider eating one of them."},
-    function(s,n){return nice(n)+" messages about food. More cooking happened here than in a kitchen."},
-    function(s,n){return "Hunger mentioned "+nice(n)+" times. This data belongs to a delivery app."}
-  ],
-  study:[
-    function(s,n){return "Studying came up "+nice(n)+" times. How often marks came up is a separate story."},
-    function(s,n){return "Mentioned studying "+nice(n)+" times. Whether it happened is undocumented."},
-    function(s,n){return "Exams came up "+nice(n)+" times. The panic, at least, is consistent."}
-  ],
-  work:[
-    function(s,n){return "Work was complained about in "+nice(n)+" messages. When is the resignation letter coming?"},
-    function(s,n){return "The office came up "+nice(n)+" times. Presumably that is what the salary is for."},
-    function(s,n){return nice(n)+" messages about work, sent during work. The work remains unaccounted for."}
-  ],
-  plan:[
-    function(s,n){return "Plans were made "+nice(n)+" times. How many happened is not in this dataset."},
-    function(s,n){return nice(n)+" plans proposed. Confirmations: no record found."},
-    function(s,n){return "Planned "+nice(n)+" times. Executed: not once, as far as this chat shows."}
-  ],
-  sorry:[
-    function(s,n){return "Sorry has been said "+nice(n)+" times. At this point it is a greeting."},
-    function(s,n){return nice(n)+" apologies. Either that many mistakes, or it became a verbal tic."},
-    function(s,n){return "Apologised "+nice(n)+" times. No evidence any were accepted."}
-  ],
-  love:[
-    function(s,n){return "This line has appeared "+nice(n)+" times. Try writing a new one."},
-    function(s,n){return "Said "+nice(n)+" times, word for word. Copy and paste is suspected."},
-    function(s,n){return "One emotion across "+nice(n)+" messages. Consistent, not varied."}
-  ],
-  drama:[
-    function(s,n){return "Drama across "+nice(n)+" messages. Netflix has competition."},
-    function(s,n){return "This energy appeared "+nice(n)+" times. There is a whole series in here."},
-    function(s,n){return "Confusion in "+nice(n)+" messages. Resolved on zero occasions."}
-  ],
-  tired:[
-    function(s,n){return "Exhaustion mentioned "+nice(n)+" times. Rest taken: unclear."},
-    function(s,n){return "Too tired "+nice(n)+" times, yet somehow typed "+nice(s.total)+" messages."},
-    function(s,n){return "Ran out of energy "+nice(n)+" times. Recharging has not been observed."}
-  ]
+var OPEN_EN={
+  bore:[function(s,o){return "First time on "+dstr(o.first)+", and "+nice(o.n)+" times since."},
+        function(s,o){return ini(o.who)+" alone is responsible for "+o.pct+"% of this complaint."},
+        function(s,o){return "Bored "+nice(o.n)+" times, and the chat never once stopped."}],
+  sleep:[function(s,o){return "Sleep mentioned "+nice(o.n)+" times, alongside "+nice(s.late)+" messages after midnight."},
+        function(s,o){return "First time on "+dstr(o.first)+", and the habit has not changed since."},
+        function(s,o){return ini(o.who)+" runs the night shift here, "+o.pct+"% of the time."}],
+  food:[function(s,o){return "Food came up "+nice(o.n)+" times, mostly around "+hourLabel(s.peak)+"."},
+        function(s,o){return ini(o.who)+" raised it "+o.pct+"% of the time."},
+        function(s,o){return "First hungry on "+dstr(o.first)+", and "+nice(o.n)+" times after that."}],
+  study:[function(s,o){return "Studying came up "+nice(o.n)+" times, starting "+dstr(o.first)+"."},
+        function(s,o){return ini(o.who)+" brought it up "+o.pct+"% of the time."},
+        function(s,o){return nice(o.n)+" mentions of exams. Noticeably fewer of results."}],
+  work:[function(s,o){return "Work complained about in "+nice(o.n)+" messages, first on "+dstr(o.first)+"."},
+        function(s,o){return ini(o.who)+" accounts for "+o.pct+"% of the complaints single-handedly."},
+        function(s,o){return nice(o.n)+" mentions of the office, and the chat peaks at "+hourLabel(s.peak)+"."}],
+  plan:[function(s,o){return nice(o.n)+" plans made, the first on "+dstr(o.first)+"."},
+        function(s,o){return ini(o.who)+" proposes "+o.pct+"% of them."},
+        function(s,o){return nice(o.n)+" rounds of planning, with "+nice(s.silenceDays)+" days of silence in between."}],
+  sorry:[function(s,o){return "Sorry "+nice(o.n)+" times, the first on "+dstr(o.first)+"."},
+        function(s,o){return ini(o.who)+" issued "+o.pct+"% of the apologies alone."},
+        function(s,o){return nice(o.n)+" apologies, and no detectable change in behaviour."}],
+  love:[function(s,o){return "Said "+nice(o.n)+" times, the first on "+dstr(o.first)+"."},
+        function(s,o){return ini(o.who)+" says it first "+o.pct+"% of the time."},
+        function(s,o){return "One emotion, "+nice(o.n)+" times, across "+nice(s.spanDays)+" days."}],
+  drama:[function(s,o){return "Drama across "+nice(o.n)+" messages, beginning "+dstr(o.first)+"."},
+        function(s,o){return ini(o.who)+" is behind "+o.pct+"% of it."},
+        function(s,o){return nice(o.n)+" rounds of confusion. Resolutions are not on record."}],
+  tired:[function(s,o){return "Exhaustion mentioned "+nice(o.n)+" times, first on "+dstr(o.first)+"."},
+        function(s,o){return ini(o.who)+" is tired "+o.pct+"% of the time."},
+        function(s,o){return "Out of energy "+nice(o.n)+" times, yet "+nice(s.total)+" messages got typed."}]
 };
+/* closers: half are quips, half carry a fact about this particular chat; invalid ones return null */
+var CLOSE=[
+ function(s){return "Pattern hai, ittefaq nahi."},
+ function(s){return "Data jhooth nahi bolta."},
+ function(s){return "Poore chat mein koi sudhaar nahi dikha."},
+ function(s){return "Screenshot le lo, saboot ke liye."},
+ function(s){return "Shikayat nahi hai, sirf observation hai."},
+ function(s){return "Kuch galat nahi hai isme. Bas thoda zyada hai."},
+ function(s){return s.wkndPct>42?"Aur weekend pe yeh "+s.wkndPct+"% tak pahunch jata hai.":null},
+ function(s){return s.drift<-25?"Pehle se "+Math.abs(s.drift)+"% kam ho gaya hai yeh sab.":null},
+ function(s){return s.drift>35?"Aur yeh "+s.drift+"% badh gaya hai shuruaat se.":null},
+ function(s){return s.enderPct>62?"Baat khatam "+ini(s.enderP)+" hi karta hai, "+s.enderPct+"% baar.":null},
+ function(s){return s.silenceDays>14?"Beech mein "+s.silenceDays+" din ki chuppi bhi thi, yaad hai?":null},
+ function(s){return s.late>40?nice(s.late)+" messages aadhi raat ke baad, alag se.":null},
+ function(s){return "Peak hour "+hourLabel(s.peak)+" hai, agar koi pooche."},
+ function(s){return nice(s.activeDays)+" din mein se har din kuch na kuch hua hai."}
+];
+var CLOSE_EN=[
+ function(s){return "A pattern, not a coincidence."},
+ function(s){return "The data does not lie."},
+ function(s){return "No visible improvement across the entire chat."},
+ function(s){return "Screenshot this, for the record."},
+ function(s){return "Not a complaint, just an observation."},
+ function(s){return "Nothing wrong with it. Just a lot of it."},
+ function(s){return s.wkndPct>42?"And on weekends it climbs to "+s.wkndPct+"%.":null},
+ function(s){return s.drift<-25?"All of this is "+Math.abs(s.drift)+"% quieter than it used to be.":null},
+ function(s){return s.drift>35?"And it is "+s.drift+"% busier than when you started.":null},
+ function(s){return s.enderPct>62?ini(s.enderP)+" ends the conversation "+s.enderPct+"% of the time, by the way.":null},
+ function(s){return s.silenceDays>14?"There were also "+s.silenceDays+" silent days in the middle of this.":null},
+ function(s){return s.late>40?"Plus "+nice(s.late)+" messages after midnight, separately.":null},
+ function(s){return "Peak hour is "+hourLabel(s.peak)+", if anyone asks."},
+ function(s){return "Something happened on "+nice(s.activeDays)+" separate days."}
+];
 var INTRO={
   love:"Dono ne milke jo likha hai, uska hisaab:",
   friends:"Dosti ka poora record, aapke hi shabdon mein:",
@@ -620,14 +887,16 @@ var INTRO_EN={
   "new":"Early days, but the record already exists:"
 };
 function roast(s,type,lang){
-  var en=lang==="en",B=en?BURN_EN:BURN;
+  var en=lang==="en";
   var ks=Object.keys(s.cat||{}).filter(function(k){return s.quote[k]&&s.quote[k].sc>0});
   ks.sort(function(a,b){return (s.quote[b].sc*1.5+Math.log(1+s.cat[b]))-(s.quote[a].sc*1.5+Math.log(1+s.cat[a]))});
   var out=[],i;
   for(i=0;i<ks.length&&out.length<4;i++){
     var k=ks[i];
-    var vr=B[k];
-    out.push({q:s.quote[k].m,burn:vr[seed(s,k)%vr.length](s,s.cat[k])});
+    var by=s.catBy[k]||{},who=topOf(by)||s.board[0];
+    var o={n:s.cat[k],first:s.catFirst[k]||s.first,who:who,pct:Math.round((by[who]||0)/Math.max(1,s.cat[k])*100)};
+    var OP=(en?OPEN_EN:OPEN)[k],CL=(en?CLOSE_EN:CLOSE).map(function(f){return f(s)}).filter(function(x){return x});
+    out.push({q:s.quote[k].m,burn:OP[seed(s,k)%OP.length](s,o)+" "+CL[seed(s,k+"~"+o.n)%CL.length]});
   }
   var top=s.board[0],rp=s.repeat[top],used=out.map(function(b){return b.q.txt.toLowerCase().replace(/[^\p{L}\s]/gu,"").replace(/\s+/g," ").trim()});
   if(rp&&rp.n>3&&out.length<5&&used.indexOf(rp.txt)<0)
@@ -671,6 +940,13 @@ function build(s,type){
     cap:"The most-sent message from each of you, word for word. No notes."});
   if(s.night.length>=2)c.push({k:NIGHTK[type]||"The 3 a.m. file",thread:pick3(s.night).map(function(m,i){return [m,i%2?"me":"them"]}),
     stamp:nice(s.late)+" messages after midnight",cap:"Nothing good is ever said at this hour. You said "+nice(s.late)+" things."});
+  if(Math.abs(s.drift)>18&&s.spanDays>60)c.push({
+    k:s.drift<0?"The drift":"The upswing",
+    mid:(s.drift<0?"You talk "+Math.abs(s.drift)+"% less than you used to":"You talk "+s.drift+"% more than you used to"),
+    rows:[["Back then",nice(s.rateEarly)+" a day"],["Now",nice(s.rateLate)+" a day"]],
+    cap:s.drift<0?"Nobody decided this. It just happened, one quiet week at a time.":"Whatever changed, it started working."});
+  if(s.enderPct>58)c.push({k:"The last word",mid:ini(s.enderP)+" ends it "+s.enderPct+"% of the time",
+    cap:"Someone always sends the final message before everyone goes quiet. It is usually the same person."});
   c.push({k:"The awards",awards:awards(s,type),cap:"Decided entirely by the numbers. Take it up with the data."});
   var vd=verdict(s,type);
   var w=s.pair?[[ini(P[0]),persona(s,P[0],P[1],type)],[ini(P[1]),persona(s,P[1],P[0],type,persona(s,P[0],P[1],type).t)]]
@@ -749,7 +1025,7 @@ function doneScreen(){
     '<div class="line"><span>Starts it most</span><b>'+ini(s.starter)+'</b></div>'+
     '<div class="line"><span>Peak hour</span><b>'+hourLabel(s.peak)+'</b></div>'+
     '<div class="line"><span>Longest streak</span><b>'+nice(s.streak)+' days</b></div>'+
-    '<p class="foot">scrollback</p>';
+    '<p class="foottxt">scrollback</p>';
   var here="";
   try{here=String(location.href).split("#")[0].split("?")[0]}catch(e){}
   $("gift").textContent=here||"scrollback.in";
@@ -834,8 +1110,8 @@ $("next").addEventListener("click",function(){step(1)});
 $("unlock").addEventListener("click",function(){unlocked=true;idx=FREE;render();show("s-story")});
 $("again").addEventListener("click",function(){
   RAW=null;PEOPLE=[];S=null;$("opts").hidden=true;$("modewrap").hidden=true;$("pickwrap").hidden=true;
-  $("drop").querySelector("strong").textContent="Drop your WhatsApp export";
-  $("drop").querySelector("span").textContent=".txt or .zip file";show("s-upload");
+  $("drop").querySelector("strong").textContent="Drop your WhatsApp export here";
+  $("drop").querySelector("span").textContent=".txt or .zip \u00b7 stays on this device";show("s-upload");
 });
 $("copy").addEventListener("click",function(){
   var t=$("gift").textContent,b=$("copy");
@@ -875,5 +1151,3 @@ $("sample").addEventListener("click",function(){
 });
 })();
 </script>
-
-</body></html>
