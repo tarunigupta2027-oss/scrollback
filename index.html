@@ -95,7 +95,10 @@ button{font:inherit;cursor:pointer;border:none}
 details.how{background:var(--paper);border:2px solid var(--ink);border-radius:14px;padding:14px 16px}
 details.how summary{font-family:var(--font-display);font-weight:600;color:var(--accent);cursor:pointer;font-size:.98rem;list-style:none}
 details.how summary::-webkit-details-marker{display:none}
-details.how ol{margin:12px 0 0;padding-left:20px;color:var(--muted);font-size:.93rem;display:flex;flex-direction:column;gap:6px}
+details.how ol{margin:12px 0 0;padding-left:20px;color:var(--muted);font-size:.93rem;display:flex;flex-direction:column;gap:7px}
+details.how ol b{color:var(--ink)}
+.osbar{display:flex;gap:8px;margin-top:12px}
+.hownote{font-size:.86rem;color:var(--muted);margin-top:12px;line-height:1.45}
 .field{display:flex;flex-direction:column;gap:7px}
 .lbl{font-size:.88rem;color:var(--muted);font-weight:600}
 select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px solid var(--ink);background:var(--card);color:var(--ink)}
@@ -216,6 +219,10 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
 .shot .line{display:flex;justify-content:space-between;font-size:.93rem;border-top:2px solid var(--ink);padding-top:10px;text-align:left;gap:10px}
 .shot .line b{font-family:var(--font-display);text-align:right}
 .shot .foottxt{font-size:.74rem;opacity:.65;letter-spacing:.1em;text-transform:uppercase;font-family:var(--font-display)}
+.sharebox{background:var(--mint);border:2.5px solid var(--ink);border-radius:20px;box-shadow:6px 6px 0 var(--ink);
+  padding:20px;display:flex;flex-direction:column;gap:11px}
+.sharebox strong{font-family:var(--font-display);font-size:1.12rem}
+.sharebox span{font-size:.9rem;line-height:1.45}
 .mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.86rem;background:var(--card);border:2px solid var(--ink);
   border-radius:12px;padding:12px 14px;word-break:break-all;color:var(--muted)}
 
@@ -387,14 +394,27 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
         <span>.txt or .zip · stays on this device</span>
       </div>
       <input type="file" id="file" accept=".txt,.zip,text/plain,application/zip" hidden>
-      <details class="how" id="how2">
-        <summary>How do I export my chat?</summary>
-        <ol>
+      <details class="how" id="how2" open>
+        <summary>How do I get the chat file out of WhatsApp?</summary>
+        <div class="osbar">
+          <button class="lg" id="osi" aria-pressed="true">iPhone</button>
+          <button class="lg" id="osa" aria-pressed="false">Android</button>
+        </div>
+        <ol id="stepsI">
           <li>Open the chat in WhatsApp.</li>
           <li>Tap the contact or group name at the top.</li>
-          <li>Scroll down and tap Export chat.</li>
-          <li>Choose Without media, then save the file to this device.</li>
+          <li>Scroll right down and tap <b>Export Chat</b>, then <b>Without Media</b>.</li>
+          <li>In the share sheet, swipe across the grey icons and tap <b>Save to Files</b>. Pick <b>On My iPhone</b>.</li>
+          <li>Come back here, tap the box above, tap <b>Browse</b>, and pick the file you just saved.</li>
         </ol>
+        <ol id="stepsA" hidden>
+          <li>Open the chat in WhatsApp.</li>
+          <li>Tap the three dots, top right, then <b>More</b>, then <b>Export chat</b>.</li>
+          <li>Choose <b>Without media</b>.</li>
+          <li>Pick <b>Files</b> (or Drive) to save it. It usually lands in <b>Downloads</b>.</li>
+          <li>Come back here, tap the box above, and pick it from Downloads or Recent.</li>
+        </ol>
+        <p class="hownote">Stuck? You can also share the export to any app that keeps files &mdash; Telegram saved messages, Notes, your own email. Then open it from there.</p>
       </details>
       <div id="opts" hidden style="display:flex;flex-direction:column;gap:16px">
         <div class="field" id="modewrap" hidden>
@@ -491,7 +511,7 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
         <option value="new">Just getting started</option>
       </select>
     </div>
-    <p class="footnote">Read on your device. Nothing was sent anywhere.</p>
+    <p class="footnote">Read on your device. Nothing was sent anywhere.<br><button class="link" id="startover" style="margin-top:8px">Start a different chat</button></p>
   </div>
 </div>
 
@@ -523,11 +543,15 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
   <div class="panel">
     <h2 class="h2" style="text-align:center">Your story is ready.</h2>
     <div class="shot" id="shot"></div>
-    <p class="note">Screenshot the card above to post it. Send anyone the link below and they can make their own.</p>
-    <div class="mono" id="gift"></div>
-    <button class="btn ghost wide" id="copy">Copy link to Scrollback</button>
-    <button class="btn wide" id="again">Start another story</button>
-    <p class="footnote">The share card shows names and numbers only. Your messages are never on it.<br>Private gift links you can send to one person arrive with the next release.</p>
+    <p class="note">Screenshot the card above to post it &mdash; or send them the link below and they'll see all ten screens.</p>
+    <div class="sharebox">
+      <strong>Send them the whole story</strong>
+      <span>All ten screens, exactly as you just read them. The story travels inside the link itself, so there is still nothing stored anywhere.</span>
+      <div class="mono" id="gift">Building your link&hellip;</div>
+      <button class="btn wide" id="copy">Copy the story link</button>
+    </div>
+    <button class="btn ghost wide" id="again">Start another story</button>
+    <p class="footnote">The share card shows names and numbers only. Your messages are never on it.</p>
   </div>
 </div>
 
@@ -1008,8 +1032,82 @@ function build(s,type){
 }
 function pick3(a){return a.length<=3?a:[a[0],a[Math.floor(a.length/2)],a[a.length-1]]}
 
+
+/* ---------- shareable story links (no server: everything rides in the URL fragment) ---------- */
+function b64e(b){var t="",i;for(i=0;i<b.length;i++)t+=String.fromCharCode(b[i]);return btoa(t).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")}
+function b64d(t){t=t.replace(/-/g,"+").replace(/_/g,"/");while(t.length%4)t+="=";var s=atob(t),a=new Uint8Array(s.length),i;for(i=0;i<s.length;i++)a[i]=s.charCodeAt(i);return a}
+function pack(o){
+  var bytes=new TextEncoder().encode(JSON.stringify(o));
+  if(window.CompressionStream){
+    try{
+      var cs=new CompressionStream("deflate-raw"),w=cs.writable.getWriter();
+      w.write(bytes);w.close();
+      return new Response(cs.readable).arrayBuffer().then(function(buf){return "z"+b64e(new Uint8Array(buf))});
+    }catch(e){}
+  }
+  return Promise.resolve("r"+b64e(bytes));
+}
+function unpack(str){
+  var tag=str.charAt(0),data=b64d(str.slice(1));
+  if(tag==="z"&&window.DecompressionStream){
+    var ds=new DecompressionStream("deflate-raw"),w=ds.writable.getWriter();
+    w.write(data);w.close();
+    return new Response(ds.readable).arrayBuffer().then(function(b){return JSON.parse(new TextDecoder().decode(b))});
+  }
+  return Promise.resolve(JSON.parse(new TextDecoder().decode(data)));
+}
+function slimRoast(r){
+  return {intro:r.intro,end:r.end,beats:r.beats.map(function(b){
+    return {q:{txt:b.q?trunc(b.q.txt,140):""},dry:b.dry||"",burn:b.burn}})};
+}
+function slimStory(){
+  return {v:1,pair:S.pair,n:S.board.slice(0,2),np:S.P.length,t:TYPE,
+    c:CARDS.map(function(c){
+      var o={};
+      ["k","big","cap","sub","mid","stamp"].forEach(function(f){if(c[f])o[f]=c[f]});
+      if(c.rows)o.rows=c.rows;
+      if(c.thread)o.thread=c.thread.map(function(x){return [{txt:trunc(x[0].txt,140)},x[1]]});
+      if(c.awards)o.awards=c.awards.map(function(a){return {t:a.t,who:a.who,d:a.d}});
+      if(c.verdict)o.verdict={t:c.verdict.t,d:c.verdict.d};
+      if(c.who)o.who=c.who.map(function(w){return [w[0],{t:w[1].t,d:w[1].d}]});
+      if(c.roast)o.rd={hi:slimRoast(roast(S,TYPE,"hi")),en:slimRoast(roast(S,TYPE,"en"))};
+      return o;
+    })};
+}
+function loadShared(d){
+  SHARED=true;unlocked=true;
+  S={pair:d.pair,board:d.n,P:new Array(d.np||2),vd:{t:"",d:""}};
+  CARDS=d.c;TYPE=d.t||"friends";idx=0;
+  $("ctype").parentNode.hidden=true;
+  render();show("s-story");
+}
+
+/* ---------- remember the story if the page is left and come back to it ---------- */
+var SKEY="sb_story_v1";
+function saveState(){
+  if(SHARED||!S||!CARDS.length)return;
+  try{localStorage.setItem(SKEY,JSON.stringify({t:Date.now(),i:idx,u:unlocked,l:LANG,d:slimStory()}))}catch(e){}
+}
+function clearState(){try{localStorage.removeItem(SKEY)}catch(e){}}
+function restoreState(){
+  var raw=null;
+  try{raw=localStorage.getItem(SKEY)}catch(e){}
+  if(!raw)return false;
+  try{
+    var o=JSON.parse(raw);
+    if(!o||!o.d||!o.d.c||!o.d.c.length)return false;
+    if(Date.now()-o.t>6*3600000){clearState();return false}
+    S={pair:o.d.pair,board:o.d.n,P:new Array(o.d.np||2),vd:{t:"",d:""}};
+    CARDS=o.d.c;TYPE=o.d.t||"friends";LANG=o.l||"hi";
+    unlocked=o.u!==false;idx=Math.min(o.i||0,CARDS.length-1);
+    $("ctype").value=TYPE;
+    render();show("s-story");
+    return true;
+  }catch(e){clearState();return false}
+}
+
 /* ---------- render ---------- */
-var S=null,CARDS=[],idx=0,unlocked=false,FREE=3,TYPE="friends",LANG="hi";
+var S=null,CARDS=[],idx=0,unlocked=false,FREE=3,TYPE="friends",LANG="hi",SHARED=false,SHARELINK="";
 var PAL=["--p7","--p5","--p2","--p4","--p6","--p8","--p1","--p3"];
 function render(){
   var c=CARDS[idx],h="";
@@ -1024,8 +1122,8 @@ function render(){
   if(c.awards)h+='<div class="awards">'+c.awards.map(function(a){return '<div class="aw"><span class="ini">'+esc(ini(a.who))+'</span><div><h3>'+esc(a.t)+'</h3><p class="winner">'+esc(nm(a.who))+'</p><p>'+esc(a.d)+'</p></div></div>'}).join("")+'</div>';
   if(c.verdict)h+='<div class="verdict"><p class="kicker">'+(S.pair?"You two are":"This group is")+'</p><h2>'+esc(c.verdict.t)+'</h2><p>'+esc(c.verdict.d)+'</p></div>';
   if(c.who)h+='<div class="who">'+c.who.map(function(w){return '<div class="p"><div class="whohead"><span class="ini">'+esc(ini(w[0]))+'</span><span class="whoname">'+esc(nm(w[0]))+'</span></div><h3>'+esc(w[1].t)+'</h3><p>'+esc(w[1].d)+'</p></div>'}).join("")+'</div>';
-  if(c.roast){
-    var R=roast(S,TYPE,LANG);
+  if(c.roast||c.rd){
+    var R=c.rd?c.rd[LANG]:roast(S,TYPE,LANG);
     h+='<div class="langsw"><button class="lg" data-l="hi" aria-pressed="'+(LANG==="hi")+'">Hinglish</button>'+
        '<button class="lg" data-l="en" aria-pressed="'+(LANG==="en")+'">English</button></div>'+
        '<p class="cap" style="margin-bottom:2px">'+esc(R.intro)+'</p><div class="roastlist">'+
@@ -1037,7 +1135,7 @@ function render(){
   if(c.cap&&!c.big)h+='<p class="cap">'+esc(c.cap)+'</p>';
   $("slide").style.setProperty("--pc","var("+PAL[idx%PAL.length]+")");
   $("slide").innerHTML=h;
-  if(c.roast){
+  if(c.roast||c.rd){
     var lgs=$("slide").querySelectorAll(".lg");
     for(var z=0;z<lgs.length;z++)lgs[z].addEventListener("click",function(){
       LANG=this.getAttribute("data-l");render();
@@ -1045,12 +1143,13 @@ function render(){
   }
   $("prev").disabled=idx===0;
   $("prev").style.opacity=idx===0?".4":"1";
-  $("next").textContent=(idx===CARDS.length-1)?"Finish":"Next";
+  $("next").textContent=(idx===CARDS.length-1)?(SHARED?"Make your own story":"Finish"):"Next";
+  saveState();
 }
 function step(d){
   var n=idx+d;
   if(n<0)return;
-  if(n>=CARDS.length){doneScreen();return}
+  if(n>=CARDS.length){if(SHARED){location.hash="";SHARED=false;show("s-upload");var st=document.getElementById("start");if(st)st.scrollIntoView();return}doneScreen();return}
   if(!unlocked&&n>=FREE){gate();return}
   idx=n;render();
 }
@@ -1078,7 +1177,15 @@ function doneScreen(){
     '<p class="foottxt">scrollback</p>';
   var here="";
   try{here=String(location.href).split("#")[0].split("?")[0]}catch(e){}
-  $("gift").textContent=here||"scrollback.in";
+  here=here||"https://scrollback.in/";
+  $("gift").textContent="Building your link\u2026";
+  SHARELINK=here;
+  pack(slimStory()).then(function(code){
+    var url=here+"#s="+code;
+    if(url.length>7800){SHARELINK=here;$("gift").textContent=here;return}
+    SHARELINK=url;
+    $("gift").textContent=here.replace(/^https?:\/\//,"").replace(/\/$/,"")+"/#s="+code.slice(0,14)+"\u2026";
+  }).catch(function(){SHARELINK=here;$("gift").textContent=here});
   show("s-done");
 }
 
@@ -1119,6 +1226,28 @@ $("t49").addEventListener("click",function(){pickTier(49)});
 $("t149").addEventListener("click",function(){pickTier(149)});
 pickTier(149);
 $("gmode").addEventListener("change",function(){$("pickwrap").hidden=$("gmode").value!=="pair"});
+
+/* export instructions: default to the phone they are actually on */
+(function(){
+  var iOS=/iPad|iPhone|iPod/.test(navigator.userAgent||"")||((navigator.platform==="MacIntel")&&navigator.maxTouchPoints>1);
+  function setOS(ios){
+    $("osi").setAttribute("aria-pressed",ios?"true":"false");
+    $("osa").setAttribute("aria-pressed",ios?"false":"true");
+    $("stepsI").hidden=!ios;$("stepsA").hidden=ios;
+  }
+  setOS(iOS);
+  $("osi").addEventListener("click",function(){setOS(true)});
+  $("osa").addEventListener("click",function(){setOS(false)});
+})();
+
+$("startover").addEventListener("click",function(){
+  clearState();RAW=null;PEOPLE=[];S=null;SHARED=false;
+  try{location.hash=""}catch(e){}
+  $("opts").hidden=true;$("modewrap").hidden=true;$("pickwrap").hidden=true;
+  $("drop").querySelector("strong").textContent="Drop your WhatsApp export here";
+  $("drop").querySelector("span").textContent=".txt or .zip · stays on this device";
+  show("s-upload");
+});
 $("ctype").addEventListener("change",function(){
   if(!S)return;
   TYPE=$("ctype").value;CARDS=build(S,TYPE);
@@ -1159,15 +1288,30 @@ $("prev").addEventListener("click",function(){step(-1)});
 $("next").addEventListener("click",function(){step(1)});
 $("unlock").addEventListener("click",function(){unlocked=true;idx=FREE;render();show("s-story")});
 $("again").addEventListener("click",function(){
-  RAW=null;PEOPLE=[];S=null;$("opts").hidden=true;$("modewrap").hidden=true;$("pickwrap").hidden=true;
+  clearState();RAW=null;PEOPLE=[];S=null;$("opts").hidden=true;$("modewrap").hidden=true;$("pickwrap").hidden=true;
   $("drop").querySelector("strong").textContent="Drop your WhatsApp export here";
   $("drop").querySelector("span").textContent=".txt or .zip \u00b7 stays on this device";show("s-upload");
 });
 $("copy").addEventListener("click",function(){
-  var t=$("gift").textContent,b=$("copy");
-  function sel(){var r=document.createRange();r.selectNodeContents($("gift"));var g=getSelection();g.removeAllRanges();g.addRange(r);b.textContent="Selected — copy it";setTimeout(function(){b.textContent="Copy link to Scrollback"},2400)}
-  try{navigator.clipboard.writeText(t).then(function(){b.textContent="Copied";setTimeout(function(){b.textContent="Copy link to Scrollback"},1600)},sel)}catch(e){sel()}
+  var t=SHARELINK||$("gift").textContent,b=$("copy");
+  function sel(){var r=document.createRange();r.selectNodeContents($("gift"));var g=getSelection();g.removeAllRanges();g.addRange(r);b.textContent="Selected — copy it";setTimeout(function(){b.textContent="Copy the story link"},2400)}
+  try{navigator.clipboard.writeText(t).then(function(){b.textContent="Copied";setTimeout(function(){b.textContent="Copy the story link"},1600)},sel)}catch(e){sel()}
 });
+
+/* ---------- open a story someone sent you ---------- */
+(function(){
+  var h="";try{h=String(location.hash||"")}catch(e){}
+  if(h.indexOf("#s=")!==0){restoreState();return}
+  var code=h.slice(3);
+  unpack(code).then(function(d){
+    if(!d||!d.c||!d.c.length)throw 0;
+    loadShared(d);
+  }).catch(function(){
+    show("s-upload");
+    $("err").hidden=false;
+    $("err").textContent="That shared story link looks incomplete. Ask them to send it again, or make your own below.";
+  });
+})();
 
 /* ---------- sample ---------- */
 $("sample").addEventListener("click",function(){
