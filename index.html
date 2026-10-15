@@ -54,6 +54,18 @@ button{font:inherit;cursor:pointer;border:none}
 .hero-art{position:relative}
 .hero-art svg{width:100%;height:auto;display:block}
 
+.trust{background:var(--paper);border-top:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);padding:26px 0}
+.trustrow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}
+.titem{display:flex;gap:13px;align-items:flex-start}
+.titem svg{width:42px;height:42px;flex:none}
+.titem b{display:block;font-family:var(--font-display);font-size:1rem;font-weight:600}
+.titem span{font-size:.9rem;color:var(--muted);line-height:1.45}
+.freepill{display:inline-flex;align-items:center;gap:8px;background:var(--mint);border:2.5px solid var(--ink);
+  border-radius:999px;padding:7px 16px;font-family:var(--font-display);font-weight:600;font-size:.88rem;margin-bottom:18px}
+.freebar{background:var(--yellow);border:2.5px solid var(--ink);border-radius:16px;padding:16px 20px;margin-bottom:22px;
+  font-family:var(--font-display);font-weight:600;font-size:1.02rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.freebar em{font-style:normal;font-family:var(--font-body);font-weight:400;color:#4A4036;font-size:.92rem}
+
 /* bands */
 .band{background:var(--paper);border-top:2.5px solid var(--ink);border-bottom:2.5px solid var(--ink);padding:56px 0}
 .band.cream{background:var(--cream);border:none;padding:56px 0}
@@ -147,11 +159,14 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
 .aw{display:flex;align-items:center;gap:12px;padding:11px 14px;background:var(--card);border:2px solid var(--ink);border-radius:14px}
 .aw div{min-width:0}
 .aw h3{font-size:1rem;font-family:var(--font-display);line-height:1.2}
+.aw .winner{font-family:var(--font-display);font-weight:600;font-size:.86rem;color:var(--accent);line-height:1.2}
 .aw p{font-size:.82rem;color:var(--muted);line-height:1.35}
 .who{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
 .who .p{background:var(--card);border:2px solid var(--ink);border-radius:16px;padding:15px;text-align:left;display:flex;flex-direction:column;gap:6px}
 .ini{width:34px;height:34px;border-radius:50%;background:var(--yellow);border:2px solid var(--ink);color:var(--ink);
   display:grid;place-items:center;font-family:var(--font-display);font-weight:700;font-size:.9rem;flex:none}
+.whohead{display:flex;align-items:center;gap:8px;min-width:0}
+.whoname{font-family:var(--font-display);font-weight:600;font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .who h3{font-size:1.05rem;font-family:var(--font-display);line-height:1.2}
 .who p{font-size:.84rem;color:var(--muted);line-height:1.4}
 .verdict{background:var(--coral);color:#fff;border:2.5px solid var(--ink);border-radius:20px;padding:28px 22px;display:flex;flex-direction:column;gap:11px}
@@ -205,6 +220,7 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
   border-radius:12px;padding:12px 14px;word-break:break-all;color:var(--muted)}
 
 @media (max-width:860px){
+  .trustrow{grid-template-columns:1fr;gap:16px}
   .hero{grid-template-columns:1fr;gap:12px;padding:16px 0 40px}
   .hero-art{order:-1;max-width:420px;margin:0 auto}
   .steps{grid-template-columns:1fr}
@@ -243,6 +259,7 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
 
   <section class="hero">
     <div class="hero-copy">
+      <span class="freepill">Free right now &middot; every screen unlocked</span>
       <h1><span class="hl hl-peach">Your chat,</span><br><span class="hl hl-coral">as a story.</span></h1>
       <p class="lede">Drop in a WhatsApp chat and get a funny, slightly too honest story of your relationship. Ready to share or gift.</p>
       <div class="cta-row">
@@ -283,6 +300,37 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
     </div>
   </section>
 </div>
+
+<div class="trust">
+  <div class="wrap">
+    <div class="trustrow">
+      <div class="titem">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <rect x="9" y="21" width="30" height="21" rx="6" fill="#35BF9E" stroke="#141414" stroke-width="3.5"/>
+          <path d="M16 21v-6a8 8 0 0 1 16 0v6" fill="none" stroke="#141414" stroke-width="3.5" stroke-linecap="round"/>
+        </svg>
+        <div><b>Nothing is stored</b><span>No server, no database, no account. There is nowhere for your chat to leak from.</span></div>
+      </div>
+      <div class="titem">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <path d="M6 18c10-8 26-8 36 0M13 26c7-5 15-5 22 0M20 34c3-2 5-2 8 0" fill="none" stroke="#141414" stroke-width="3.5" stroke-linecap="round"/>
+          <path d="M8 8l32 32" stroke="#FF5A36" stroke-width="4.5" stroke-linecap="round"/>
+        </svg>
+        <div><b>Works with no internet</b><span>Open the page, switch on aeroplane mode, and it still builds your whole story.</span></div>
+      </div>
+      <div class="titem">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <rect x="9" y="21" width="30" height="21" rx="6" fill="#F7D14A" stroke="#141414" stroke-width="3.5"/>
+          <path d="M16 21v-6a8 8 0 0 1 15-3" fill="none" stroke="#141414" stroke-width="3.5" stroke-linecap="round"/>
+        </svg>
+        <div><b>Every screen is free right now</b><span>Nothing is locked while Scrollback is being tested. Read all the way to the end.</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="height:0"></div>
+<div class="wrap" hidden></div>
 
 <div class="band" id="how">
   <div class="wrap">
@@ -395,8 +443,9 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
 <div class="band cream" id="pricing">
   <div class="wrap">
     <p class="eyebrow">Pricing</p>
-    <h2 class="h2">Free to try. Pay if you like it.</h2>
-    <p class="sub">The first three screens are free, every time. No trial, no card, no countdown.</p>
+    <h2 class="h2">Everything is free right now.</h2>
+    <div class="freebar" style="margin-top:18px;max-width:720px">All 10 screens are open while Scrollback is being tested. <em>No payment, no card, nothing to unlock.</em></div>
+    <p class="sub">Here is what it will cost once payments are switched on. The first three screens will stay free, always.</p>
     <div class="prices">
       <div class="pcard">
         <h3 style="font-size:1.2rem">Full story</h3>
@@ -416,12 +465,12 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
 <div class="wrap">
   <div class="foot">
     <span>Scrollback &middot; made in Gurgaon</span>
-    <span>Your messages never leave your phone.</span>
+    <span>Your chat never leaves your device.</span>
   </div>
 </div>
 </div>
 
-<div id="s-story" hidden class="stage">
+<div id="s-story" hidden class="stage" data-clarity-mask="true">
   <svg class="doodle l" viewBox="0 0 100 60" aria-hidden="true"><path d="M4 30C16 6 28 54 40 30s24-24 36 0 20 24 20 0" fill="none" stroke="#141414" stroke-width="4" stroke-linecap="round"/></svg>
   <svg class="doodle r" viewBox="0 0 100 100" aria-hidden="true"><path d="M50 6l9 24 24 9-24 9-9 24-9-24-24-9 24-9z" fill="#F7D14A" stroke="#141414" stroke-width="4" stroke-linejoin="round"/></svg>
   <div class="stagewrap">
@@ -446,14 +495,16 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
   </div>
 </div>
 
-<div id="s-pay" hidden class="stage">
+<div id="s-pay" hidden class="stage" data-clarity-mask="true">
   <div class="panel">
     <div class="lock">
-      <div class="disc" style="background:#fff">&#128274;</div>
-      <strong style="font-family:var(--font-display);font-size:1.2rem" id="lockn">6 more screens locked</strong>
-      <span class="cap">The ones with the actual memories in them</span>
+      <div class="disc" style="background:#fff">&#10024;</div>
+      <strong style="font-family:var(--font-display);font-size:1.2rem" id="lockn">6 more screens ahead</strong>
+      <span class="cap">The ones with the actual memories in them. All open, free, right now.</span>
     </div>
     <div class="teases" id="teases"></div>
+    <button class="btn wide" id="unlock">Keep reading &mdash; it's free</button>
+    <p class="eyebrow" style="text-align:center;margin-top:4px">What it will cost later</p>
     <button class="tier" id="t49" role="radio" aria-checked="false">
       <div class="top"><h3><span class="dot">&#10003;</span>Full story</h3><span class="price">&#8377;49</span></div>
       <p>Every screen, your awards, your verdict and the roast.</p>
@@ -464,12 +515,11 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
       <p>Everything above, plus a personal note and a private link to send them.</p>
     </button>
     <div class="occ"><span>Anniversary</span><span>Birthday</span><span>Rakhi</span><span>New Year</span></div>
-    <button class="btn wide" id="unlock">Unlock the rest</button>
-    <p class="footnote">Payments go live in the next release. Unlocking is free while Scrollback is in testing.</p>
+    <p class="footnote">Payments are not switched on yet. Nothing here can charge you.</p>
   </div>
 </div>
 
-<div id="s-done" hidden class="stage">
+<div id="s-done" hidden class="stage" data-clarity-mask="true">
   <div class="panel">
     <h2 class="h2" style="text-align:center">Your story is ready.</h2>
     <div class="shot" id="shot"></div>
@@ -477,7 +527,7 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
     <div class="mono" id="gift"></div>
     <button class="btn ghost wide" id="copy">Copy link to Scrollback</button>
     <button class="btn wide" id="again">Start another story</button>
-    <p class="footnote">The share card shows initials and numbers only. Your messages are never on it.<br>Private gift links you can send to one person arrive with the next release.</p>
+    <p class="footnote">The share card shows names and numbers only. Your messages are never on it.<br>Private gift links you can send to one person arrive with the next release.</p>
   </div>
 </div>
 
@@ -542,7 +592,8 @@ function dur(ms){var m=Math.round(ms/60000);if(m<1)return "under a minute";if(m<
 function hourLabel(h){var ap=h<12?"a.m.":"p.m.",hh=h%12;if(hh===0)hh=12;return hh+" "+ap}
 function clock(d){var h=d.getHours(),ap=h<12?"a.m.":"p.m.",hh=h%12;if(hh===0)hh=12;return hh+":"+String(d.getMinutes()).padStart(2,"0")+" "+ap}
 function dstr(d){return d.getDate()+" "+MON[d.getMonth()]+" "+d.getFullYear()}
-function ini(n){return (n.trim()[0]||"?").toUpperCase()}
+function ini(n){return (String(n).trim()[0]||"?").toUpperCase()}
+function nm(n){n=String(n||"").trim().replace(/\s+/g," ");return n.length>22?n.slice(0,21)+"\u2026":(n||"Someone")}
 function trunc(t,n){t=t.replace(/\s+/g," ").trim();return t.length>n?t.slice(0,n-1)+"…":t}
 
 /* ---------- analysis (works for 2 people or a whole group) ---------- */
@@ -676,8 +727,8 @@ var NOUN={intensity:"Marathon",night:"Night Shift",imbalance:"Chase",replyGap:"W
 var FACT={
   intensity:function(s){return nice(s.perDay)+" messages a day, every day."},
   night:function(s){return s.latePct+"% of everything here lands after midnight."},
-  imbalance:function(s){return ini(s.board[0])+" sent "+Math.round(s.by[s.board[0]]/s.total*100)+"% of it."},
-  replyGap:function(s){return ini(s.fastP)+" replies in "+dur(s.medFast)+"; "+ini(s.slowP)+" takes "+dur(s.medSlow)+"."},
+  imbalance:function(s){return nm(s.board[0])+" sent "+Math.round(s.by[s.board[0]]/s.total*100)+"% of it."},
+  replyGap:function(s){return nm(s.fastP)+" replies in "+dur(s.medFast)+"; "+nm(s.slowP)+" takes "+dur(s.medSlow)+"."},
   affection:function(s){return nice(s.loveN)+" messages were some version of I miss you."},
   humour:function(s){return nice(s.laughN)+" messages were purely laughing."},
   brevity:function(s){return "The average message is "+Math.round(s.avgLen)+" characters."},
@@ -692,7 +743,7 @@ var FACT={
   fading:function(s){return "You text "+Math.abs(s.drift)+"% less now than when this started."},
   growing:function(s){return "You text "+s.drift+"% more now than when this started."},
   weekendy:function(s){return s.wkndPct+"% of this lands on a Saturday or Sunday."},
-  ending:function(s){return ini(s.enderP)+" gets the last word "+s.enderPct+"% of the time."}
+  ending:function(s){return nm(s.enderP)+" gets the last word "+s.enderPct+"% of the time."}
 };
 function rank(s){
   var keys=Object.keys(s.sig).filter(function(k){return ADJ[k]}),mu=0;
@@ -777,66 +828,66 @@ function seed(s,k){
 function topOf(o){var k=Object.keys(o||{});if(!k.length)return null;return k.sort(function(x,y){return o[y]-o[x]})[0]}
 var OPEN={
   bore:[function(s,o){return "Pehli baar "+dstr(o.first)+" ko, aur uske baad "+nice(o.n)+" baar."},
-        function(s,o){return ini(o.who)+" ne akele "+o.pct+"% baar yeh rona roya hai."},
+        function(s,o){return nm(o.who)+" ne akele "+o.pct+"% baar yeh rona roya hai."},
         function(s,o){return nice(o.n)+" baar bore hone ka zikr, phir bhi chat kabhi band nahi hui."}],
   sleep:[function(s,o){return "Neend ka zikr "+nice(o.n)+" baar, aur "+nice(s.late)+" messages aadhi raat ke baad."},
         function(s,o){return "Pehli baar "+dstr(o.first)+" ko, aur aadat aaj tak nahi gayi."},
-        function(s,o){return ini(o.who)+" is chat ka official night shift hai, "+o.pct+"% baar."}],
+        function(s,o){return nm(o.who)+" is chat ka official night shift hai, "+o.pct+"% baar."}],
   food:[function(s,o){return "Khane ka zikr "+nice(o.n)+" baar, zyada tar "+hourLabel(s.peak)+" ke aas paas."},
-        function(s,o){return ini(o.who)+" ne "+o.pct+"% baar khane ki baat chhedi hai."},
+        function(s,o){return nm(o.who)+" ne "+o.pct+"% baar khane ki baat chhedi hai."},
         function(s,o){return "Pehli baar "+dstr(o.first)+" ko bhookh lagi thi, uske baad "+nice(o.n)+" baar."}],
   study:[function(s,o){return "Padhai ka zikr "+nice(o.n)+" baar, pehli baar "+dstr(o.first)+" ko."},
-        function(s,o){return ini(o.who)+" ne "+o.pct+"% baar padhai ka naam liya hai."},
+        function(s,o){return nm(o.who)+" ne "+o.pct+"% baar padhai ka naam liya hai."},
         function(s,o){return nice(o.n)+" baar exam ka rona, result ka zikr kaafi kam."}],
   work:[function(s,o){return "Kaam ka rona "+nice(o.n)+" messages mein, pehli baar "+dstr(o.first)+" ko."},
-        function(s,o){return ini(o.who)+" akela "+o.pct+"% complaints kar raha hai."},
+        function(s,o){return nm(o.who)+" akela "+o.pct+"% complaints kar raha hai."},
         function(s,o){return nice(o.n)+" baar office ka naam, aur chat sabse busy "+hourLabel(s.peak)+" pe."}],
   plan:[function(s,o){return nice(o.n)+" plans bane, pehla "+dstr(o.first)+" ko."},
-        function(s,o){return ini(o.who)+" hi "+o.pct+"% plans propose karta hai."},
+        function(s,o){return nm(o.who)+" hi "+o.pct+"% plans propose karta hai."},
         function(s,o){return nice(o.n)+" baar planning, aur beech mein "+nice(s.silenceDays)+" din ki chuppi bhi."}],
   sorry:[function(s,o){return "Sorry "+nice(o.n)+" baar, pehli baar "+dstr(o.first)+" ko."},
-        function(s,o){return ini(o.who)+" ne akele "+o.pct+"% maafi maangi hai."},
+        function(s,o){return nm(o.who)+" ne akele "+o.pct+"% maafi maangi hai."},
         function(s,o){return nice(o.n)+" sorry, aur behaviour mein koi badlaav nahi."}],
   love:[function(s,o){return "Yeh "+nice(o.n)+" baar bola gaya, pehli baar "+dstr(o.first)+" ko."},
-        function(s,o){return ini(o.who)+" "+o.pct+"% baar pehle bolta hai."},
+        function(s,o){return nm(o.who)+" "+o.pct+"% baar pehle bolta hai."},
         function(s,o){return nice(o.n)+" baar yahi emotion, "+nice(s.spanDays)+" din mein."}],
   drama:[function(s,o){return "Drama "+nice(o.n)+" messages mein, shuruaat "+dstr(o.first)+" se."},
-        function(s,o){return ini(o.who)+" "+o.pct+"% drama ka zimmedaar hai."},
+        function(s,o){return nm(o.who)+" "+o.pct+"% drama ka zimmedaar hai."},
         function(s,o){return nice(o.n)+" baar confusion, resolve kitni baar hua woh record mein nahi."}],
   tired:[function(s,o){return "Thakne ka zikr "+nice(o.n)+" baar, pehli baar "+dstr(o.first)+" ko."},
-        function(s,o){return ini(o.who)+" "+o.pct+"% baar thaka hua hai."},
+        function(s,o){return nm(o.who)+" "+o.pct+"% baar thaka hua hai."},
         function(s,o){return nice(o.n)+" baar energy khatam, phir bhi "+nice(s.total)+" messages type hue."}]
 };
 var OPEN_EN={
   bore:[function(s,o){return "First time on "+dstr(o.first)+", and "+nice(o.n)+" times since."},
-        function(s,o){return ini(o.who)+" alone is responsible for "+o.pct+"% of this complaint."},
+        function(s,o){return nm(o.who)+" alone is responsible for "+o.pct+"% of this complaint."},
         function(s,o){return "Bored "+nice(o.n)+" times, and the chat never once stopped."}],
   sleep:[function(s,o){return "Sleep mentioned "+nice(o.n)+" times, alongside "+nice(s.late)+" messages after midnight."},
         function(s,o){return "First time on "+dstr(o.first)+", and the habit has not changed since."},
-        function(s,o){return ini(o.who)+" runs the night shift here, "+o.pct+"% of the time."}],
+        function(s,o){return nm(o.who)+" runs the night shift here, "+o.pct+"% of the time."}],
   food:[function(s,o){return "Food came up "+nice(o.n)+" times, mostly around "+hourLabel(s.peak)+"."},
-        function(s,o){return ini(o.who)+" raised it "+o.pct+"% of the time."},
+        function(s,o){return nm(o.who)+" raised it "+o.pct+"% of the time."},
         function(s,o){return "First hungry on "+dstr(o.first)+", and "+nice(o.n)+" times after that."}],
   study:[function(s,o){return "Studying came up "+nice(o.n)+" times, starting "+dstr(o.first)+"."},
-        function(s,o){return ini(o.who)+" brought it up "+o.pct+"% of the time."},
+        function(s,o){return nm(o.who)+" brought it up "+o.pct+"% of the time."},
         function(s,o){return nice(o.n)+" mentions of exams. Noticeably fewer of results."}],
   work:[function(s,o){return "Work complained about in "+nice(o.n)+" messages, first on "+dstr(o.first)+"."},
-        function(s,o){return ini(o.who)+" accounts for "+o.pct+"% of the complaints single-handedly."},
+        function(s,o){return nm(o.who)+" accounts for "+o.pct+"% of the complaints single-handedly."},
         function(s,o){return nice(o.n)+" mentions of the office, and the chat peaks at "+hourLabel(s.peak)+"."}],
   plan:[function(s,o){return nice(o.n)+" plans made, the first on "+dstr(o.first)+"."},
-        function(s,o){return ini(o.who)+" proposes "+o.pct+"% of them."},
+        function(s,o){return nm(o.who)+" proposes "+o.pct+"% of them."},
         function(s,o){return nice(o.n)+" rounds of planning, with "+nice(s.silenceDays)+" days of silence in between."}],
   sorry:[function(s,o){return "Sorry "+nice(o.n)+" times, the first on "+dstr(o.first)+"."},
-        function(s,o){return ini(o.who)+" issued "+o.pct+"% of the apologies alone."},
+        function(s,o){return nm(o.who)+" issued "+o.pct+"% of the apologies alone."},
         function(s,o){return nice(o.n)+" apologies, and no detectable change in behaviour."}],
   love:[function(s,o){return "Said "+nice(o.n)+" times, the first on "+dstr(o.first)+"."},
-        function(s,o){return ini(o.who)+" says it first "+o.pct+"% of the time."},
+        function(s,o){return nm(o.who)+" says it first "+o.pct+"% of the time."},
         function(s,o){return "One emotion, "+nice(o.n)+" times, across "+nice(s.spanDays)+" days."}],
   drama:[function(s,o){return "Drama across "+nice(o.n)+" messages, beginning "+dstr(o.first)+"."},
-        function(s,o){return ini(o.who)+" is behind "+o.pct+"% of it."},
+        function(s,o){return nm(o.who)+" is behind "+o.pct+"% of it."},
         function(s,o){return nice(o.n)+" rounds of confusion. Resolutions are not on record."}],
   tired:[function(s,o){return "Exhaustion mentioned "+nice(o.n)+" times, first on "+dstr(o.first)+"."},
-        function(s,o){return ini(o.who)+" is tired "+o.pct+"% of the time."},
+        function(s,o){return nm(o.who)+" is tired "+o.pct+"% of the time."},
         function(s,o){return "Out of energy "+nice(o.n)+" times, yet "+nice(s.total)+" messages got typed."}]
 };
 /* closers: half are quips, half carry a fact about this particular chat; invalid ones return null */
@@ -850,7 +901,7 @@ var CLOSE=[
  function(s){return s.wkndPct>42?"Aur weekend pe yeh "+s.wkndPct+"% tak pahunch jata hai.":null},
  function(s){return s.drift<-25?"Pehle se "+Math.abs(s.drift)+"% kam ho gaya hai yeh sab.":null},
  function(s){return s.drift>35?"Aur yeh "+s.drift+"% badh gaya hai shuruaat se.":null},
- function(s){return s.enderPct>62?"Baat khatam "+ini(s.enderP)+" hi karta hai, "+s.enderPct+"% baar.":null},
+ function(s){return s.enderPct>62?"Baat khatam "+nm(s.enderP)+" hi karta hai, "+s.enderPct+"% baar.":null},
  function(s){return s.silenceDays>14?"Beech mein "+s.silenceDays+" din ki chuppi bhi thi, yaad hai?":null},
  function(s){return s.late>40?nice(s.late)+" messages aadhi raat ke baad, alag se.":null},
  function(s){return "Peak hour "+hourLabel(s.peak)+" hai, agar koi pooche."},
@@ -866,7 +917,7 @@ var CLOSE_EN=[
  function(s){return s.wkndPct>42?"And on weekends it climbs to "+s.wkndPct+"%.":null},
  function(s){return s.drift<-25?"All of this is "+Math.abs(s.drift)+"% quieter than it used to be.":null},
  function(s){return s.drift>35?"And it is "+s.drift+"% busier than when you started.":null},
- function(s){return s.enderPct>62?ini(s.enderP)+" ends the conversation "+s.enderPct+"% of the time, by the way.":null},
+ function(s){return s.enderPct>62?nm(s.enderP)+" ends the conversation "+s.enderPct+"% of the time, by the way.":null},
  function(s){return s.silenceDays>14?"There were also "+s.silenceDays+" silent days in the middle of this.":null},
  function(s){return s.late>40?"Plus "+nice(s.late)+" messages after midnight, separately.":null},
  function(s){return "Peak hour is "+hourLabel(s.peak)+", if anyone asks."},
@@ -916,10 +967,10 @@ function build(s,type){
   c.push({k:"Chapter one",big:nice(s.total),cap:"messages sent",
     sub:(s.pair?"Since ":s.P.length+" people, since ")+MON[s.first.getMonth()]+" "+s.first.getFullYear()+" · about "+nice(s.perDay)+" a day."});
   if(s.pair){
-    c.push({k:"Who starts it",mid:ini(s.starter)+" texts first "+s.startPct+"% of the time",
+    c.push({k:"Who starts it",mid:nm(s.starter)+" texts first "+s.startPct+"% of the time",
       cap:"Across "+nice(P.reduce(function(a,p){return a+s.starts[p]},0))+" separate conversations, someone always had to go first."});
-    c.push({k:"Reply speed",rows:P.map(function(p){return [ini(p)+" replies in",dur(median(s.replies[p])||0)]}),
-      cap:s.slow.ms?ini(s.slow.who)+" once took "+dur(s.slow.ms)+" to answer. That was "+dstr(s.slow.t)+".":"Measured across every exchange."});
+    c.push({k:"Reply speed",rows:P.map(function(p){return [nm(p)+" replies in",dur(median(s.replies[p])||0)]}),
+      cap:s.slow.ms?nm(s.slow.who)+" once took "+dur(s.slow.ms)+" to answer. That was "+dstr(s.slow.t)+".":"Measured across every exchange."});
   }else{
     c.push({k:"The leaderboard",rows:P.slice(0,5).map(function(p){return [trunc(p,16),nice(s.by[p])]}),
       cap:ini(P[0])+" alone sent "+Math.round(s.by[P[0]]/s.total*100)+"% of everything in here."});
@@ -932,11 +983,11 @@ function build(s,type){
          s.mMiss?{k:"The day it changed",lab:"missed them first",m:s.mMiss}:
          (s.longMsg.len>220?{k:"The longest thing anyone typed",lab:"wrote "+nice(s.longMsg.len)+" characters in one go",m:s.longMsg}:null);
   if(ms&&type!=="work")c.push({k:ms.k,thread:[[ms.m,"me"]],stamp:dstr(ms.m.t)+" · "+clock(ms.m.t),
-    cap:ini(ms.m.who)+" "+ms.lab+", "+Math.max(1,Math.round((ms.m.t-s.first)/86400000))+" days in."});
+    cap:nm(ms.m.who)+" "+ms.lab+", "+Math.max(1,Math.round((ms.m.t-s.first)/86400000))+" days in."});
   else if(ms&&type==="work")c.push({k:"The longest message in here",thread:[[s.longMsg,"me"]],stamp:dstr(s.longMsg.t),
-    cap:ini(s.longMsg.who)+" wrote "+nice(s.longMsg.len)+" characters. In a chat app."});
+    cap:nm(s.longMsg.who)+" wrote "+nice(s.longMsg.len)+" characters. In a chat app."});
   var reps=P.filter(function(p){return s.repeat[p]}).slice(0,3);
-  if(reps.length)c.push({k:"Receipts",rows:reps.map(function(p){return ["“"+trunc(s.repeat[p].txt,20)+"” — "+ini(p),nice(s.repeat[p].n)+"×"]}),
+  if(reps.length)c.push({k:"Receipts",rows:reps.map(function(p){return ["“"+trunc(s.repeat[p].txt,20)+"” — "+nm(p),nice(s.repeat[p].n)+"×"]}),
     cap:"The most-sent message from each of you, word for word. No notes."});
   if(s.night.length>=2)c.push({k:NIGHTK[type]||"The 3 a.m. file",thread:pick3(s.night).map(function(m,i){return [m,i%2?"me":"them"]}),
     stamp:nice(s.late)+" messages after midnight",cap:"Nothing good is ever said at this hour. You said "+nice(s.late)+" things."});
@@ -945,12 +996,11 @@ function build(s,type){
     mid:(s.drift<0?"You talk "+Math.abs(s.drift)+"% less than you used to":"You talk "+s.drift+"% more than you used to"),
     rows:[["Back then",nice(s.rateEarly)+" a day"],["Now",nice(s.rateLate)+" a day"]],
     cap:s.drift<0?"Nobody decided this. It just happened, one quiet week at a time.":"Whatever changed, it started working."});
-  if(s.enderPct>58)c.push({k:"The last word",mid:ini(s.enderP)+" ends it "+s.enderPct+"% of the time",
+  if(s.enderPct>58)c.push({k:"The last word",mid:nm(s.enderP)+" ends it "+s.enderPct+"% of the time",
     cap:"Someone always sends the final message before everyone goes quiet. It is usually the same person."});
   c.push({k:"The awards",awards:awards(s,type),cap:"Decided entirely by the numbers. Take it up with the data."});
   var vd=verdict(s,type);
-  var w=s.pair?[[ini(P[0]),persona(s,P[0],P[1],type)],[ini(P[1]),persona(s,P[1],P[0],type,persona(s,P[0],P[1],type).t)]]
-              :[[ini(P[0]),persona(s,P[0],P[1],type)],[ini(P[1]),persona(s,P[1],P[0],type,persona(s,P[0],P[1],type).t)]];
+  var w=[[P[0],persona(s,P[0],P[1],type)],[P[1],persona(s,P[1],P[0],type,persona(s,P[0],P[1],type).t)]];
   c.push({k:"The verdict",verdict:vd,who:w});
   s.vd=vd;
   if(roast(s,type,"hi").beats.length)c.push({k:"The roast",roast:true});
@@ -964,16 +1014,16 @@ var PAL=["--p7","--p5","--p2","--p4","--p6","--p8","--p1","--p3"];
 function render(){
   var c=CARDS[idx],h="";
   $("bars").innerHTML=CARDS.map(function(_,i){return '<i class="'+(i<=idx?"on":"")+'"></i>'}).join("");
-  $("pair").textContent=S.pair?ini(S.board[0])+" + "+ini(S.board[1]):S.P.length+" people";
+  $("pair").textContent=S.pair?nm(S.board[0])+" + "+nm(S.board[1]):S.P.length+" people";
   $("count").textContent=(idx+1)+" / "+CARDS.length;
   if(c.k)h+='<p class="kicker">'+esc(c.k)+'</p>';
   if(c.big)h+='<p class="huge">'+c.big+'</p><p class="cap">'+esc(c.cap)+'</p>';
   if(c.mid)h+='<p class="mid">'+esc(c.mid)+'</p>';
   if(c.thread)h+='<div class="thread">'+c.thread.map(function(p){return '<div class="bub '+p[1]+'">'+esc(trunc(p[0].txt,180))+'</div>'}).join("")+(c.stamp?'<span class="stamp">'+esc(c.stamp)+'</span>':'')+'</div>';
   if(c.rows)h+='<div class="rows">'+c.rows.map(function(r){return '<div class="row"><span>'+esc(r[0])+'</span><b>'+esc(r[1])+'</b></div>'}).join("")+'</div>';
-  if(c.awards)h+='<div class="awards">'+c.awards.map(function(a){return '<div class="aw"><span class="ini">'+esc(ini(a.who))+'</span><div><h3>'+esc(a.t)+'</h3><p>'+esc(a.d)+'</p></div></div>'}).join("")+'</div>';
+  if(c.awards)h+='<div class="awards">'+c.awards.map(function(a){return '<div class="aw"><span class="ini">'+esc(ini(a.who))+'</span><div><h3>'+esc(a.t)+'</h3><p class="winner">'+esc(nm(a.who))+'</p><p>'+esc(a.d)+'</p></div></div>'}).join("")+'</div>';
   if(c.verdict)h+='<div class="verdict"><p class="kicker">'+(S.pair?"You two are":"This group is")+'</p><h2>'+esc(c.verdict.t)+'</h2><p>'+esc(c.verdict.d)+'</p></div>';
-  if(c.who)h+='<div class="who">'+c.who.map(function(w){return '<div class="p"><span class="ini">'+esc(w[0])+'</span><h3>'+esc(w[1].t)+'</h3><p>'+esc(w[1].d)+'</p></div>'}).join("")+'</div>';
+  if(c.who)h+='<div class="who">'+c.who.map(function(w){return '<div class="p"><div class="whohead"><span class="ini">'+esc(ini(w[0]))+'</span><span class="whoname">'+esc(nm(w[0]))+'</span></div><h3>'+esc(w[1].t)+'</h3><p>'+esc(w[1].d)+'</p></div>'}).join("")+'</div>';
   if(c.roast){
     var R=roast(S,TYPE,LANG);
     h+='<div class="langsw"><button class="lg" data-l="hi" aria-pressed="'+(LANG==="hi")+'">Hinglish</button>'+
@@ -1006,7 +1056,7 @@ function step(d){
 }
 function gate(){
   var s=S,t=[];
-  $("lockn").textContent=(CARDS.length-FREE)+" more screens locked";
+  $("lockn").textContent=(CARDS.length-FREE)+" more screens ahead";
   if(s.firstMsg)t.push(["\u{1F4C5}","The first thing anyone said here, from "+dstr(s.firstMsg.t)]);
   if(s.mLove)t.push(["❤️","The exact day someone said it first"]);
   if(s.repeat[s.board[0]])t.push(["\u{1F9FE}","The message one of you has sent "+nice(s.repeat[s.board[0]].n)+" times"]);
@@ -1020,9 +1070,9 @@ function gate(){
 function doneScreen(){
   var s=S;
   $("shot").innerHTML='<p class="kicker">Scrollback</p><h2>'+esc(s.vd.t)+'</h2>'+
-    '<p class="cap" style="opacity:.75">'+(s.pair?ini(s.board[0])+" + "+ini(s.board[1]):s.P.length+" people")+' · since '+MON[s.first.getMonth()]+' '+s.first.getFullYear()+'</p>'+
+    '<p class="cap" style="opacity:.75">'+(s.pair?nm(s.board[0])+" + "+nm(s.board[1]):s.P.length+" people")+' · since '+MON[s.first.getMonth()]+' '+s.first.getFullYear()+'</p>'+
     '<div class="line"><span>Messages</span><b>'+nice(s.total)+'</b></div>'+
-    '<div class="line"><span>Starts it most</span><b>'+ini(s.starter)+'</b></div>'+
+    '<div class="line"><span>Starts it most</span><b>'+nm(s.starter)+'</b></div>'+
     '<div class="line"><span>Peak hour</span><b>'+hourLabel(s.peak)+'</b></div>'+
     '<div class="line"><span>Longest streak</span><b>'+nice(s.streak)+' days</b></div>'+
     '<p class="foottxt">scrollback</p>';
@@ -1151,3 +1201,12 @@ $("sample").addEventListener("click",function(){
 });
 })();
 </script>
+
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "yxx7bk6i2j");
+</script>
+
