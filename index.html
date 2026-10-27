@@ -586,11 +586,10 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
    PAYMENTS.  Flip live to true and paste the two Dodo links when the
    account is approved. Nothing else needs changing.
    ===================================================================== */
-var PAY = {
-  live: false,                 // <-- change to true to switch payments on
-  p49:  "",                    // <-- Dodo payment link for the Rs 49 full story
-  p149: ""                     // <-- Dodo payment link for the Rs 149 gift edition
-};
+var PAY = { live: true,
+  p49:  "https://checkout.dodopayments.com/buy/pdt_0NqdXcDjEL15b0ypYe9hx?quantity=1&redirect_url=https%3A%2F%2Fscrollback.in%2F%3Fpaid%3D1",
+  p149: "https://checkout.dodopayments.com/buy/pdt_0NqdXokqseB0Uqc65JEaD?quantity=1&redirect_url=https%3A%2F%2Fscrollback.in%2F%3Fpaid%3D1"
+  };
 /* Both links must send the customer back to  https://scrollback.in/?paid=1  */
 
 var $=function(id){return document.getElementById(id)};
