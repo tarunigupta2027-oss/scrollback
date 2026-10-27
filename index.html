@@ -587,9 +587,9 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
    account is approved. Nothing else needs changing.
    ===================================================================== */
 var PAY = { live: true,
-  p49:  "https://checkout.dodopayments.com/buy/pdt_0NqdXcDjEL15b0ypYe9hx?quantity=1&redirect_url=https%3A%2F%2Fscrollback.in%2F%3Fpaid%3D1",
-  p149: "https://checkout.dodopayments.com/buy/pdt_0NqdXokqseB0Uqc65JEaD?quantity=1&redirect_url=https%3A%2F%2Fscrollback.in%2F%3Fpaid%3D1"
-  };
+  p49:  "https://checkout.dodopayments.com/buy/pdt_0NqdXcDjEL15b0ypYe9hx?quantity=1&singlePage=true&redirect_url=https%3A%2F%2Fscrollback.in%2F%3Fpaid%3D1",
+  p149: "https://checkout.dodopayments.com/buy/pdt_0NqdXokqseB0Uqc65JEaD?quantity=1&singlePage=true&redirect_url=https%3A%2F%2Fscrollback.in%2F%3Fpaid%3D1"  
+};
 /* Both links must send the customer back to  https://scrollback.in/?paid=1  */
 
 var $=function(id){return document.getElementById(id)};
