@@ -557,7 +557,7 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
       <p>Everything above, plus a personal note and a private link to send them.</p>
     </button>
     <div class="occ"><span>Anniversary</span><span>Birthday</span><span>Rakhi</span><span>New Year</span></div>
-    <p class="footnote">Payments are not switched on yet. Nothing here can charge you.</p>
+    <p class="footnote" id="paynote">Payments are not switched on yet. Nothing here can charge you.</p>
   </div>
 </div>
 
@@ -581,6 +581,18 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
 <script>
 (function(){
 "use strict";
+
+/* =====================================================================
+   PAYMENTS.  Flip live to true and paste the two Dodo links when the
+   account is approved. Nothing else needs changing.
+   ===================================================================== */
+var PAY = {
+  live: false,                 // <-- change to true to switch payments on
+  p49:  "",                    // <-- Dodo payment link for the Rs 49 full story
+  p149: ""                     // <-- Dodo payment link for the Rs 149 gift edition
+};
+/* Both links must send the customer back to  https://scrollback.in/?paid=1  */
+
 var $=function(id){return document.getElementById(id)};
 var SEC=["s-upload","s-story","s-pay","s-done"];
 function show(id){SEC.forEach(function(s){$(s).hidden=(s!==id)});window.scrollTo(0,0)}
@@ -1105,7 +1117,9 @@ function loadShared(d){
 }
 
 /* ---------- remember the story if the page is left and come back to it ---------- */
-var SKEY="sb_story_v1";
+var SKEY="sb_story_v1",PKEY="sb_paid_v1";
+function isPaid(){try{return localStorage.getItem(PKEY)==="1"}catch(e){return false}}
+function markPaid(){try{localStorage.setItem(PKEY,"1")}catch(e){}}
 function saveState(){
   if(SHARED||!S||!CARDS.length)return;
   try{localStorage.setItem(SKEY,JSON.stringify({t:Date.now(),i:idx,u:unlocked,l:LANG,d:slimStory()}))}catch(e){}
@@ -1172,7 +1186,7 @@ function step(d){
   var n=idx+d;
   if(n<0)return;
   if(n>=CARDS.length){if(SHARED){location.hash="";SHARED=false;show("s-upload");var st=document.getElementById("start");if(st)st.scrollIntoView();return}doneScreen();return}
-  if(!unlocked&&n>=FREE){gate();return}
+  if(!unlocked&&!isPaid()&&n>=FREE){gate();return}
   idx=n;render();
 }
 function gate(){
@@ -1242,7 +1256,11 @@ function pickTier(p){
   PRICE=p;
   $("t49").setAttribute("aria-checked",p===49?"true":"false");
   $("t149").setAttribute("aria-checked",p===149?"true":"false");
-  $("unlock").textContent="Unlock "+(p===49?"the full story":"the gift edition")+" — ₹"+p;
+  $("unlock").textContent=PAY.live?("Unlock \u2014 \u20b9"+p):"Keep reading \u2014 it's free";
+  var fn=$("paynote");
+  if(fn)fn.textContent=PAY.live
+    ?"Secure payment by Dodo. You come straight back here and the rest of your story opens."
+    :"Payments are not switched on yet. Nothing here can charge you.";
 }
 $("t49").addEventListener("click",function(){pickTier(49)});
 $("t149").addEventListener("click",function(){pickTier(149)});
@@ -1308,7 +1326,11 @@ $("go").addEventListener("click",function(){
 });
 $("prev").addEventListener("click",function(){step(-1)});
 $("next").addEventListener("click",function(){step(1)});
-$("unlock").addEventListener("click",function(){unlocked=true;idx=FREE;render();show("s-story")});
+$("unlock").addEventListener("click",function(){
+  var url=PAY.live?(PRICE===49?PAY.p49:PAY.p149):"";
+  if(url){saveState();location.href=url;return}
+  unlocked=true;idx=FREE;render();show("s-story");
+});
 $("again").addEventListener("click",function(){
   clearState();RAW=null;PEOPLE=[];S=null;$("opts").hidden=true;$("modewrap").hidden=true;$("pickwrap").hidden=true;
   $("drop").querySelector("strong").textContent="Drop your WhatsApp export here";
@@ -1322,8 +1344,21 @@ $("copy").addEventListener("click",function(){
 
 /* ---------- open a story someone sent you ---------- */
 (function(){
-  var h="";try{h=String(location.hash||"")}catch(e){}
-  if(h.indexOf("#s=")!==0){restoreState();return}
+  var h="",paidNow=false;
+  try{h=String(location.hash||"")}catch(e){}
+  /* accept our own ?paid=1 and the common shapes a provider may redirect back with */
+  try{
+    var q=String(location.search||"");
+    paidNow=/[?&]paid=1/.test(q)||/[?&]status=(succeeded|success|paid|completed)/i.test(q)||/[?&](payment_id|subscription_id)=/.test(q);
+  }catch(e){}
+  if(paidNow){
+    markPaid();
+    try{history.replaceState(null,"",String(location.pathname||"/")+h)}catch(e){}
+  }
+  if(h.indexOf("#s=")!==0){
+    if(restoreState()&&paidNow){unlocked=true;if(idx<FREE)idx=FREE;render()}
+    return;
+  }
   var code=h.slice(3);
   unpack(code).then(function(d){
     if(!d||!d.c||!d.c.length)throw 0;
