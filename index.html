@@ -283,7 +283,7 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
 
   <section class="hero">
     <div class="hero-copy">
-      <span class="freepill">Free right now &middot; every screen unlocked</span>
+      <span class="freepill">First three screens free &middot; no account needed</span>
       <h1><span class="hl hl-peach">Your chat,</span><br><span class="hl hl-coral">as a story.</span></h1>
       <p class="lede">Drop in a WhatsApp chat and get a funny, slightly too honest story of your relationship. Ready to share or gift.</p>
       <div class="cta-row">
@@ -347,7 +347,7 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
           <rect x="9" y="21" width="30" height="21" rx="6" fill="#F7D14A" stroke="#141414" stroke-width="3.5"/>
           <path d="M16 21v-6a8 8 0 0 1 15-3" fill="none" stroke="#141414" stroke-width="3.5" stroke-linecap="round"/>
         </svg>
-        <div><b>Every screen is free right now</b><span>Nothing is locked while Scrollback is being tested. Read all the way to the end.</span></div>
+        <div><b>Start free, pay only if you like it</b><span>The first three screens are free. &#8377;49 opens the rest &mdash; one payment, no account, no subscription.</span></div>
       </div>
     </div>
   </div>
@@ -480,9 +480,9 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
 <div class="band cream" id="pricing">
   <div class="wrap">
     <p class="eyebrow">Pricing</p>
-    <h2 class="h2">Everything is free right now.</h2>
-    <div class="freebar" style="margin-top:18px;max-width:720px">All 10 screens are open while Scrollback is being tested. <em>No payment, no card, nothing to unlock.</em></div>
-    <p class="sub">Here is what it will cost once payments are switched on. The first three screens will stay free, always.</p>
+    <h2 class="h2">Three screens free. Then &#8377;49.</h2>
+    <div class="freebar" style="margin-top:18px;max-width:720px">You see the first three screens before you pay anything. <em>If the story is no good, you close the tab and it cost you nothing.</em></div>
+    <p class="sub">One payment, no account, no subscription. UPI or card.</p>
     <div class="prices">
       <div class="pcard">
         <h3 style="font-size:1.2rem">Full story</h3>
@@ -542,11 +542,11 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
     <div class="lock">
       <div class="disc" style="background:#fff">&#10024;</div>
       <strong style="font-family:var(--font-display);font-size:1.2rem" id="lockn">6 more screens ahead</strong>
-      <span class="cap">The ones with the actual memories in them. All open, free, right now.</span>
+      <span class="cap">The ones with the actual memories in them.</span>
     </div>
     <div class="teases" id="teases"></div>
-    <button class="btn wide" id="unlock">Keep reading &mdash; it's free</button>
-    <p class="eyebrow" style="text-align:center;margin-top:4px">What it will cost later</p>
+    <button class="btn wide" id="unlock">Unlock &mdash; &#8377;49</button>
+    <p class="eyebrow" style="text-align:center;margin-top:4px">Pick one</p>
     <button class="tier" id="t49" role="radio" aria-checked="false">
       <div class="top"><h3><span class="dot">&#10003;</span>Full story</h3><span class="price">&#8377;49</span></div>
       <p>Every screen, your awards, your verdict and the roast.</p>
@@ -557,7 +557,7 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
       <p>Everything above, plus a personal note and a private link to send them.</p>
     </button>
     <div class="occ"><span>Anniversary</span><span>Birthday</span><span>Rakhi</span><span>New Year</span></div>
-    <p class="footnote" id="paynote">Payments are not switched on yet. Nothing here can charge you.</p>
+    <p class="footnote" id="paynote">Secure payment by Dodo. You come straight back here and the rest of your story opens.</p>
   </div>
 </div>
 
@@ -586,9 +586,10 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
    PAYMENTS.  Flip live to true and paste the two Dodo links when the
    account is approved. Nothing else needs changing.
    ===================================================================== */
-var PAY = { live: true,
+var PAY = {
+  live: true,
   p49:  "https://checkout.dodopayments.com/buy/pdt_0NqdXcDjEL15b0ypYe9hx?quantity=1&singlePage=true&redirect_url=https%3A%2F%2Fscrollback.in%2F%3Fpaid%3D1",
-  p149: "https://checkout.dodopayments.com/buy/pdt_0NqdXokqseB0Uqc65JEaD?quantity=1&singlePage=true&redirect_url=https%3A%2F%2Fscrollback.in%2F%3Fpaid%3D1"  
+  p149: "https://checkout.dodopayments.com/buy/pdt_0NqdXokqseB0Uqc65JEaD?quantity=1&singlePage=true&redirect_url=https%3A%2F%2Fscrollback.in%2F%3Fpaid%3D1"
 };
 /* Both links must send the customer back to  https://scrollback.in/?paid=1  */
 
