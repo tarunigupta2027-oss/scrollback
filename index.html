@@ -649,7 +649,7 @@ var LOVE=/\b(i love you|love you|love u|luv u|ily|jaan|baby|babe|sweetheart|darl
 var MISS=/\b(miss you|miss u|missing you)\b/i;
 var SORRY=/\b(sorry|sry|maaf|apolog)/i;
 var LAUGH=/\b(?:ha){2,}|\b(?:he){2,}|\bhaa+h|\blol+\b|\blmf?ao+\b|\brofl\b|\bxd\b|\u{1F602}|\u{1F923}|\u{1F605}/iu;
-var WORK=/\b(meeting|deadline|eod|pfa|attached|approval|approve|invoice|client|deliverable|standup|sprint|ticket|escalate|agenda|minutes|revert|regards|kindly|sir|maam|ma'am|hr |payroll|appraisal|onboard|deployment|release|bugfix|jira|asap|eta|fyi|cc |follow up|followup|sop|roster|shift|login|attendance|leave approved|wfh|call at|on call|please share|sharing the|as discussed|noted)\b/i;
+var WORK=/\b(meeting|deadline|eod|pfa|attached|approval|approve|invoice|client|deliverable|standup|sprint|ticket|escalate|agenda|minutes|revert|regards|kindly|sir|maam|ma'am|hr |payroll|appraisal|onboard|deployment|release|bugfix|jira|asap|eta|fyi|cc |follow up|followup|sop|roster|shift|login|leave approved|wfh|call at|on call|please share|sharing the|as discussed|noted)\b/i;
 var MON=["January","February","March","April","May","June","July","August","September","October","November","December"];
 function cl(x){return Math.max(0,Math.min(1,x||0))}
 function median(a){if(!a.length)return 0;var s=a.slice().sort(function(x,y){return x-y});var h=Math.floor(s.length/2);return s.length%2?s[h]:(s[h-1]+s[h])/2}
@@ -715,7 +715,13 @@ function analyse(msgs,P){
       }
     }
     var norm=m.txt.toLowerCase().replace(/[^\p{L}\s]/gu,"").replace(/\s+/g," ").trim();
-    if(norm.length>1&&norm.length<26)s.rep[m.who][norm]=(s.rep[m.who][norm]||0)+1;
+    /* key on the stripped form so spelling wobbles merge, but keep the message
+       as it was actually typed -- digits and emoji included -- for display. */
+    if(norm.length>1&&norm.length<26){
+      var rr=s.rep[m.who];
+      if(!rr[norm])rr[norm]={n:0,txt:m.txt};
+      rr[norm].n++;
+    }
     var w=m.txt.toLowerCase().replace(/[^a-zऀ-ॿ\s]/g," ").split(/\s+/);
     for(var q=0;q<w.length;q++){var t=w[q];if(t.length>2&&STOP.indexOf(t)<0)s.words[t]=(s.words[t]||0)+1}
   }
@@ -729,8 +735,8 @@ function analyse(msgs,P){
   s.topEmoji=Object.keys(s.emoji).sort(function(x,y){return s.emoji[y]-s.emoji[x]}).slice(0,4);
   s.topWords=Object.keys(s.words).sort(function(x,y){return s.words[y]-s.words[x]}).slice(0,3);
   P.forEach(function(p){
-    var r=s.rep[p],best=Object.keys(r).sort(function(x,y){return r[y]-r[x]})[0];
-    s.repeat[p]=best?{txt:best,n:r[best]}:null;
+    var r=s.rep[p],best=Object.keys(r).sort(function(x,y){return r[y].n-r[x].n})[0];
+    s.repeat[p]=best?{txt:r[best].txt,n:r[best].n,key:best}:null;
   });
   s.board=P.slice().sort(function(x,y){return s.by[y]-s.by[x]});
   s.spanDays=Math.max(1,s.activeDays,Math.round((s.last-s.first)/86400000));
@@ -1017,7 +1023,7 @@ function roast(s,type,lang){
     out.push({q:s.quote[k].m,burn:OP[seed(s,k)%OP.length](s,o)+" "+CL[seed(s,k+"~"+o.n)%CL.length]});
   }
   var top=s.board[0],rp=s.repeat[top],used=out.map(function(b){return b.q.txt.toLowerCase().replace(/[^\p{L}\s]/gu,"").replace(/\s+/g," ").trim()});
-  if(rp&&rp.n>3&&out.length<5&&used.indexOf(rp.txt)<0)
+  if(rp&&rp.n>3&&out.length<5&&used.indexOf(rp.key)<0)
     out.push({dry:rp.txt,who:top,burn:en?"“"+rp.txt+"”, "+nice(rp.n)+" times. That is the entire vocabulary.":"“"+rp.txt+"” "+nice(rp.n)+" baar. Poora vocabulary isi mein aa gaya."});
   return {
     intro:(en?INTRO_EN:INTRO)[type]||(en?INTRO_EN:INTRO).friends,
@@ -1388,30 +1394,117 @@ $("copy").addEventListener("click",function(){
 /* ---------- sample ---------- */
 $("sample").addEventListener("click",function(){
   track("sample_chat");
-  var names=["Riya","Arjun"],out=[],n=0;
-  var early=["hey","hi","who is this","arjun from sunday","ohh hey","how are you","good, you?","same","what are you doing","nothing much"];
-  var mid=["kya kar rahe ho","bored yaar","should we watch something","that movie you mentioned","haan that one","you fell asleep last time","that was once","sure sure","ok good night","wait one more thing","did you eat","not yet","ok ok eating","call me","in 5","reached home","finally","ok"];
-  var late=["i love you","love you too","miss you","i miss you more","cant sleep","same","you up?","always","sorry about today","its ok","no its not, sorry","stop apologising","ok"];
-  var emo=["\u{1F602}","❤️","\u{1F605}","\u{1F97A}"];
+  var names=["Ishaan","Kabir"],out=[],n=0;
+
+  /* day one: a friendship that starts over borrowed notes */
+  var first=[
+    ["Ishaan","bhai DBMS ke notes bhej de"],
+    ["Kabir","mere paas bhi nahi hai"],
+    ["Ishaan","to tu kya kar raha hai abhi"],
+    ["Kabir","yahi soch raha tha ki kisse maangu"],
+    ["Ishaan","hahaha gaye hum dono"],
+    ["Kabir","exam kal 9 baje hai yaad hai na"],
+    ["Ishaan","ab yaad aaya"],
+    ["Kabir","syllabus kitna hai"],
+    ["Ishaan","pata nahi, kholne ki himmat nahi ho rahi"],
+    ["Kabir","chal raat bhar karte hain"]
+  ];
+
+  /* the everyday stuff */
+  var mid=[
+    "bhai 5 min mein aa raha hu",
+    "tera 5 min 45 min hota hai",
+    "arey nikal chuka hu ghar se",
+    "jhoot bol raha hai tu",
+    "hahaha pakda gaya",
+    "weekend pe plan banate hain",
+    "har hafte yahi bolta hai tu",
+    "is baar pakka",
+    "pakka wala pakka ya normal pakka",
+    "bhai 500 bhej de, kal de dunga",
+    "pichle wale 500 ka kya hua",
+    "wo to hisaab barabar ho gaya tha",
+    "kaise barabar ho gaya zara samjha",
+    "chhod na yaar",
+    "khana kha liya tune",
+    "maggi bana raha hu",
+    "bhook lagi thi kya karta",
+    "gym jaana hai kal subah 6 baje",
+    "tune pichle mahine bhi yahi bola tha",
+    "is baar seriously keh raha hu",
+    "hahahahaha",
+    "assignment ka kya scene hai",
+    "submission kal raat 11:59 ki hai",
+    "mera to kuch bhi nahi hua abhi tak",
+    "same bhai same",
+    "chai peene chalte hain",
+    "cutting ya full",
+    "full, kal se diet",
+    "roz kal se diet hai tera",
+    "mann nahi lag raha padhai mein",
+    "bore ho raha hu yaar",
+    "kuch bhi karne ka mann nahi",
+    "ghar pe bol dena hum saath the",
+    "matlab tune kiya kya",
+    "kuch nahi kiya hahaha",
+    "seriously bhai batata kyu nahi",
+    "rehne de ab",
+    "thak gaya hu aaj",
+    "sorry yaar kal nahi aa paya",
+    "koi baat nahi",
+    "nahi bhai galti meri thi",
+    "bas kar ab itna sorry mat bol",
+    "lecture mein baitha hu, bore",
+    "bunk maar lete hain",
+    "75% to kabhi hui hi nahi",
+    "us topic pe baat mat kar",
+    "pata nahi kyu aisa hota hai har baar",
+    "tu kabhi nahi sudhrega",
+    "ye to tu bhi nahi sudhra"
+  ];
+
+  /* after midnight */
+  var late=[
+    "so ja ab 3 baj gaye",
+    "ek aur episode dekh ke sota hu",
+    "kal class hai bhai",
+    "bunk maar lenge",
+    "neend nahi aa rahi yaar",
+    "phone rakh ke so ja",
+    "tu bhi to online hai abhi",
+    "good night bhai",
+    "good night, subah uthana mat",
+    "hahaha legend",
+    "kal se sab theek kar dunga",
+    "ye line roz sunta hu"
+  ];
+
+  var emo=["\u{1F602}","\u{1F480}","\u{1F605}","\u{1F64F}"];
   function add(t,who,txt){var hh=t.getHours()%12||12,ap=t.getHours()<12?"am":"pm";
     out.push(t.getDate()+"/"+(t.getMonth()+1)+"/"+String(t.getFullYear()).slice(2)+", "+hh+":"+String(t.getMinutes()).padStart(2,"0")+" "+ap+" - "+who+": "+txt);n++}
-  add(new Date(2022,2,14,21,12),"Riya","hey");
-  for(var k=1;k<early.length;k++)add(new Date(2022,2,14,21,12+k*3),names[k%2],early[k]);
+
+  for(var k=0;k<first.length;k++)
+    add(new Date(2022,2,14,21,12+k*3),first[k][0],first[k][1]);
+
   for(var day=1;day<430;day++){
-    if(day>60&&day<71)continue;
+    if(day>60&&day<71)continue;                     /* the fortnight nobody texted */
     var per=3+Math.floor(Math.random()*13);
     var base=new Date(2022,2,14+day,19+Math.floor(Math.random()*5),Math.floor(Math.random()*58));
     for(var j=0;j<per;j++){
-      var who=Math.random()<0.6?names[0]:names[1];
-      var pool=day>45&&Math.random()<0.4?late:mid;
-      var txt=pool[Math.floor(Math.random()*pool.length)];
-      if(day===46&&j===0){who=names[1];txt="i love you"}
-      if(Math.random()<0.28)txt+=" "+emo[Math.floor(Math.random()*emo.length)];
+      var who=Math.random()<0.53?names[0]:names[1];
+      var txt,r=Math.random();
+      if(r<0.065){ txt="bhai 5 min mein aa raha hu"; who=names[0]; }
+      else if(r<0.115){ txt="haan haan pata hai 😂"; who=names[1]; }
+      else { txt=mid[Math.floor(Math.random()*mid.length)];
+             if(/sorry|galti/i.test(txt))who=names[1];      /* Kabir is the apologist */
+             if(/5 min|jhoot|pakda/i.test(txt))who=names[1]; }
+      if(Math.random()<0.22)txt+=" "+emo[Math.floor(Math.random()*emo.length)];
       add(new Date(base.getTime()+j*(1+Math.floor(Math.random()*24))*60000),who,txt);
     }
-    if(Math.random()<0.35){
+    if(Math.random()<0.4){
       var nb=new Date(2022,2,14+day+1,0,10+Math.floor(Math.random()*170));
-      for(var q=0;q<2+Math.floor(Math.random()*3);q++)add(new Date(nb.getTime()+q*7*60000),Math.random()<0.5?names[0]:names[1],late[Math.floor(Math.random()*late.length)]);
+      for(var q=0;q<2+Math.floor(Math.random()*4);q++)
+        add(new Date(nb.getTime()+q*7*60000),Math.random()<0.38?names[0]:names[1],late[Math.floor(Math.random()*late.length)]);
     }
   }
   load(out.join("\n"));
