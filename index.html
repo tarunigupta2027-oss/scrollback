@@ -1371,6 +1371,15 @@ $("copy").addEventListener("click",function(){
     var q=String(location.search||"");
     paidNow=/[?&]paid=1/.test(q)||/[?&]status=(succeeded|success|paid|completed)/i.test(q)||/[?&](payment_id|subscription_id)=/.test(q);
   }catch(e){}
+  /* ?lock=1 puts this browser back to the locked state -- for demoing the
+     paywall on a machine that has already paid or already used ?paid=1. */
+  try{
+    if(/[?&]lock=1/.test(String(location.search||""))){
+      paidNow=false;
+      try{localStorage.removeItem(PKEY);localStorage.removeItem(SKEY)}catch(e){}
+      try{history.replaceState(null,"",String(location.pathname||"/")+h)}catch(e){}
+    }
+  }catch(e){}
   if(paidNow){
     track("paid_return");
     markPaid();
