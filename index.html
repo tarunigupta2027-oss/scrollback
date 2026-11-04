@@ -593,6 +593,15 @@ var PAY = {
 };
 /* Both links must send the customer back to  https://scrollback.in/?paid=1  */
 
+/* =====================================================================
+   FUNNEL COUNTERS.  Sends an event NAME to Microsoft Clarity and nothing
+   else -- no message text, no names, no chat content, no numbers from the
+   chat.  Read these in Clarity under Dashboard > Custom events.
+   ===================================================================== */
+function track(name){
+  try{ if(window.clarity) window.clarity("event", name); }catch(e){}
+}
+
 var $=function(id){return document.getElementById(id)};
 var SEC=["s-upload","s-story","s-pay","s-done"];
 function show(id){SEC.forEach(function(s){$(s).hidden=(s!==id)});window.scrollTo(0,0)}
@@ -1191,6 +1200,7 @@ function step(d){
 }
 function gate(){
   var s=S,t=[];
+  track("paywall_seen");
   $("lockn").textContent=(CARDS.length-FREE)+" more screens ahead";
   if(s.firstMsg)t.push(["\u{1F4C5}","The first thing anyone said here, from "+dstr(s.firstMsg.t)]);
   if(s.mLove)t.push(["❤️","The exact day someone said it first"]);
@@ -1222,6 +1232,7 @@ function doneScreen(){
     SHARELINK=url;
     $("gift").textContent=here.replace(/^https?:\/\//,"").replace(/\/$/,"")+"/#s="+code.slice(0,14)+"\u2026";
   }).catch(function(){SHARELINK=here;$("gift").textContent=here});
+  track("story_finished");
   show("s-done");
 }
 
@@ -1233,6 +1244,7 @@ function load(text){
   if(!msgs){fail("That file does not look like a WhatsApp export. Export the chat again and choose Without media.");return}
   RAW=msgs;PEOPLE=people(msgs);$("err").hidden=true;
   if(PEOPLE.length<2){fail("This export only has one person in it. Try a chat with at least two people.");return}
+  track("chat_parsed");
   $("drop").querySelector("strong").textContent="Chat loaded";
   $("drop").querySelector("span").textContent=nice(msgs.length)+" messages · "+PEOPLE.length+" people";
   if(PEOPLE.length>2){
@@ -1250,6 +1262,7 @@ function start(P){
   if(!s){fail("Not enough messages between those people to build a story.");return}
   S=s;TYPE=s.type;$("ctype").value=TYPE;
   CARDS=build(s,TYPE);idx=0;unlocked=false;render();show("s-story");
+  track("story_started");
 }
 var PRICE=149;
 function pickTier(p){
@@ -1327,6 +1340,7 @@ $("go").addEventListener("click",function(){
 $("prev").addEventListener("click",function(){step(-1)});
 $("next").addEventListener("click",function(){step(1)});
 $("unlock").addEventListener("click",function(){
+  track(PRICE===49?"unlock_click_49":"unlock_click_149");
   var url=PAY.live?(PRICE===49?PAY.p49:PAY.p149):"";
   if(url){saveState();location.href=url;return}
   unlocked=true;idx=FREE;render();show("s-story");
@@ -1352,6 +1366,7 @@ $("copy").addEventListener("click",function(){
     paidNow=/[?&]paid=1/.test(q)||/[?&]status=(succeeded|success|paid|completed)/i.test(q)||/[?&](payment_id|subscription_id)=/.test(q);
   }catch(e){}
   if(paidNow){
+    track("paid_return");
     markPaid();
     try{history.replaceState(null,"",String(location.pathname||"/")+h)}catch(e){}
   }
@@ -1372,6 +1387,7 @@ $("copy").addEventListener("click",function(){
 
 /* ---------- sample ---------- */
 $("sample").addEventListener("click",function(){
+  track("sample_chat");
   var names=["Riya","Arjun"],out=[],n=0;
   var early=["hey","hi","who is this","arjun from sunday","ohh hey","how are you","good, you?","same","what are you doing","nothing much"];
   var mid=["kya kar rahe ho","bored yaar","should we watch something","that movie you mentioned","haan that one","you fell asleep last time","that was once","sure sure","ok good night","wait one more thing","did you eat","not yet","ok ok eating","call me","in 5","reached home","finally","ok"];
