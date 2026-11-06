@@ -233,7 +233,11 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
 .occ span{background:var(--card);border:2px solid var(--ink);border-radius:999px;padding:7px 14px;font-size:.85rem}
 .shot{background:var(--pink);color:var(--ink);border:2.5px solid var(--ink);box-shadow:7px 7px 0 var(--ink);border-radius:22px;
   padding:28px 22px;display:flex;flex-direction:column;gap:13px;text-align:center}
-.shot .huge,.shot h2,.shot .kicker,.shot .cap,.shot .foottxt{color:var(--ink)}
+.shot .huge,.shot h2,.shot .kicker,.shot .cap,.shot .quotes{display:flex;flex-direction:column;gap:9px;border-top:2px solid var(--ink);padding-top:12px;text-align:left}
+.shot .qt{display:flex;flex-direction:column;gap:2px}
+.shot .qt em{font-style:italic;font-size:.95rem;line-height:1.35}
+.shot .qt span{font-family:var(--font-display);font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;opacity:.7}
+.shot .foottxt{color:var(--ink)}
 .shot .line{display:flex;justify-content:space-between;font-size:.93rem;border-top:2px solid var(--ink);padding-top:10px;text-align:left;gap:10px}
 .shot .line b{font-family:var(--font-display);text-align:right}
 .shot .foottxt{font-size:.74rem;opacity:.65;letter-spacing:.1em;text-transform:uppercase;font-family:var(--font-display)}
@@ -284,6 +288,7 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
 .slide.anim{animation:slidein .34s cubic-bezier(.2,.7,.3,1) both}
 .slide.anim .sicon{animation:popin .42s .06s cubic-bezier(.2,1.5,.4,1) both}
 .mascot{animation:floaty 4s ease-in-out infinite}
+.mascot.mini{animation:none}
 
 [hidden]{display:none!important}
 
@@ -344,10 +349,7 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
 <div class="wrap">
   <nav class="nav">
     <div class="mark">
-      <svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true">
-        <circle cx="20" cy="20" r="17" fill="#F7D14A" stroke="#141414" stroke-width="2.5"/>
-        <path d="M11 17h18M11 22h12" stroke="#141414" stroke-width="2.5" stroke-linecap="round"/>
-      </svg>
+      <svg class="mascot mini" viewBox="0 0 120 120" aria-hidden="true" style="width:34px;height:34px"><path d="M22 20h76a14 14 0 0 1 14 14v42a14 14 0 0 1-14 14H56l-20 18v-18h-14a14 14 0 0 1-14-14V34a14 14 0 0 1 14-14z" fill="#FF5A36" stroke="#141414" stroke-width="6" stroke-linejoin="round"/><circle cx="46" cy="52" r="13" fill="#F7F5F1" stroke="#141414" stroke-width="5"/><circle cx="78" cy="52" r="13" fill="#F7F5F1" stroke="#141414" stroke-width="5"/><circle cx="49" cy="55" r="6" fill="#141414"/><circle cx="81" cy="55" r="6" fill="#141414"/><path d="M50 72c4 5 16 5 20 0" fill="none" stroke="#141414" stroke-width="5" stroke-linecap="round"/></svg>
       Scrollback
     </div>
     <div class="navlinks">
@@ -360,7 +362,17 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
 
   <section class="hero">
     <div class="hero-copy">
-      <span class="freepill">First three screens free &middot; no account needed</span>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px">
+        <svg class="mascot hero-mascot" viewBox="0 0 120 120" role="img" aria-label="Scrollback mascot" style="width:66px;height:66px;flex:none">
+          <path d="M22 20h76a14 14 0 0 1 14 14v42a14 14 0 0 1-14 14H56l-20 18v-18h-14a14 14 0 0 1-14-14V34a14 14 0 0 1 14-14z" fill="#FF5A36" stroke="#141414" stroke-width="5" stroke-linejoin="round"/>
+          <circle cx="46" cy="52" r="13" fill="#F7F5F1" stroke="#141414" stroke-width="4"/>
+          <circle cx="78" cy="52" r="13" fill="#F7F5F1" stroke="#141414" stroke-width="4"/>
+          <circle cx="49" cy="55" r="5.5" fill="#141414"/><circle cx="81" cy="55" r="5.5" fill="#141414"/>
+          <path d="M50 72c4 5 16 5 20 0" fill="none" stroke="#141414" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M103 14l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#F7D14A" stroke="#141414" stroke-width="3" stroke-linejoin="round"/>
+        </svg>
+        <span class="freepill" style="margin-bottom:0">First three screens free &middot; no account needed</span>
+      </div>
       <h1><span class="hl hl-peach">Your chat,</span><br><span class="hl hl-coral">as a story.</span></h1>
       <p class="lede">Drop in a WhatsApp chat and get a funny, slightly too honest story of your relationship. Ready to share or gift.</p>
       <div class="cta-row">
@@ -469,7 +481,7 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
         </svg>
         <span class="stepn">Step three</span>
         <h3>Read, laugh, share</h3>
-        <p>Ten screens, six awards, a verdict and a roast built from your own lines.</p>
+        <p>A dozen screens, six awards, a verdict and a roast built from your own lines.</p>
       </div>
     </div>
   </div>
@@ -539,7 +551,7 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
         <ul class="plist">
           <li><span class="tick">&#10003;</span><span>The file is read on your device, never transmitted.</span></li>
           <li><span class="tick">&#10003;</span><span>No account, no email, no login.</span></li>
-          <li><span class="tick">&#10003;</span><span>Share cards show initials and numbers only, never your messages.</span></li>
+          <li><span class="tick">&#10003;</span><span>The share card is drawn on your device too. Nothing is sent anywhere to make it.</span></li>
           <li><span class="tick">&#10003;</span><span>Close the tab and it's gone.</span></li>
         </ul>
       </div>
@@ -565,7 +577,7 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
       <div class="pcard">
         <h3 style="font-size:1.2rem">Full story</h3>
         <p class="pamt">&#8377;49</p>
-        <p>All ten screens, your six awards, the verdict and a card to share.</p>
+        <p>Every screen, your six awards, the verdict and a card to share.</p>
       </div>
       <div class="pcard feat">
         <span class="ptag">Gift ready</span>
@@ -644,15 +656,15 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
     <div style="display:flex;justify-content:center"><svg class="mascot" viewBox="0 0 120 120" role="img" aria-label="Scrollback mascot"><path d="M22 20h76a14 14 0 0 1 14 14v42a14 14 0 0 1-14 14H56l-20 18v-18h-14a14 14 0 0 1-14-14V34a14 14 0 0 1 14-14z" fill="#FF5A36" stroke="#141414" stroke-width="5" stroke-linejoin="round"/><circle cx="46" cy="52" r="13" fill="#F7F5F1" stroke="#141414" stroke-width="4"/><circle cx="78" cy="52" r="13" fill="#F7F5F1" stroke="#141414" stroke-width="4"/><circle class="blink" cx="49" cy="55" r="5.5" fill="#141414"/><circle class="blink" cx="81" cy="55" r="5.5" fill="#141414"/><path d="M50 72c4 5 16 5 20 0" fill="none" stroke="#141414" stroke-width="4.5" stroke-linecap="round"/><path d="M103 14l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#F7D14A" stroke="#141414" stroke-width="3" stroke-linejoin="round"/></svg></div>
     <h2 class="h2" style="text-align:center">Your story is ready.</h2>
     <div class="shot" id="shot"></div>
-    <p class="note">Screenshot the card above to post it &mdash; or send them the link below and they'll see all ten screens.</p>
+    <p class="note">Screenshot the card above to post it &mdash; or send them the link below and they'll see every screen.</p>
     <div class="sharebox">
       <strong>Send them the whole story</strong>
-      <span>All ten screens, exactly as you just read them. The story travels inside the link itself, so there is still nothing stored anywhere.</span>
+      <span>Every screen, exactly as you just read them. The story travels inside the link itself, so there is still nothing stored anywhere.</span>
       <div class="mono" id="gift">Building your link&hellip;</div>
       <button class="btn wide" id="copy">Copy the story link</button>
     </div>
     <button class="btn ghost wide" id="again">Start another story</button>
-    <p class="footnote">The share card shows names and numbers only. Your messages are never on it.</p>
+    <p class="footnote">The card is built on your device. It quotes a few of your own lines, so have a look before you post it.</p>
   </div>
 </div>
 
@@ -1395,13 +1407,36 @@ function gate(){
 }
 function doneScreen(){
   var s=S;
+  /* one line per chapter, numbers and names only -- never message text */
+  var L=[];
+  L.push(["Messages",nice(s.total)]);
+  L.push(["Talking since",MON[s.first.getMonth()]+" "+s.first.getFullYear()]);
+  if(s.pair)L.push(["Starts it most",nm(s.starter)+" · "+s.startPct+"%"]);
+  else L.push(["Loudest",nm(s.board[0])]);
+  if(s.medFast)L.push(["Fastest reply",nm(s.fastP)+" · "+dur(s.medFast)]);
+  L.push(["Peak hour",hourLabel(s.peak)]);
+  L.push(["After midnight",nice(s.late)+" · "+s.latePct+"%"]);
+  if(s.enderPct>50)L.push(["Last word",nm(s.enderP)+" · "+s.enderPct+"%"]);
+  L.push(["Longest streak",nice(s.streak)+" days"]);
+  var aw=awards(s,TYPE),tally={},topA="",topN=0,ai;
+  for(ai=0;ai<aw.length;ai++){tally[aw[ai].who]=(tally[aw[ai].who]||0)+1;
+    if(tally[aw[ai].who]>topN){topN=tally[aw[ai].who];topA=aw[ai].who}}
+  if(topA)L.push(["Most awards",nm(topA)+" · "+topN+" of "+aw.length]);
+  /* the lines people actually came for, in their own words */
+  var Q=[];
+  s.P.forEach(function(p){
+    var r=s.repeat[p];
+    if(r&&r.n>3)Q.push(["\u201c"+trunc(r.txt,42)+"\u201d",nm(p)+" \u00b7 "+nice(r.n)+"\u00d7"]);
+  });
+  if(s.firstMsg)Q.unshift(["\u201c"+trunc(s.firstMsg.txt,42)+"\u201d","the first message \u00b7 "+dstr(s.firstMsg.t)]);
+  Q=Q.slice(0,3);
   $("shot").innerHTML='<p class="kicker">Scrollback</p><h2>'+esc(s.vd.t)+'</h2>'+
-    '<p class="cap" style="opacity:.75">'+(s.pair?nm(s.board[0])+" + "+nm(s.board[1]):s.P.length+" people")+' · since '+MON[s.first.getMonth()]+' '+s.first.getFullYear()+'</p>'+
-    '<div class="line"><span>Messages</span><b>'+nice(s.total)+'</b></div>'+
-    '<div class="line"><span>Starts it most</span><b>'+nm(s.starter)+'</b></div>'+
-    '<div class="line"><span>Peak hour</span><b>'+hourLabel(s.peak)+'</b></div>'+
-    '<div class="line"><span>Longest streak</span><b>'+nice(s.streak)+' days</b></div>'+
-    '<p class="foottxt">scrollback</p>';
+    '<p class="cap" style="opacity:.75">'+(s.pair?nm(s.board[0])+" + "+nm(s.board[1]):s.P.length+" people")+'</p>'+
+    L.map(function(r){return '<div class="line"><span>'+esc(r[0])+'</span><b>'+esc(r[1])+'</b></div>'}).join("")+
+    (Q.length?'<div class="quotes">'+Q.map(function(q){
+        return '<div class="qt"><em>'+esc(q[0])+'</em><span>'+esc(q[1])+'</span></div>';
+      }).join("")+'</div>':'')+
+    '<p class="foottxt">scrollback.in \u00b7 nothing was uploaded</p>';
   var here="";
   try{here=String(location.href).split("#")[0].split("?")[0]}catch(e){}
   here=here||"https://scrollback.in/";
