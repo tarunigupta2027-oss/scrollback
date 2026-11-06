@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="google-site-verification" content="Ux4QaNLSgP5YCESYtSBTPULoOE5Uhm1ui503TpMmuaQ" />
 <title>Scrollback</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22%23FF5A36%22%2F%3E%3Cpath%20d%3D%22M15%2020a5%205%200%200%201%205-5h24a5%205%200%200%201%205%205v15a5%205%200%200%201-5%205H29l-9%208v-8h-0a5%205%200%200%201-5-5z%22%20fill%3D%22%23F7F5F1%22%2F%3E%3Ccircle%20cx%3D%2225%22%20cy%3D%2228%22%20r%3D%223%22%20fill%3D%22%23141414%22%2F%3E%3Ccircle%20cx%3D%2233%22%20cy%3D%2228%22%20r%3D%223%22%20fill%3D%22%23141414%22%2F%3E%3Ccircle%20cx%3D%2241%22%20cy%3D%2228%22%20r%3D%223%22%20fill%3D%22%23141414%22%2F%3E%3C%2Fsvg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2215%22%20fill%3D%22%23FF5A36%22/%3E%3Cpath%20d%3D%22M15%2020a5%205%200%200%201%205-5h24a5%205%200%200%201%205%205v15a5%205%200%200%201-5%205H29l-9%208v-8h-0a5%205%200%200%201-5-5z%22%20fill%3D%22%23F7F5F1%22/%3E%3Ccircle%20cx%3D%2225%22%20cy%3D%2228%22%20r%3D%223%22%20fill%3D%22%23141414%22/%3E%3Ccircle%20cx%3D%2233%22%20cy%3D%2228%22%20r%3D%223%22%20fill%3D%22%23141414%22/%3E%3Ccircle%20cx%3D%2241%22%20cy%3D%2228%22%20r%3D%223%22%20fill%3D%22%23141414%22/%3E%3C/svg%3E">
 <meta name="description" content="Turn a WhatsApp chat into a funny, shareable story. Who texts first, who leaves who on read, your 3 a.m. messages and a roast built from your own lines. Nothing is uploaded — it all runs on your device.">
 <meta property="og:title" content="Scrollback — your chat, as a story">
 <meta property="og:description" content="Drop in a WhatsApp chat and get a funny, slightly too honest story of your relationship. Nothing leaves your device.">
@@ -255,7 +255,83 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
   .doodle{display:none}
   .start{padding:22px}
 }
+
+/* ---- per-screen icon ---- */
+.sicon{width:46px;height:46px;margin:0 auto -2px;display:block}
+/* ---- calendar screen ---- */
+.cal{background:var(--card);border:2.5px solid var(--ink);border-radius:18px;padding:12px 10px 12px;display:flex;flex-direction:column;gap:6px}
+.cal .calhead{font-family:var(--font-display);font-weight:600;font-size:.95rem;letter-spacing:.01em}
+.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.calgrid span{font-size:.62rem;font-family:var(--font-display);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:2px 0}
+.calgrid b{font-weight:400;font-size:.8rem;padding:4px 0;display:grid;place-items:center;font-variant-numeric:tabular-nums;color:var(--muted)}
+.calgrid b.on{position:relative;color:var(--ink);font-weight:700;font-family:var(--font-display)}
+.calgrid b.on::after{content:"";position:absolute;inset:-3px;border:2.5px solid var(--coral);border-radius:50%;
+  transform:rotate(-8deg) scale(1.08)}
+/* ---- common words ---- */
+.wordcloud{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;align-items:center}
+.wd{background:var(--card);border:2px solid var(--ink);border-radius:999px;padding:6px 13px;font-family:var(--font-display);
+  font-weight:600;line-height:1.1;display:inline-flex;align-items:baseline;gap:6px}
+.wd small{font-family:var(--font-body);font-weight:400;font-size:.72rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.partbadge{align-self:center;background:var(--ink);color:var(--yellow);font-family:var(--font-display);font-weight:600;
+  font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;border-radius:999px;padding:4px 14px;margin-bottom:-4px}
+/* ---- mascot ---- */
+.mascot{width:96px;height:96px;display:block}
+.mascot .blink{transform-origin:center}
+/* ---- card entrance + counter ---- */
+@keyframes slidein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes popin{from{opacity:0;transform:scale(.82)}to{opacity:1;transform:none}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.slide.anim{animation:slidein .34s cubic-bezier(.2,.7,.3,1) both}
+.slide.anim .sicon{animation:popin .42s .06s cubic-bezier(.2,1.5,.4,1) both}
+.mascot{animation:floaty 4s ease-in-out infinite}
+
 [hidden]{display:none!important}
+
+/* ---- phones: keep the card AND the Next button on one screen ----
+   Previously every story screen ran past the fold, so Next was below it. */
+@media (max-width:560px){
+  .stage{padding:14px 0 18px}
+  .wrap{padding:0 16px}
+  .stagewrap{max-width:100%}
+  .bars{margin-bottom:10px}
+  .meta{margin-bottom:10px;font-size:.7rem}
+  .slide{
+    padding:22px 16px;gap:12px;border-radius:22px;box-shadow:5px 5px 0 var(--ink);
+    min-height:min(420px,48dvh);
+    max-height:calc(100dvh - 262px);
+    overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  }
+  .huge{font-size:2.9rem}
+  .mid{font-size:1.5rem}
+  .cap{font-size:.9rem}
+  .kicker{font-size:.72rem}
+  /* dense screens: awards, roast, rows */
+  .awards{gap:7px}
+  .aw{padding:9px 11px;gap:10px}
+  .aw h3{font-size:.92rem}
+  .aw .winner{font-size:.8rem}
+  .aw p{font-size:.76rem}
+  .rows{gap:7px}
+  .row{padding:10px 12px;font-size:.9rem}
+  .roastlist{gap:11px}
+  .burn{font-size:.86rem}
+  .rst .bub{font-size:.9rem}
+  .cal{padding:10px 8px}
+  .calgrid b{font-size:.74rem;padding:3px 0}
+  .cal .calhead{font-size:.88rem}
+  .who{gap:9px}
+  .who .p{padding:12px}
+  .verdict{padding:22px 18px}
+  .verdict h2{font-size:1.65rem}
+  .nav2{margin-top:12px;position:sticky;bottom:0;padding-bottom:4px}
+  .nav2 button{padding:12px 20px;font-size:1rem}
+  .typebar{margin-top:10px;font-size:.8rem}
+  .typebar span{font-size:.8rem}
+  .footnote{font-size:.78rem;margin-top:8px}
+  .panel{gap:14px}
+  .lock{padding:20px}
+  .tier{padding:14px}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 
@@ -402,7 +478,8 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
 <div class="band cream" id="start">
   <div class="wrap">
     <div class="start">
-      <div style="text-align:center">
+      <div style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px">
+        <svg class="mascot" viewBox="0 0 120 120" role="img" aria-label="Scrollback mascot"><path d="M22 20h76a14 14 0 0 1 14 14v42a14 14 0 0 1-14 14H56l-20 18v-18h-14a14 14 0 0 1-14-14V34a14 14 0 0 1 14-14z" fill="#FF5A36" stroke="#141414" stroke-width="5" stroke-linejoin="round"/><circle cx="46" cy="52" r="13" fill="#F7F5F1" stroke="#141414" stroke-width="4"/><circle cx="78" cy="52" r="13" fill="#F7F5F1" stroke="#141414" stroke-width="4"/><circle class="blink" cx="49" cy="55" r="5.5" fill="#141414"/><circle class="blink" cx="81" cy="55" r="5.5" fill="#141414"/><path d="M50 72c4 5 16 5 20 0" fill="none" stroke="#141414" stroke-width="4.5" stroke-linecap="round"/><path d="M103 14l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#F7D14A" stroke="#141414" stroke-width="3" stroke-linejoin="round"/></svg>
         <p class="eyebrow">Start here</p>
         <h2 class="h2" style="font-size:1.8rem">Drop your chat in</h2>
       </div>
@@ -564,6 +641,7 @@ select{font:inherit;width:100%;padding:12px 14px;border-radius:12px;border:2px s
 
 <div id="s-done" hidden class="stage" data-clarity-mask="true">
   <div class="panel">
+    <div style="display:flex;justify-content:center"><svg class="mascot" viewBox="0 0 120 120" role="img" aria-label="Scrollback mascot"><path d="M22 20h76a14 14 0 0 1 14 14v42a14 14 0 0 1-14 14H56l-20 18v-18h-14a14 14 0 0 1-14-14V34a14 14 0 0 1 14-14z" fill="#FF5A36" stroke="#141414" stroke-width="5" stroke-linejoin="round"/><circle cx="46" cy="52" r="13" fill="#F7F5F1" stroke="#141414" stroke-width="4"/><circle cx="78" cy="52" r="13" fill="#F7F5F1" stroke="#141414" stroke-width="4"/><circle class="blink" cx="49" cy="55" r="5.5" fill="#141414"/><circle class="blink" cx="81" cy="55" r="5.5" fill="#141414"/><path d="M50 72c4 5 16 5 20 0" fill="none" stroke="#141414" stroke-width="4.5" stroke-linecap="round"/><path d="M103 14l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#F7D14A" stroke="#141414" stroke-width="3" stroke-linejoin="round"/></svg></div>
     <h2 class="h2" style="text-align:center">Your story is ready.</h2>
     <div class="shot" id="shot"></div>
     <p class="note">Screenshot the card above to post it &mdash; or send them the link below and they'll see all ten screens.</p>
@@ -611,6 +689,18 @@ function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").repl
 /* ---------- parsing ---------- */
 var IOS=/^\[(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4}),?\s+(\d{1,2}):(\d{2})(?::(\d{2}))?(?:\s*([APap])\.?\s*[Mm]\.?)?\]\s*([^:]{1,70}?):\s*([\s\S]*)$/;
 var AND=/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{2,4}),?\s+(\d{1,2}):(\d{2})(?::(\d{2}))?(?:\s*([APap])\.?\s*[Mm]\.?)?\s*[-–—]\s*([^:]{1,70}?):\s*([\s\S]*)$/;
+
+/* WhatsApp's own system lines. These are not things a person said, so they must
+   not open the story, be counted, be quoted or be roasted. */
+var SYS=/^(?:‎|‏)*(?:messages and calls are end-to-end encrypted|this chat is with a business|messages to this chat and calls are now secured|your security code with|you created group|created group|you added|added you|you were added|joined using this group|left$|you left|removed|changed the subject|changed this group|changed their phone number|disappearing messages were|you blocked|you unblocked|missed voice call|missed video call|this message was deleted|you deleted this message|waiting for this message|tap to learn more)/i;
+var SYSIN=/messages and calls are end-to-end encrypted[^]*?(tap to learn more\.?|read or listen to them\.?)/i;
+function isSystem(t){
+  var x=String(t||"").replace(/[‎‏‪-‮]/g,"").trim();
+  if(!x)return true;
+  if(SYS.test(x))return true;
+  /* a sender-less notice can land in the name slot instead */
+  return /end-to-end encrypted/i.test(x)&&x.length<220;
+}
 var MEDIA=/(<media omitted>|image omitted|video omitted|sticker omitted|audio omitted|document omitted|gif omitted|this message was deleted|you deleted this message|^null$)/i;
 function clean(t){return t.replace(/‎|‏|‪|‬/g,"").replace(/[  ]/g," ")}
 function parse(raw){
@@ -633,7 +723,12 @@ function parse(raw){
     if(o.ap==="a"&&h===12)h=0;
     var dt=new Date(y,mo-1,d,h,o.mi,0);
     if(isNaN(dt.getTime()))continue;
-    msgs.push({t:dt,who:o.who,txt:o.txt.trim()});
+    var who=String(o.who||"").trim(), txt=o.txt.trim();
+    /* drop WhatsApp's own notices, however the export shapes them */
+    if(isSystem(who)||isSystem(txt))continue;
+    txt=txt.replace(SYSIN,"").trim();
+    if(!txt)continue;
+    msgs.push({t:dt,who:who,txt:txt});
   }
   return msgs.length>4?msgs:null;
 }
@@ -1036,48 +1131,75 @@ function roast(s,type,lang){
 /* ---------- story ---------- */
 var NIGHTK={love:"The 3 a.m. file",friends:"The 3 a.m. file",group:"The 3 a.m. file",work:"The after-hours file","new":"The late ones"};
 var FIRSTK={love:"Where it started",friends:"Where it started",group:"Day one",work:"The first thread","new":"Where it started"};
+
+/* ---------- month grid with the day it all started circled ---------- */
+var DOW=["M","T","W","T","F","S","S"];
+function calHTML(c){
+  var y=c.y,mo=c.m,day=c.d;
+  var firstDow=(new Date(y,mo,1).getDay()+6)%7;      /* make Monday column 0 */
+  var days=new Date(y,mo+1,0).getDate();
+  var out='<div class="cal"><p class="calhead">'+MON[mo]+" "+y+'</p><div class="calgrid">';
+  for(var i=0;i<7;i++)out+='<span>'+DOW[i]+'</span>';
+  for(var b=0;b<firstDow;b++)out+='<b></b>';
+  for(var d=1;d<=days;d++)out+='<b class="'+(d===day?"on":"")+'">'+d+'</b>';
+  return out+'</div></div>';
+}
+
 function build(s,type){
   var P=s.board,c=[];
-  c.push({k:"Chapter one",big:nice(s.total),cap:"messages sent",
+  c.push({ic:"start",k:"How much you talk",big:nice(s.total),cap:"messages sent",
     sub:(s.pair?"Since ":s.P.length+" people, since ")+MON[s.first.getMonth()]+" "+s.first.getFullYear()+" · about "+nice(s.perDay)+" a day."});
   if(s.pair){
-    c.push({k:"Who starts it",mid:nm(s.starter)+" texts first "+s.startPct+"% of the time",
+    c.push({ic:"who",k:"Who starts it",mid:nm(s.starter)+" texts first "+s.startPct+"% of the time",
       cap:"Across "+nice(P.reduce(function(a,p){return a+s.starts[p]},0))+" separate conversations, someone always had to go first."});
-    c.push({k:"Reply speed",rows:P.map(function(p){return [nm(p)+" replies in",dur(median(s.replies[p])||0)]}),
+    c.push({ic:"speed",k:"Reply speed",rows:P.map(function(p){return [nm(p)+" replies in",dur(median(s.replies[p])||0)]}),
       cap:s.slow.ms?nm(s.slow.who)+" once took "+dur(s.slow.ms)+" to answer. That was "+dstr(s.slow.t)+".":"Measured across every exchange."});
   }else{
-    c.push({k:"The leaderboard",rows:P.slice(0,5).map(function(p){return [trunc(p,16),nice(s.by[p])]}),
+    c.push({ic:"board",k:"The leaderboard",rows:P.slice(0,5).map(function(p){return [trunc(p,16),nice(s.by[p])]}),
       cap:ini(P[0])+" alone sent "+Math.round(s.by[P[0]]/s.total*100)+"% of everything in here."});
-    c.push({k:"Who starts it",mid:trunc(s.starter,18)+" starts "+s.startPct+"% of conversations",
+    c.push({ic:"who",k:"Who starts it",mid:trunc(s.starter,18)+" starts "+s.startPct+"% of conversations",
       cap:"Someone has to break the silence, and it is usually the same person."});
   }
-  if(s.firstMsg)c.push({k:FIRSTK[type]||"Where it started",thread:[[s.firstMsg,"them"]],stamp:dstr(s.firstMsg.t)+" · "+clock(s.firstMsg.t),
+  c.push({k:"The day it started",ic:"cal",
+    cal:{y:s.first.getFullYear(),m:s.first.getMonth(),d:s.first.getDate()},
+    mid:nm((s.firstMsg||{}).who||s.board[0])+" texted first",
+    cap:["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"][s.first.getDay()]+", "+dstr(s.first)+
+        " \u2014 "+nice(s.total)+" messages ago."});
+  if(s.firstMsg)c.push({ic:"first",k:FIRSTK[type]||"Where it started",thread:[[s.firstMsg,"them"]],stamp:dstr(s.firstMsg.t)+" · "+clock(s.firstMsg.t),
     cap:"The first thing anyone said here. Everything after it is "+nice(s.total-1)+" more messages."});
   var ms=s.mLove?{k:"The day it changed",lab:"said it first",m:s.mLove}:
          s.mMiss?{k:"The day it changed",lab:"missed them first",m:s.mMiss}:
          (s.longMsg.len>220?{k:"The longest thing anyone typed",lab:"wrote "+nice(s.longMsg.len)+" characters in one go",m:s.longMsg}:null);
-  if(ms&&type!=="work")c.push({k:ms.k,thread:[[ms.m,"me"]],stamp:dstr(ms.m.t)+" · "+clock(ms.m.t),
+  if(ms&&type!=="work")c.push({ic:"first",k:ms.k,thread:[[ms.m,"me"]],stamp:dstr(ms.m.t)+" · "+clock(ms.m.t),
     cap:nm(ms.m.who)+" "+ms.lab+", "+Math.max(1,Math.round((ms.m.t-s.first)/86400000))+" days in."});
-  else if(ms&&type==="work")c.push({k:"The longest message in here",thread:[[s.longMsg,"me"]],stamp:dstr(s.longMsg.t),
+  else if(ms&&type==="work")c.push({ic:"first",k:"The longest message in here",thread:[[s.longMsg,"me"]],stamp:dstr(s.longMsg.t),
     cap:nm(s.longMsg.who)+" wrote "+nice(s.longMsg.len)+" characters. In a chat app."});
   var reps=P.filter(function(p){return s.repeat[p]}).slice(0,3);
-  if(reps.length)c.push({k:"Receipts",rows:reps.map(function(p){return ["“"+trunc(s.repeat[p].txt,20)+"” — "+nm(p),nice(s.repeat[p].n)+"×"]}),
+  if(reps.length)c.push({ic:"receipts",k:"Receipts",rows:reps.map(function(p){return ["“"+trunc(s.repeat[p].txt,20)+"” — "+nm(p),nice(s.repeat[p].n)+"×"]}),
     cap:"The most-sent message from each of you, word for word. No notes."});
-  if(s.night.length>=2)c.push({k:NIGHTK[type]||"The 3 a.m. file",thread:pick3(s.night).map(function(m,i){return [m,i%2?"me":"them"]}),
+  var wlist=Object.keys(s.words).sort(function(x,y){return s.words[y]-s.words[x]}).slice(0,9);
+  if(wlist.length>=5){
+    var hi=s.words[wlist[0]];
+    c.push({k:"The words you live on",ic:"words",
+      words:wlist.map(function(w){return [w,s.words[w],(0.85+0.55*(s.words[w]/hi)).toFixed(2)]}),
+      cap:'"'+wlist[0]+'" alone turns up '+nice(hi)+" times. Nine words, "+
+          nice(wlist.reduce(function(a,w){return a+s.words[w]},0))+" appearances between them."});
+  }
+  if(s.night.length>=2)c.push({ic:"night",k:NIGHTK[type]||"The 3 a.m. file",thread:pick3(s.night).map(function(m,i){return [m,i%2?"me":"them"]}),
     stamp:nice(s.late)+" messages after midnight",cap:"Nothing good is ever said at this hour. You said "+nice(s.late)+" things."});
   if(Math.abs(s.drift)>18&&s.spanDays>60)c.push({
-    k:s.drift<0?"The drift":"The upswing",
+    ic:"drift",k:s.drift<0?"The drift":"The upswing",
     mid:(s.drift<0?"You talk "+Math.abs(s.drift)+"% less than you used to":"You talk "+s.drift+"% more than you used to"),
     rows:[["Back then",nice(s.rateEarly)+" a day"],["Now",nice(s.rateLate)+" a day"]],
     cap:s.drift<0?"Nobody decided this. It just happened, one quiet week at a time.":"Whatever changed, it started working."});
-  if(s.enderPct>58)c.push({k:"The last word",mid:nm(s.enderP)+" ends it "+s.enderPct+"% of the time",
+  if(s.enderPct>58)c.push({ic:"last",k:"The last word",mid:nm(s.enderP)+" ends it "+s.enderPct+"% of the time",
     cap:"Someone always sends the final message before everyone goes quiet. It is usually the same person."});
-  c.push({k:"The awards",awards:awards(s,type),cap:"Decided entirely by the numbers. Take it up with the data."});
+  c.push({ic:"awards",k:"The awards",awards:awards(s,type),cap:"Decided entirely by the numbers. Take it up with the data."});
   var vd=verdict(s,type);
   var w=[[P[0],persona(s,P[0],P[1],type)],[P[1],persona(s,P[1],P[0],type,persona(s,P[0],P[1],type).t)]];
-  c.push({k:"The verdict",verdict:vd,who:w});
+  c.push({ic:"verdict",k:"The verdict",verdict:vd,who:w});
   s.vd=vd;
-  if(roast(s,type,"hi").beats.length)c.push({k:"The roast",roast:true});
+  if(roast(s,type,"hi").beats.length)c.push({ic:"roast",k:"The roast",roast:true});
   return c;
 }
 function pick3(a){return a.length<=3?a:[a[0],a[Math.floor(a.length/2)],a[a.length-1]]}
@@ -1161,15 +1283,46 @@ function restoreState(){
 /* ---------- render ---------- */
 var S=null,CARDS=[],idx=0,unlocked=false,FREE=3,TYPE="friends",LANG="hi",SHARED=false,SHARELINK="";
 var PAL=["--p7","--p5","--p2","--p4","--p6","--p8","--p1","--p3"];
+
+/* ---------- one icon per screen, drawn inline so nothing is fetched ---------- */
+var IC={
+ start:'<circle cx="24" cy="24" r="16" fill="%F7D14A" stroke="%141414" stroke-width="3"/><path d="M16 20h16M16 27h10" stroke="%141414" stroke-width="3" stroke-linecap="round"/>',
+ who:'<path d="M8 18h26l-7-7M40 30H14l7 7" fill="none" stroke="%141414" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>',
+ speed:'<circle cx="24" cy="26" r="14" fill="%8FD3F4" stroke="%141414" stroke-width="3"/><path d="M24 18v8l6 4" stroke="%141414" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M19 7h10" stroke="%141414" stroke-width="3.2" stroke-linecap="round"/>',
+ board:'<rect x="8" y="24" width="9" height="16" fill="%F0D9C4" stroke="%141414" stroke-width="2.8"/><rect x="19" y="12" width="10" height="28" fill="%FF9B42" stroke="%141414" stroke-width="2.8"/><rect x="31" y="29" width="9" height="11" fill="%8FD3F4" stroke="%141414" stroke-width="2.8"/>',
+ cal:'<rect x="7" y="13" width="34" height="28" rx="5" fill="%fff" stroke="%141414" stroke-width="3"/><path d="M7 22h34" stroke="%141414" stroke-width="3"/><path d="M16 8v9M32 8v9" stroke="%141414" stroke-width="3.2" stroke-linecap="round"/><circle cx="24" cy="32" r="6" fill="none" stroke="%FF5A36" stroke-width="3"/>',
+ first:'<path d="M24 5l5.4 12.6L42 23l-12.6 5.4L24 41l-5.4-12.6L6 23l12.6-5.4z" fill="%F58FC2" stroke="%141414" stroke-width="2.8" stroke-linejoin="round"/>',
+ receipts:'<path d="M12 7h24v34l-6-3.4-6 3.4-6-3.4-6 3.4z" fill="%fff" stroke="%141414" stroke-width="3" stroke-linejoin="round"/><path d="M19 17h10M19 25h7" stroke="%141414" stroke-width="3" stroke-linecap="round"/>',
+ night:'<path d="M31 6a17 17 0 1 0 11 29A19 19 0 0 1 31 6z" fill="%2BC4D4" stroke="%141414" stroke-width="3" stroke-linejoin="round"/><circle cx="35" cy="13" r="2.6" fill="%141414"/>',
+ words:'<path d="M9 11h12v11c0 6-4 10-9 11" fill="%35BF9E" stroke="%141414" stroke-width="2.8" stroke-linejoin="round"/><path d="M26 11h12v11c0 6-4 10-9 11" fill="%35BF9E" stroke="%141414" stroke-width="2.8" stroke-linejoin="round"/>',
+ drift:'<path d="M8 35l9-10 7 6 13-17" fill="none" stroke="%141414" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="38" cy="13" r="5" fill="%FF5A36" stroke="%141414" stroke-width="2.8"/>',
+ last:'<rect x="18" y="6" width="12" height="21" rx="6" fill="%F58FC2" stroke="%141414" stroke-width="3"/><path d="M12 23a12 12 0 0 0 24 0M24 35v6" stroke="%141414" stroke-width="3.2" stroke-linecap="round" fill="none"/>',
+ awards:'<path d="M14 6h20l-4 13H18z" fill="%FF5A36" stroke="%141414" stroke-width="2.8" stroke-linejoin="round"/><circle cx="24" cy="29" r="12" fill="%F7D14A" stroke="%141414" stroke-width="3"/><path d="M24 23l2 4.2 4.6.6-3.3 3.2.8 4.6-4.1-2.2-4.1 2.2.8-4.6L17.4 27.8l4.6-.6z" fill="%141414"/>',
+ verdict:'<circle cx="24" cy="24" r="16" fill="%FF5A36" stroke="%141414" stroke-width="3"/><path d="M16 24.5l5.5 5.5L33 18" fill="none" stroke="%fff" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"/>',
+ roast:'<path d="M25 4c6 8 1 11 5 14 3-1 4-4 4-4 4 6 6 10 6 15a16 16 0 1 1-32 0c0-8 7-12 10-18 2 3 1 6 1 6 4-3 6-7 6-13z" fill="%FF9B42" stroke="%141414" stroke-width="3" stroke-linejoin="round"/><path d="M25 25c2 3 1 5 2 7a6 6 0 1 1-6-2c2 1 4 0 4-5z" fill="%F7D14A" stroke="%141414" stroke-width="2.4" stroke-linejoin="round"/>'
+};
+function icon(k){
+  var d=IC[k];if(!d)return "";
+  return '<svg class="sicon" viewBox="0 0 48 48" aria-hidden="true">'+
+    d.replace(/%/g,"#")+
+    '</svg>';
+}
+
 function render(){
   var c=CARDS[idx],h="";
   $("bars").innerHTML=CARDS.map(function(_,i){return '<i class="'+(i<=idx?"on":"")+'"></i>'}).join("");
   $("pair").textContent=S.pair?nm(S.board[0])+" + "+nm(S.board[1]):S.P.length+" people";
-  $("count").textContent=(idx+1)+" / "+CARDS.length;
+  $("count").textContent="Chapter "+(idx+1)+" of "+CARDS.length;
+  if(idx===FREE)h+='<span class="partbadge">Part two</span>';
+  if(c.ic)h+=icon(c.ic);
   if(c.k)h+='<p class="kicker">'+esc(c.k)+'</p>';
   if(c.big)h+='<p class="huge">'+c.big+'</p><p class="cap">'+esc(c.cap)+'</p>';
   if(c.mid)h+='<p class="mid">'+esc(c.mid)+'</p>';
   if(c.thread)h+='<div class="thread">'+c.thread.map(function(p){return '<div class="bub '+p[1]+'">'+esc(trunc(p[0].txt,180))+'</div>'}).join("")+(c.stamp?'<span class="stamp">'+esc(c.stamp)+'</span>':'')+'</div>';
+  if(c.cal)h+=calHTML(c.cal);
+  if(c.words)h+='<div class="wordcloud">'+c.words.map(function(w){
+      return '<span class="wd" style="font-size:'+w[2]+'rem">'+esc(w[0])+' <small>'+nice(w[1])+'</small></span>';
+    }).join("")+'</div>';
   if(c.rows)h+='<div class="rows">'+c.rows.map(function(r){return '<div class="row"><span>'+esc(r[0])+'</span><b>'+esc(r[1])+'</b></div>'}).join("")+'</div>';
   if(c.awards)h+='<div class="awards">'+c.awards.map(function(a){return '<div class="aw"><span class="ini">'+esc(ini(a.who))+'</span><div><h3>'+esc(a.t)+'</h3><p class="winner">'+esc(nm(a.who))+'</p><p>'+esc(a.d)+'</p></div></div>'}).join("")+'</div>';
   if(c.verdict)h+='<div class="verdict"><p class="kicker">'+(S.pair?"You two are":"This group is")+'</p><h2>'+esc(c.verdict.t)+'</h2><p>'+esc(c.verdict.d)+'</p></div>';
@@ -1192,6 +1345,27 @@ function render(){
     for(var z=0;z<lgs.length;z++)lgs[z].addEventListener("click",function(){
       LANG=this.getAttribute("data-l");render();
     });
+  }
+  /* entrance: re-trigger the CSS animation, then count the big number up */
+  var sl=$("slide"),calm=false;
+  sl.scrollTop=0;                       /* long screens must open at the top, not where the last one ended */
+  try{calm=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){}
+  if(!calm){
+    sl.classList.remove("anim");void sl.offsetWidth;sl.classList.add("anim");
+    var hg=sl.querySelector(".huge");
+    if(hg){
+      var shown=hg.textContent,digits=shown.replace(/[^0-9]/g,"");
+      if(digits&&digits.length<=7&&/^[0-9,]+$/.test(shown)){
+        var target=parseInt(digits,10),t0=0;
+        var stepUp=function(ts){
+          if(!t0)t0=ts;
+          var k=Math.min(1,(ts-t0)/650),e=1-Math.pow(1-k,3);
+          hg.textContent=nice(Math.round(target*e));
+          if(k<1)requestAnimationFrame(stepUp);else hg.textContent=shown;
+        };
+        hg.textContent="0";requestAnimationFrame(stepUp);
+      }
+    }
   }
   $("prev").disabled=idx===0;
   $("prev").style.opacity=idx===0?".4":"1";
@@ -1529,6 +1703,7 @@ $("sample").addEventListener("click",function(){
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "yxx7bk6i2j");
 </script>
+
 
 
 </body>
